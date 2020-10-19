@@ -1,0 +1,21 @@
+version: "3.7"
+
+services: 
+    apache:
+        image: httpd
+        container_name: apache
+        hostname: apache
+        volumes: 
+          - "./apache:/var/www/html:ro"
+        labels: 
+            - "traefik.enable=true"
+            - "traefik.http.routers.apache.entrypoints=websecure"
+            - "traefik.http.routers.apache.rule=Host(`apache.$DOMAIN`)"
+            - "traefik.http.routers.apache.tls.certresolver=lets-encr"
+            #- "traefik.http.routers.apache.middlewares=auth-middleware"
+            #- "traefik.http.middlewares.auth-middleware.basicauth.usersfile=/users_credentials"
+            
+networks:
+  default:
+    external:
+      name: $NETWORK

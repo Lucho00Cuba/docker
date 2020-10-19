@@ -1,0 +1,35 @@
+version: "3.7"
+
+services: 
+    traefik: 
+        image: "traefik:v2.1"
+        container_name: "traefik"
+        hostname: "traefik"
+        env_file: 
+            - .env
+        ports: 
+            - "80:80"
+            - "443:443"
+            - "8080:8080"
+        volumes:
+            - "/var/run/docker.sock:/var/run/docker.sock:ro"
+            - "${TRAEFIK_YML}:/traefik.yml:ro"
+            #- "${USER_CRENDENTIALS}:/users_credentials:ro"
+            - "${ACME}:/acme.json"
+        labels: 
+            - "traefik.enable=true"
+            ##--HTTP REDIRECT--##
+            - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+            - "traefik.http.routers.redirect-https.rule=hostregexp(`{host:.+}`)"
+            - "traefik.http.routers.redirect-https.entrypoints=web"
+            - "traefik.http.routers.redirect-https.middlewares=redirect-to-https"
+            #------------------------------------------------------------#
+            ##--DNS CHALLENGE--##
+            #- "traefik.http.routers.traefik.tls.certresolver=lets-encr"
+            #- "traefik.http.routers.traefik.tls.domains[0].main=*.$MY_DOMAIN"
+            #- "traefik.http.routers.traefik.tls.domains[0].sans=$MY_DOMAIN"
+
+networks:
+  default:
+    external:
+      name: $NETWORK

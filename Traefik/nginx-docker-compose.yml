@@ -1,0 +1,20 @@
+version: "3.7"
+
+services: 
+    nginx:
+        image: nginx
+        container_name: nginx
+        hostname: nginx
+        volumes: 
+          - "./nginx:/usr/share/nginx/html:ro"
+        labels: 
+            - "traefik.enable=true"
+            - "traefik.http.routers.nginx.entrypoints=websecure" # web(http) | websecure(https)
+            - "traefik.http.routers.nginx.rule=Host(`nginx.$DOMAIN`)"
+            - "traefik.http.routers.nginx.tls.certresolver=lets-encr"
+            #- "traefik.http.routers.nginx.middlewares=auth-middleware"
+            #- "traefik.http.middlewares.auth-middleware.basicauth.usersfile=/users_credentials"
+networks:
+  default:
+    external:
+      name: $NETWORK

@@ -1,0 +1,41 @@
+version: "3.7"
+
+services: 
+    nextcloud:
+        image: nextcloud
+        container_name: cloud
+        hostname: cloud
+        volumes: 
+          - "./nextcloud:/var/www/html"
+        labels: 
+            - "traefik.enable=true"
+            - "traefik.http.routers.cloud.entrypoints=websecure"
+            - "traefik.http.routers.cloud.rule=Host(`cloud.$DOMAIN`)"
+            #- "traefik.http.routers.cloud.middlewares=auth-middleware"
+            #- "traefik.http.middlewares.auth-middleware.basicauth.usersfile=/users_credentials"
+            - "traefik.http.routers.cloud.tls.certresolver=lets-encr"
+        environment: 
+            - MYSQL_HOST=maria-db
+            - MYSQL_DATABASE=nextcloud
+            - MYSQL_USER=nextcloud
+            - MYSQL_PASSWORD=nextcloudpass
+        restart: always
+        links: 
+            - maria-db
+            
+    maria-db:
+        image: mariadb
+        container_name: maria-cloud
+        volumes: 
+            - "./database:/var/lib/mysql"
+        environment: 
+            - MYSQL_ROOT_PASSWORD=rootcloud
+            - MYSQL_DATABASE=nextcloud
+            - MYSQL_USER=nextcloud
+            - MYSQL_PASSWORD=nextcloudpass
+        restart: always
+
+networks:
+  default:
+    external:
+      name: $NETWORK
