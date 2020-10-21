@@ -1,7 +1,7 @@
 
 # Aplicacion en Docker para Hosting Web
 
-En este servicio desplegaremos el dos contenedores.
+En este servicio desplegaremos dos contenedores.
 
 ##Detalles 
 
