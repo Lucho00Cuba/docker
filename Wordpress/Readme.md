@@ -3,7 +3,7 @@
 
 En este servicio desplegaremos dos contenedores.
 
-##Detalles 
+## Detalles 
 
 * Una Base de Datos : **MYSQL**
 * El Servidor Web de WordPress : **WordPress**
