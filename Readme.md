@@ -27,6 +27,8 @@
 
 **App de docker simple pero potente**
 
+**Apache Guacamole, que es un cliente (aplicación web HTML5) capaz de ofrecerte funcionalidades para acceso remoto a servidores y otros equipos remotos desde cualquier parte solo con la ayuda de una conexión y un navegador web.**
+
 **------------------------------------------------**
 
 ## Nextcloud
