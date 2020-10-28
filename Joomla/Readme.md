@@ -7,3 +7,5 @@ En este servicio desplegaremos el dos contenedores.
 
 * Una Base de Datos : **MYSQL**
 * El Servidor Web de WordPress : **Joomla**
+
+**-----------------------------------------------**
