@@ -1,11 +1,10 @@
-
 # Aplicacion en Docker Joomla
 
 En este servicio desplegaremos el dos contenedores.
 
-##Detalles 
+## Detalles 
 
 * Una Base de Datos : **MYSQL**
-* El Servidor Web de WordPress : **Joomla**
+* El Servidor Web (CMS) : **Joomla**
 
 **-----------------------------------------------**
