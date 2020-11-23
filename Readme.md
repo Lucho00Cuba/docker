@@ -120,3 +120,7 @@
 
 ## Autor_Deploy : Lucho00Cuba
 ## Linux Cuba
+
+[Mail](lomv0209@gmail.com)
+[Youtube](https://www.youtube.com/channel/UCledsaFq1uBeyGbmxzSG_4Q)
+[Linkedin](https://www.linkedin.com/in/luis-octavio-mota-verdasco-sys-admin/)
