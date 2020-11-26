@@ -32,4 +32,5 @@ Traefik → traefik.example.com
 
 ## Certificado SSl por Lets Encrypt
 
+Archivo autogenerado en la configuracion de traefik
 **------------------------------------------------**
