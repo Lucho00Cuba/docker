@@ -1,4 +1,6 @@
-# Aplicacion en Docker Prestashop
+# CMS de E-commerce
+
+## Aplicacion en Docker Prestashop
 
 En este servicio desplegaremos el dos contenedores.
 
