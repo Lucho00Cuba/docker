@@ -9,4 +9,4 @@ En este servicio desplegaremos dos contenedores.
 * El Servidor Web de WordPress : **WordPress**
 * Expondremos un puerto de cada contenedor 80,3306
 
-### Importante cambiar los valores entre "[]" por valores reales
+### Importante cambiar los valores entre "[]" por valores reales del archivo yml
