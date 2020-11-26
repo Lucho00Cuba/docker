@@ -9,7 +9,7 @@ Joomla! es un sistema de gestión de contenidos (o CMS, por las siglas en inglé
 ## Detalles 
 
 * Una Base de Datos : **MYSQL**
-* El Servidor Web (CMS) : **Joomla**
+* El Servidor Web : **Joomla (CMS)**
 
 **-----------------------------------------------**
 
