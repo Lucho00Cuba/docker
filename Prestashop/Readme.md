@@ -1,8 +1,10 @@
-# CMS de E-commerce
+# CMS de E-Commerce
 
 ## Aplicacion en Docker Prestashop
 
-En este servicio desplegaremos el dos contenedores.
+En este servicio desplegaremos dos contenedores. 
+
+Prestashop es un servicio de e-comerce lo cual nos brinda una tienda online
 
 ## Detalles 
 
