@@ -15,8 +15,6 @@
 
 [Docker Doc](https://docs.docker.com/)
 
-**------------------------------------------------**
-
 ## Guacamole
 
 ![Guacamole](https://www.linuxadictos.com/wp-content/uploads/apache-guacamole-logo.jpg)
@@ -29,7 +27,6 @@
 
 **Apache Guacamole, que es un cliente (aplicación web HTML5) capaz de ofrecerte funcionalidades para acceso remoto a servidores y otros equipos remotos desde cualquier parte solo con la ayuda de una conexión y un navegador web.**
 
-**------------------------------------------------**
 
 ## Nextcloud
 
@@ -41,8 +38,6 @@
 
 **Nuestra nube casera con docker**
 
-**------------------------------------------------**
-
 ## Traefik v2.1
 
 ![Traefik](https://roocket.ir/public/images/2019/11/3/reverse-proxy-traefik.png)
@@ -53,7 +48,6 @@
 
 **__Proxy Inverso con implementacion SSL__**
 
-**------------------------------------------------**
 
 ## WordPress CMS
 
@@ -66,8 +60,6 @@
 **App de Hosting con CMS WordPress**
 
 
-**------------------------------------------------**
-
 ## Joomla
 
 ![Joomla](https://nakedsecurity.sophos.com/wp-content/uploads/sites/2/2017/09/joomla.png?w=775)
@@ -78,7 +70,6 @@
 
 **Joomla! es un sistema de gestión de contenidos que permite desarrollar sitios web dinámicos e interactivos**
 
-**------------------------------------------------**
 
 ## Drupal
 
@@ -90,8 +81,6 @@
 
 **Drupal! es un sistema de gestión de contenidos que destaca por su flexibilidad y adaptabilidad, así como la gran cantidad de módulos adicionales disponibles**
 
-**------------------------------------------------**
-
 ## Zabbix
 
 ![Zabbix](https://upload.wikimedia.org/wikipedia/commons/b/bf/Zabbix_logo.png)
@@ -102,7 +91,6 @@
 
 **Zabbix! Sistema de Monitorización de Redes**
 
-**------------------------------------------------**
 
 ## Prestashop
 
@@ -114,15 +102,11 @@
 
 **Sistema de gestión de contenidos libre y de código abierto, pensado para construir desde cero tiendas en línea de comercio electrónico**
 
-**------------------------------------------------**
-
-[.NetStorm](https://github.com/Lucho00Cuba/Docker/blob/main/push.txt)
-
-## Autor_Deploy : Lucho00Cuba
-## Linux Cuba
+---
+### Autor Deploy : Lucho00Cuba
+### Just Me
 
 ---
 [Mail](lomv0209@gmail.com)
 [Youtube](https://www.youtube.com/channel/UCledsaFq1uBeyGbmxzSG_4Q)
 [Linkedin](https://www.linkedin.com/in/luis-octavio-mota-verdasco-sys-admin/)
----
