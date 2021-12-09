@@ -1,0 +1,13 @@
+version: '3'
+services:
+    minio:
+        image: quay.io/minio/minio:RELEASE.2021-11-24T23-19-33Z
+        command: server /data --console-address ":9001"
+        environment:
+          MINIO_ROOT_USER: minio
+          MINIO_ROOT_PASSWORD: minio123
+        ports:
+            - "9000:9000"
+            - "9001:9001"
+        volumes:
+            - ./data:/data
