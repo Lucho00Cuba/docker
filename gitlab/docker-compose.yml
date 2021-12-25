@@ -1,0 +1,15 @@
+version: '3'
+services:
+    gitlab-ce:
+        image: 'gitlab/gitlab-ce:latest'
+        restart: always
+        environment:
+          GITLAB_OMNIBUS_CONFIG: |
+            gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        ports:
+          - '80:80'
+          - '2222:22'
+        volumes:
+          - './gitlab/config:/etc/gitlab'
+          - './gitlab/logs:/var/log/gitlab'
+          - './gitlab/data:/var/opt/gitlab'

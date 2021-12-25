@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataLoader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="dataloader.xsd" >
+	
+	<!-- 
+	Defined which Reader implement will be used to get data. The Class
+	attribute refer the Class name or Reader implements. This Class can be
+	developed by customer. 
+	-->
+	<Reader Class="com.platform.perf.dataloader.ego.ConsumerResLoader"/>
+	
+	<!-- 
+	Defined which Writer will be used to load the output of Reader into
+	DataBase. 
+	Type 		attribute is optional, it defined the DataBase operation type.
+				By default, it is JDBC.
+	BatchSize 	Defined how many records will be committed into DataBase one time.
+	EnableRecover: this tag is set to enable or disable automatic data loss protection. 
+	-->
+	<Writer Type="JDBC" BatchSize="1" EnableRecover="Y">
+		<!-- 
+		Defined the name of which DataSource will be used. This is Optional
+		-->
+		<DataSource>ReportDB</DataSource>
+		
+		<!--
+		The SQL statement will be defined in this element. If  The Field sub
+		elements map the output of Reader to DataBase table. The Name attribute
+		is the key of Reader output. The Column attribute is the column name of
+		DataBase Table.
+		-->
+	<SQL Input="CONSUMER_RESOURCE_ALLOCATION">
+   	<Statement><![CDATA[
+   	INSERT INTO CONSUMER_RESOURCE_ALLOCATION (
+   	CONSUMER_NAME,
+	RESOURCE_GROUP,
+	ALLOCATED_OWN,
+	ALLOCATED_SHARE,
+	ALLOCATED_BORROW,
+	ALLOCATED_LEND,
+	PLANNED_OWN,
+	LENDING_LIMIT,
+	BORROW_LIMIT,
+	BORROW_FROM,
+	LEND_TO,
+	USED,
+	TIME_STAMP_GMT,
+	TIME_STAMP,
+	SHARE_LIMIT,
+	SHARE_RATIO,
+	SHARE_QUOTA,
+	TOTAL_DEMAND,
+	UNSATISFIED_DEMAND,
+	POTENTIAL_DEMAND,
+	CLUSTER_NAME,
+	PLANNED_HOWN,
+	PLANNED_HRESERVE,
+	PLANNED_QUOTA	
+   	)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+   	]]>
+   	</Statement>
+
+   	<Field Name="name" Column="CONSUMER_NAME" Type="String"/>
+   	<Field Name="resGroup" Column="RESOURCE_GROUP" Type="String"/>
+   	<Field Name="alloc_own" Column="ALLOCATED_OWN" Type="Integer"/>
+   	<Field Name="alloc_share" Column="ALLOCATED_SHARE" Type="Integer"/>
+   	<Field Name="alloc_borrow" Column="ALLOCATED_BORROW" Type="Integer"/>
+	<Field Name="alloc_lend" Column="ALLOCATED_LEND" Type="Integer"/>
+   	<Field Name="plan_own" Column="PLANNED_OWN" Type="Integer"/>
+   	<Field Name="lend_limit" Column="LENDING_LIMIT" Type="String"/>
+   	<Field Name="borrow_limit" Column="BORROW_LIMIT" Type="String"/>
+   	<Field Name="borrow_from" Column="BORROW_FROM" Type="String"/>
+   	<Field Name="lend_to" Column="LEND_TO" Type="String"/>
+   	<Field Name="used" Column="USED" Type="Integer"/>
+   	<Field Name="GMT" Column="TIME_STAMP_GMT" Type="Long"/>
+   	<Field Name="time" Column="TIME_STAMP" Type="Timestamp"/>
+   	<Field Name="share_limit" Column="SHARE_LIMIT" Type="String"/>
+   	<Field Name="share_ratio" Column="SHARE_RATIO" Type="Integer"/>
+   	<Field Name="share_quota" Column="SHARE_QUOTA" Type="Integer"/>
+   	<Field Name="total_demand" Column="TOTAL_DEMAND" Type="Integer"/>
+   	<Field Name="unsatisfied_demand" Column="UNSATISFIED_DEMAND" Type="Integer"/>
+   	<Field Name="potential_demand" Column="POTENTIAL_DEMAND" Type="String"/>
+   	<Field Name="clustername" Column="CLUSTER_NAME" Type="String"/>
+   	<Field Name="planned_hybrid_own" Column="PLANNED_HOWN" Type="String"/>
+   	<Field Name="planned_hybrid_reserve" Column="PLANNED_HRESERVE" Type="String"/>
+   	<Field Name="planned_quota" Column="PLANNED_QUOTA"/>   	
+   	</SQL>
+
+	<SQL Input="CONSUMER_PLAN_NON_LEAF">
+	<Statement><![CDATA[
+	INSERT INTO CONSUMER_PLAN_NON_LEAF (
+	CONSUMER_NAME,
+	RESOURCE_GROUP,
+	PLANNED_OWN,
+	TIME_STAMP_GMT,
+	TIME_STAMP,
+	SHARE_LIMIT,
+	SHARE_RATIO,
+	CLUSTER_NAME,
+	PLANNED_HOWN,
+	PLANNED_HRESERVE
+	)VALUES(?,?,?,?,?,?,?,?,?,?)
+	]]>
+	</Statement>
+
+	<Field Name="name" Column="CONSUMER_NAME" Type="String"/>
+	<Field Name="resGroup" Column="RESOURCE_GROUP" Type="String"/>
+	<Field Name="plan_own" Column="PLANNED_OWN" Type="Integer"/>
+	<Field Name="GMT" Column="TIME_STAMP_GMT" Type="Long"/>
+	<Field Name="time" Column="TIME_STAMP" Type="Timestamp"/>
+	<Field Name="share_limit" Column="SHARE_LIMIT" Type="String"/>
+	<Field Name="share_ratio" Column="SHARE_RATIO" Type="Integer"/>
+	<Field Name="clustername" Column="CLUSTER_NAME" Type="String"/>
+	<Field Name="planned_hybrid_own" Column="PLANNED_HOWN" Type="String"/>
+	<Field Name="planned_hybrid_reserve" Column="PLANNED_HRESERVE" Type="String"/>
+	</SQL>
+
+<SQL Input="CONSUMER_DEMAND">
+   	<Statement><![CDATA[
+   	INSERT INTO CONSUMER_DEMAND (
+   	CONSUMER_NAME,
+	MAX_REQUESTED,
+	USED,
+	TIME_STAMP_GMT,
+	TIME_STAMP,
+	CLUSTER_NAME
+   	)VALUES(?,?,?,?,?,?)
+   	]]>
+   	</Statement>
+
+   	<Field Name="name" Column="CONSUMER_NAME" Type="String"/>
+   	<Field Name="max_req" Column="MAX_REQUESTED" Type="Integer"/>
+   	<Field Name="used" Column="USED" Type="Integer"/>
+   	<Field Name="GMT" Column="TIME_STAMP_GMT" Type="Long"/>
+   	<Field Name="time" Column="TIME_STAMP" Type="Timestamp"/>
+	<Field Name="clustername" Column="CLUSTER_NAME" Type="String"/>
+  	</SQL>
+
+<SQL Input="CONSUMER_RESOURCELIST">
+   	<Statement><![CDATA[
+   	INSERT INTO CONSUMER_RESOURCELIST (
+   	CONSUMER_NAME,
+	RESOURCE_GROUP,
+	RESOURCE_NAME,
+	RESOURCE_TYPE,
+	TIME_STAMP_GMT,
+	TIME_STAMP,
+	CLUSTER_NAME
+   	)VALUES(?,?,?,?,?,?,?)
+   	]]>
+   	</Statement>
+
+   	<Field Name="consumer" Column="CONSUMER_NAME" Type="String"/>
+   	<Field Name="hostgroup" Column="RESOURCE_GROUP" Type="String"/>
+   	<Field Name="host" Column="RESOURCE_NAME" Type="String"/>
+   	<Field Name="type" Column="RESOURCE_TYPE" Type="String"/>
+   	<Field Name="GMT" Column="TIME_STAMP_GMT" Type="Long"/>
+   	<Field Name="time" Column="TIME_STAMP" Type="Timestamp"/>
+    <Field Name="clustername" Column="CLUSTER_NAME" Type="String"/>
+  	</SQL>
+		
+	</Writer>
+</DataLoader>

@@ -1,0 +1,5 @@
+<server description="Platform REST Server">
+    <webApplication id="deploymentrest" location="${env.EGO_VERSION}/deploymentrest" name="deploymentrest" contextRoot="platform/rest/deployment">
+        <classloader commonLibraryRef="REST_JAR,log4jConfig"></classloader>
+    </webApplication>
+</server>

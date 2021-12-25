@@ -1,0 +1,81 @@
+EGO-SNMP-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+        OBJECT-TYPE
+                FROM RFC-1212
+        TRAP-TYPE
+                FROM RFC-1215
+        enterprises
+                FROM RFC1155-SMI
+        DisplayString
+                FROM RFC1213-MIB;
+
+--
+-- Enterprise number as registered with IANA
+--     http://www.iana.org/assignments/enterprise-numbers
+--
+platform OBJECT IDENTIFIER ::= { enterprises 2766 }
+
+--
+-- Enterprise Grid Orchestrator
+--
+ego OBJECT IDENTIFIER ::= { platform 2000 }
+
+--
+-- This section describes the SNMP objects used by EGO.
+--
+egoObjects OBJECT IDENTIFIER ::= { ego 1 }
+
+genericString OBJECT-TYPE
+        SYNTAX DisplayString (SIZE (0..255))
+        ACCESS not-accessible
+        STATUS mandatory
+        DESCRIPTION "Generic string object"
+        ::= { egoObjects 0 }
+
+componentName OBJECT-TYPE
+        SYNTAX DisplayString (SIZE (0..255))
+        ACCESS not-accessible
+        STATUS mandatory
+        DESCRIPTION "Name of component that triggered the event"
+        ::= { egoObjects 1 }
+
+eventCode OBJECT-TYPE
+        SYNTAX INTEGER
+        ACCESS not-accessible
+        STATUS mandatory
+        DESCRIPTION "Event code of an event specific
+                to the component which triggered it"
+        ::= { egoObjects 2 }
+
+eventLevel OBJECT-TYPE
+        SYNTAX DisplayString (SIZE (0..255))
+        ACCESS not-accessible
+        STATUS mandatory
+        DESCRIPTION "This can be either:
+                          Information
+                          Warning
+                          Error
+                          Critical"
+        ::= { egoObjects 3 }
+
+eventArgs OBJECT-TYPE
+        SYNTAX SEQUENCE OF DisplayString
+        ACCESS not-accessible
+        STATUS mandatory
+        DESCRIPTION "Generic event arguments"
+        ::= { egoObjects 4 }
+
+--
+-- This section describes the SNMP trap used by EGO.
+--
+egoTraps OBJECT IDENTIFIER ::= { ego 2 }
+
+egoEvent TRAP-TYPE
+        ENTERPRISE egoTraps
+        VARIABLES { componentName, eventCode, eventLevel, eventArgs }
+        DESCRIPTION "EGO Generic Event"
+        ::= 1
+
+
+END

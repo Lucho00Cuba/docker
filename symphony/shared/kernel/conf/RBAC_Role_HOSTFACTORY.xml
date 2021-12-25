@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RoleDatabase xmlns="http://www.platform.com/vem/2005/05/schema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.platform.com/vem/2005/05/schema ../ego.xsd">
+  <RoleList>
+    <RoleEntry>
+        <Role inheritable="true" contextTypes="Consumer" description="Manage and View Host Factory include requestors/providers, demands and hosts." id="2f42b7eb-7b6b-4b44-9132-1ce599305391">Cluster Admin</Role>
+        <Permission>HF_ALL_REQUESTOR_VIEW</Permission>
+		<Permission>HF_ALL_REQUESTOR_MANAGE</Permission>
+		<Permission>HF_ALL_PROVIDER_VIEW</Permission>
+		<Permission>HF_ALL_PROVIDER_MANAGE</Permission>
+		<Permission>HF_SERVICE_VIEW</Permission>
+		<Permission>HF_SERVICE_MANAGE</Permission>
+    </RoleEntry>
+    <RoleEntry>
+        <Role inheritable="true" contextTypes="Consumer" description="View Host Factory requestors/providers, demands and hosts." id="9676c449-4fd0-4fcd-88cd-83dfa5ddc4bc">Cluster Admin (Read only)</Role>
+        <Permission>HF_SERVICE_VIEW</Permission>
+		<Permission>HF_ALL_REQUESTOR_VIEW</Permission>
+		<Permission>HF_ALL_PROVIDER_VIEW</Permission>
+    </RoleEntry>
+  </RoleList>
+</RoleDatabase>

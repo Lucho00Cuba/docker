@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Report">
+		<xs:annotation>
+			<xs:documentation>The Root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Name" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Name of the report</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="DisplayName" type="xs:string" minOccurs="0"/>
+				<xs:element name="Summary" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Summary of the report</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Description" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Detailed description of the report</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Category" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>Category of the report</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Folder" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>Folder of the report</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Parameters">
+					<xs:annotation>
+						<xs:documentation>The Parameters for report Parameter</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Queries">
+					<xs:annotation>
+						<xs:documentation>Query sql statements</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="Query" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Layouts">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="Layout" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="DataExports" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="DataExport" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Variables" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="Variable" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Sources" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="Source" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Parameter">
+		<xs:annotation>
+			<xs:documentation>One Parameter. There are three kind of type.</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Attributes" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Attribute" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>The attribute for display custom tags. E.g. For CheckList custom tag, it needs a attribute to display which named size, so you can define an attribute name="size" value="10"</xs:documentation>
+								</xs:annotation>
+								<xs:complexType mixed="true">
+									<xs:attribute name="Name" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>The name of attribute</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+									<xs:attribute name="Value" type="xs:string">
+										<xs:annotation>
+											<xs:documentation>The value of attribute</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:choice minOccurs="0">
+					<xs:element name="Query" minOccurs="0" maxOccurs="unbounded">
+						<xs:complexType mixed="true">
+							<xs:sequence>
+								<xs:element name="SQL">
+									<xs:annotation>
+										<xs:documentation>The select sql statement to get list values</xs:documentation>
+									</xs:annotation>
+									<xs:complexType mixed="true">
+										<xs:simpleContent>
+											<xs:extension base="xs:string"/>
+										</xs:simpleContent>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="Field" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:attribute name="Type" use="required">
+											<xs:annotation>
+												<xs:documentation>The type can be value and label, the value means the key of values, the label means the display value of values.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+													<xs:enumeration value="Value"/>
+													<xs:enumeration value="Label"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:attribute>
+										<xs:attribute name="Column" type="xs:string" use="required">
+											<xs:annotation>
+												<xs:documentation>This attribute will map the column name from select sql statement</xs:documentation>
+											</xs:annotation>
+										</xs:attribute>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+							<xs:attribute name="DBType" use="required">
+								<xs:annotation>
+									<xs:documentation>The Query name, such as Oracle, MySQL, Derby</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:enumeration value="ORACLE"/>
+										<xs:enumeration value="DERBY"/>
+										<xs:enumeration value="MYSQL"/>
+										<xs:enumeration value="STANDARD"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:attribute>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="ListValue" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Item" maxOccurs="unbounded">
+									<xs:annotation>
+										<xs:documentation>For dropdownlist or checklist</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:attribute name="Value" type="xs:string" use="required"/>
+										<xs:attribute name="Label" type="xs:string"/>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="VarValue" minOccurs="0">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="Field" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:attribute name="Type" type="xs:string" use="required">
+											<xs:annotation>
+												<xs:documentation>The type can be value and label, the value means the key of values, the label means the display value of values.</xs:documentation>
+											</xs:annotation>
+										</xs:attribute>
+										<xs:attribute name="Column" type="xs:string" use="required">
+											<xs:annotation>
+												<xs:documentation>This attribute will map the column name from select sql statement</xs:documentation>
+											</xs:annotation>
+										</xs:attribute>
+									</xs:complexType>
+								</xs:element>
+							</xs:sequence>
+							<xs:attribute name="Name" type="xs:string"/>
+						</xs:complexType>
+					</xs:element>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="Name" use="required">
+				<xs:annotation>
+					<xs:documentation>The name of parameter</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="Type" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>The type of Parameter. This Type will drive the custom tag type.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="DefaultValue">
+				<xs:annotation>
+					<xs:documentation>The default value of parameter.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="Lazy" type="xs:boolean">
+				<xs:annotation>
+					<xs:documentation>Dynamic parameter or not.</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="Label" type="xs:string"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Query">
+		<xs:annotation>
+			<xs:documentation>One named query statement. </xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element name="SQL" type="xs:string">
+					<xs:annotation>
+						<xs:documentation>The query sql statement. This query can include some var through %%%VarA%%% etc.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Parameter" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>The Parameter which mapped  the var of query statement</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="Name" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>The Name of parameter. It must defined in query statement. In addition, the /Report/Parameters/Parameter element or it's attribute need include this name.</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="Type" use="required">
+							<xs:annotation>
+								<xs:documentation>The type of parameter.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="NUMERIC"/>
+									<xs:enumeration value="STRING"/>
+									<xs:enumeration value="TIMESTAMP"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="DBType" use="required">
+				<xs:annotation>
+					<xs:documentation>The name of query statement. E.g. it can named as Oracle9i,Oracle10g,MySQL etc.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="ORACLE"/>
+						<xs:enumeration value="DERBY"/>
+						<xs:enumeration value="MYSQL"/>
+						<xs:enumeration value="STANDARD"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="MaxRowNum" type="xs:int">
+				<xs:annotation>
+					<xs:documentation>The max row num that will returned by query</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:anyAttribute processContents="skip"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Layout">
+		<xs:annotation>
+			<xs:documentation>The desc of report</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Type">
+					<xs:annotation>
+						<xs:documentation>
+							The type of report. It is a enum type, E.g.
+							BarChart,LineChart,Table
+						</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="LINE_CHART"/>
+							<xs:enumeration value="GRID_TABLE"/>
+							<xs:enumeration value="BAR_CHART"/>
+							<xs:enumeration value="CLUSTERED_BAR_CHART"/>
+							<xs:enumeration value="STACKED_BAR_CHART"/>
+							<xs:enumeration value="LINE_CHART"/>
+							<xs:enumeration value="UNSUPPORTED_CHART"/>
+							<xs:enumeration value="TABLE"/>
+							<xs:enumeration value="LINE_CLUSTERED_BAR_CHART"/>
+							<xs:enumeration value="STEPPED_LINE_CLUSTERED_BAR_CHART"/>
+							<xs:enumeration value="LINE_STACKED_BAR_CHART"/>
+							<xs:enumeration value="STEPPED_LINE_STACKED_BAR_CHART"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="DataSetName" type="xs:string" minOccurs="0"/>
+				<xs:element name="DataSet" type="xs:string" minOccurs="0"/>
+				<xs:element name="Title" type="xs:string" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							The title of chart
+						</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="Subtitles" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Subtitle" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Size" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							The size of the layout
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="Width" type="xs:string"/>
+						<xs:attribute name="Height" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="X-Axis" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							The X-Axis of chart
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element ref="Column"/>
+						</xs:sequence>
+						<xs:attribute name="Label" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>
+									The label will displayed in chart
+								</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="Type" use="required">
+							<xs:annotation>
+								<xs:documentation>
+									This desc the column type. In case,
+									it will be one of Timestamp, Number,
+									String
+								</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="TIME"/>
+									<xs:enumeration value="NUMERIC"/>
+									<xs:enumeration value="STRING"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+						<xs:attribute name="Start" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									Start of the range of the x-axis
+								</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="End" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									End of the range of the x-axis
+								</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="Period" type="xs:string">
+							<xs:annotation>
+								<xs:documentation>
+									This is a option attribute. For
+									Timestamp type, it will reference a
+									period, the unit is second. e.g.5H.
+									the unit maybe is y,M,d,H,m,s
+								</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Y-Axis" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							The Y-Axis of chart
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:attribute name="Label" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>
+									The label will displayed in chart
+								</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="Format" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Series" minOccurs="0">
+					<xs:annotation>
+						<xs:documentation>
+							The series of chart. It can has types
+							FromColumns and FromRows
+						</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="FromColumns">
+								<xs:annotation>
+									<xs:documentation>
+										From Column series
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="Column" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="FromRows">
+								<xs:annotation>
+									<xs:documentation>
+										From Row series
+									</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="Column" maxOccurs="unbounded"/>
+									</xs:sequence>
+									<xs:attribute name="ValueColumn" type="xs:string" use="required">
+										<xs:annotation>
+											<xs:documentation>
+												The value column name
+											</xs:documentation>
+										</xs:annotation>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Markers" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Marker" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="Name" type="xs:string" use="required"/>
+									<xs:attribute name="Type" type="xs:string" use="required"/>
+									<xs:attribute name="Value" type="xs:string" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="TableColumns" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TableColumn" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="URL" minOccurs="0">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Parameter" minOccurs="0" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="Name" type="xs:string" use="required"/>
+															<xs:attribute name="Value" type="xs:string" use="required"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+												<xs:attribute name="Value" type="xs:string" use="required"/>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Rollup" minOccurs="0" maxOccurs="1">
+											<xs:complexType>
+												<xs:attribute name="Method" type="xs:string" use="required">
+                                            	</xs:attribute>
+												<xs:attribute name="DefaultValue" type="xs:string" use="optional">
+                                            	</xs:attribute>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="Name" type="xs:string"/>
+									<xs:attribute name="Label" type="xs:string" use="optional"/>
+									<xs:attribute name="Type" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:string">
+												<xs:enumeration value="STRING"/>
+												<xs:enumeration value="NUMERIC"/>
+												<xs:enumeration value="DATE"/>
+												<xs:enumeration value="TIME"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="Format" type="xs:string" use="optional"/>
+									<xs:attribute name="DefaultValue" type="xs:string" use="optional"/>
+									<xs:attribute name="MaxLength" type="xs:int" use="optional"/>
+									<xs:attribute name="Style" type="xs:string" use="optional"/>
+									<xs:attribute name="UpperHeader" type="xs:string" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="Selector" type="xs:string" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:anyAttribute processContents="skip"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="DataExport">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Column" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Rollup" minOccurs="0" maxOccurs="1">
+								<xs:complexType>
+									<xs:attribute name="Method" type="xs:string" use="required">
+									</xs:attribute>
+									<xs:attribute name="DefaultValue" type="xs:string" use="optional">
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="Name" type="xs:string"/>
+						<xs:attribute name="Label" type="xs:string"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Name" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Variable">
+		<xs:annotation>
+			<xs:documentation>The definition of variable of the report</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Format" minOccurs="0">
+					<xs:complexType>
+						<xs:attribute name="Plug-in" type="xs:string" use="required"/>
+						<xs:anyAttribute processContents="skip"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Name" type="xs:string" use="required"/>
+			<xs:attribute name="Target" type="xs:string" use="required"/>
+			<xs:attribute name="Source" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+			</xs:attribute>
+			<xs:attribute name="Default" type="xs:string"/>
+			<xs:attribute name="Function">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Source">
+		<xs:annotation>
+			<xs:documentation>The definition of source of the report</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Parameter" minOccurs="0" maxOccurs="unbounded">
+					<xs:complexType mixed="true">
+						<xs:choice>
+							<xs:any processContents="skip" minOccurs="0"/>
+						</xs:choice>
+						<xs:attribute name="Name" type="xs:string" use="required"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Name" type="xs:string" use="required"/>
+			<xs:attribute name="Plug-in" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Column">
+		<xs:annotation>
+			<xs:documentation>Column name in dataset</xs:documentation>
+		</xs:annotation>
+		<xs:complexType mixed="false">
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="Label" type="xs:string" use="optional"/>
+					<xs:attribute name="Type" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="LINE"/>
+								<xs:enumeration value="BAR"/>
+								<xs:enumeration value="PIE"/>
+								<xs:enumeration value="AREA"/>
+								<xs:enumeration value="STEPPED_LINE"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="Dummy" use="optional">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="true"/>
+								<xs:enumeration value="false"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+					<xs:attribute name="Show"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -1,0 +1,26 @@
+#docker run --rm --privileged -d --network symnet -p 8443:8443 -p 8543:8543 -p 8050:8050 -e LICENSE=accept -e CLUSTER_NAME=testing -v /data/cluster1:/shared ibmcom/spectrum-symphony:7.3.2.0
+#docker run --privileged --rm -d --network symnet -e LICENSE=accept -e HOST_ROLE=COMPUTE -v /data/cluster1:/shared ibmcom/spectrum-symphony:7.3.2.0
+#
+version: '3'
+services:
+  master:
+    image: ibmcom/spectrum-symphony:7.3.2.0
+    hostname: master
+    privileged: true
+    ports:
+      - '8443:8443'
+      - '8543:8543'
+      - '8050:8050'
+    volumes:
+      - "./shared:/shared"
+    environment:
+      LICENSE: accept
+      CLUSTER_NAME: Home
+  worker:
+    image: ibmcom/spectrum-symphony:7.3.2.0
+    privileged: true
+    environment:
+      LICENSE: accept
+      HOST_ROLE: COMPUTE
+    volumes:
+      - "./shared:/shared"

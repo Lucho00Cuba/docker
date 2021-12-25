@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ds:DataSources xmlns:ds="http://www.ibm.com/perf/2006/01/datasource" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://www.ibm.com/perf/2006/01/datasource datasource.xsd">
+	<!--This Conf file can use multi-datasource.
+	    Name  Name of datasource.If have multi-datasource,please use different name.
+	    Driver  A JDBC driver is a set of database-specific implementations for the interfaces defined by JDBC.
+	            Each database vendor has its own specific implementation of the JDBC driver. 
+	            Example: Derby DB is "org.apache.derby.jdbc.ClientDriver";
+	                     Oracle DB is "oracle.jdbc.driver.OracleDriver";
+	                     MySQL DB is "org.gjt.mm.mysql.Driver"
+	    Connection  The database URL.
+	                Example: Derby DB is "jdbc:derby://<server>[:<port>]/<databaseName>";
+	                         Oracle DB is "jdbc:oracle:thin:@//<host>[:<port>]/SID";
+	                         MySQL DB is "jdbc:mysql://<host>[:<port>]/<databaseName>";
+	    UserName  The database username.
+	    Password  The database user's password.
+	    Default   Default or not.
+        -->
+	<!--
+	<ds:DataSource Name="ReportDB"
+				Driver="org.gjt.mm.mysql.Driver"
+				Connection="jdbc:mysql://<host>[:<port>]/<databaseName>"
+				Default="false"
+				Cipher="aes128"
+				UserName=""
+				Password=""/>
+	<ds:DataSource Name="ReportDB" 
+				Driver="oracle.jdbc.driver.OracleDriver" 
+				Connection="jdbc:oracle:thin:@//<host>[:<port>]/SID" 
+				Default="false" 
+				Cipher="aes128"
+				UserName="" 
+				Password=""/>
+	<ds:DataSource Name="ReportDB" 
+				Driver="org.apache.derby.jdbc.ClientDriver" 
+				Connection="jdbc:derby://<server>[:<port>]/<databaseName>" 
+				Default="true" 
+				Cipher="aes128"
+				UserName="" 
+				Password=""/>				
+	-->
+</ds:DataSources>

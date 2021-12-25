@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.platform.com/gui/pmc_tab" 
+	xmlns:tns="http://www.platform.com/gui/pmc_tab" 
+	elementFormDefault="qualified">
+
+    <element name="Tab" type="tns:TabType"></element>
+    
+    <complexType name="TabType">
+    	<sequence>
+    		<element name="TabGroups" type="tns:TabGroupsType" minOccurs="1" maxOccurs="1"></element>
+    		<element name="TabItems" type="tns:TabItemsType" minOccurs="1" maxOccurs="1"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="TabItemsType">
+    	<sequence>
+    		<element name="TabItem" type="tns:TabItemType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+    
+    <complexType name="TabGroupsType">
+    	<sequence>
+    		<element name="TabGroup" type="tns:TabGroupType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="TabGroupType">
+    	<sequence></sequence>
+    	<attribute name="id" type="string"></attribute>
+    	<attribute name="tabIds" type="string"></attribute>
+    	<attribute name="activeIndex" type="int" default="-1"></attribute>
+    </complexType>
+
+    <complexType name="TabItemType">
+    	<sequence>
+    		<element name="Datasource" type="string" minOccurs="0" maxOccurs="1"></element>
+    	</sequence>
+    	<attribute name="id" type="string"></attribute>
+    	<attribute name="label" type="string"></attribute>
+    	<attribute name="status" type="string"></attribute>
+    	<attribute name="disabled" type="string"></attribute>
+    	<attribute name="type" type="string"></attribute>
+    	<attribute name="url" type="string"></attribute>
+    	<attribute name="layoutSourceId" type="string"></attribute>
+    </complexType>
+</schema>

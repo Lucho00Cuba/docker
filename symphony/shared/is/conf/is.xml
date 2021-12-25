@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration>
+   <ISConfiguration>
+       <GlobalConfiguration>
+           <MaxClose>1</MaxClose>
+           <MaxOpen>1</MaxOpen>
+           <RunInterval>30</RunInterval>
+           <ThresholdTimeWinList ApplyOnHost="false">
+               <ThresholdTimeWin>
+                   <StartTime>0</StartTime>
+                   <EndTime>24</EndTime>
+                   <Threshold name="IS_CPUHIGH">100</Threshold>
+                   <Threshold name="IS_CPULOW">0</Threshold>
+                   <Threshold name="IS_MEMHIGH">100</Threshold>
+                   <Threshold name="IS_MEMLOW">0</Threshold>
+               </ThresholdTimeWin>
+           </ThresholdTimeWinList>
+       </GlobalConfiguration>
+   </ISConfiguration>
+</Configuration>

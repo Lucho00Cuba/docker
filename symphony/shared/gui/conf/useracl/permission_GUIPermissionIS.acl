@@ -1,0 +1,49 @@
+#action permission mapping : action name - permission list
+
+##2 tabs: Desktop Harvesting Hosts and Server Harvesting Hosts
+getHarvestingHostInfo=EGO_RESOURCE_VIEW
+IS_DESKTOP_SERVER_HOSTS_TAB=EGO_RESOURCE_VIEW
+
+##2 tabs: Desktop Harvesting General Setting and Server Harvesting General Setting
+##VM_HARVEST_CONFIG: setting VM configure
+##VM_HARVEST_VIEWCONF: only view VM configure
+getHarvestingConfiguration=EGO_RESOURCE_VIEW
+getHarvestingConfiguration_editable=EGO_ELIM_RESTART
+setHarvestingConfiguration=EGO_ELIM_RESTART
+IS_DESKTOP_SERVER_CONFIG_TAB=EGO_RESOURCE_VIEW
+IS_VM_CONFIG_TAB=VM_HARVEST_VIEWCONF
+
+##1 tab: VM Harvesting General Setting
+globalConfigurationAcion=VM_HARVEST_VIEWCONF
+globalConfigurationAcion_editable=VM_HARVEST_CONFIG
+
+##page: VM Resources
+getResourceView=VM_RESOURCE_VIEW
+getResourceTree=VM_RESOURCE_VIEW
+
+## page: Citrix
+getVMClusterInfo=VM_RESOURCE_VIEW
+IS_CITRIX_VMNAME_LINK=EGO_RESOURCE_View
+getVCenterInfo=VM_RESOURCE_VIEW
+getVCenterInfo_editable=VM_RESOURCE_VIEW
+CITRIX_VMWARE_GLOBAL_ACTION=VM_HARVEST_CONFIG
+
+commitVCenterInfo=VM_RESOURCE_VIEW
+
+## page: VMware VMs list page
+getVMHostInfo=VM_RESOURCE_VIEW
+IS_VMWARE_VMNAME_LINK=EGO_RESOURCE_View
+getHypervisorInfo=VM_RESOURCE_VIEW
+getWorkloadDemand=VM_RESOURCE_VIEW
+getVMClusterConfiguration=VM_RESOURCE_VIEW
+
+
+#################################
+# Accessibility GUI             #
+#################################
+harvestingSetting=VM_HARVEST_VIEWCONF
+IS_VM_CONFIG_TAB_EDIT=VM_HARVEST_CONFIG
+IS_DESKTOP_SERVER_CONFIG_TAB_EDIT=EGO_ELIM_RESTART
+harvestingResources=VM_RESOURCE_VIEW
+IS_VM_RESOURCE_VIEW=VM_RESOURCE_VIEW
+IS_EGO_RESOURCE_VIEW=EGO_RESOURCE_View

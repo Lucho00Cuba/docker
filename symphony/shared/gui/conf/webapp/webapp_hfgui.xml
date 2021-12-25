@@ -1,0 +1,5 @@
+<server>
+	<webApplication id="hfgui" location="hostfactory/${env.HF_VERSION}/hfgui" name="hfgui">
+                <classloader commonLibraryRef="Platform_GUI,log4jConfig"></classloader>
+    </webApplication>
+</server>

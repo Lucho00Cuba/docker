@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TableMaintenance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="table_maintenance.xsd">
+	<Descriptions>
+		<Name>Queue Accounting Rate Table Maintenance</Name>
+		<Summary>作业队列费率表的维护</Summary>
+		<Folder>TableMaintenance</Folder>
+		<Discription>作业队列费率表的维护</Discription>
+		<DisplayName>作业队列费率表的维护</DisplayName>
+		<Category>计费表的维护</Category>
+	</Descriptions>
+	<Insert>
+		<Parameters>
+			<Parameter Name="QUEUE_NAME" Type="DROPDOWNLIST" Label="队列">
+				<VarValue Name="${QUEUE_MAP}">
+					<Field Type="Value" Column="QUEUE_CODE" />
+					<Field Type="Label" Column="QUEUE_NAME" />
+				</VarValue>
+			</Parameter>
+			<Parameter Name="BUSINESS_HOUR_CODE" Type="DROPDOWNLIST" Label="时间">
+				<ListValue>
+     				<Item Value="1" Label="工作日" />
+     				<Item Value="0" Label="非工作日" />
+    			</ListValue>
+			</Parameter>
+			<Parameter Name="QUEUE_RATE" Type="TEXT" Label="费率(元/小时)">	
+			</Parameter>
+		</Parameters>
+		<Queries>
+			<Query DBType="ORACLE">
+				<SQL>
+				<![CDATA[
+INSERT INTO 
+       QUEUE_RATE(QUEUE_NAME, BUSINESS_HOUR_CODE, QUEUE_RATE) 
+       VALUES('${QUEUE_NAME}', ${BUSINESS_HOUR_CODE}, ${QUEUE_RATE})
+ ]]>
+				</SQL>
+			</Query>
+		</Queries>
+	</Insert>
+	<Delete>
+		<Parameters>
+		</Parameters>
+		<Queries>
+			<Query DBType="ORACLE">
+				<SQL>
+				<![CDATA[
+DELETE QUEUE_RATE 
+WHERE ROWID='${ROW_ID}'
+ ]]>
+				</SQL>
+			</Query>
+		</Queries>
+	</Delete>
+	<Update>
+		<Parameters>
+			<Parameter Name="QUEUE_NAME" Type="DROPDOWNLIST" Label="队列">
+				<VarValue Name="${QUEUE_MAP}">
+					<Field Type="Value" Column="QUEUE_CODE" />
+					<Field Type="Label" Column="QUEUE_NAME" />
+				</VarValue>
+			</Parameter>
+			<Parameter Name="BUSINESS_HOUR_CODE" Type="DROPDOWNLIST" Label="时间">
+				<ListValue>
+     				<Item Value="1" Label="工作日" />
+     				<Item Value="0" Label="非工作日" />
+    			</ListValue>
+			</Parameter>
+			<Parameter Name="QUEUE_RATE" Type="TEXT" Label="费率(元/小时)">	
+			</Parameter>
+		</Parameters>
+		<Queries>
+			<Query DBType="ORACLE">
+				<SQL>
+				<![CDATA[
+UPDATE QUEUE_RATE 
+SET 
+  QUEUE_RATE = ${QUEUE_RATE},
+  QUEUE_NAME = '${QUEUE_NAME}',
+  BUSINESS_HOUR_CODE = ${BUSINESS_HOUR_CODE}
+WHERE ROWID='${ROW_ID}'
+ ]]>
+				</SQL>
+			</Query>
+		</Queries>
+	</Update>
+	<Select>
+		<Parameters>
+			<Parameter Name="QUEUE_NAME" Type="DROPDOWNLIST" Label="队列">
+				<VarValue Name="${QUEUE_MAP}">
+					<Field Type="Value" Column="QUEUE_CODE" />
+					<Field Type="Label" Column="QUEUE_NAME" />
+				</VarValue>
+			</Parameter>
+			<Parameter Name="BUSINESS_HOUR_CODE" Type="DROPDOWNLIST" Label="时间">
+				<ListValue>
+     					<Item Value="1" Label="工作日" />
+     					<Item Value="0" Label="非工作日" />
+    				</ListValue>
+			</Parameter>
+			<Parameter Name="QUEUE_RATE" Type="TEXT" Label="费率(元/小时)">	
+			</Parameter>
+		</Parameters>
+		<Queries>
+			<Query DBType="ORACLE">
+				<SQL>
+					<![CDATA[
+SELECT ROWIDTOCHAR(QR.ROWID) AS ROW_ID, QR.*
+FROM QUEUE_RATE QR
+ ]]>
+				</SQL>
+			</Query>
+		</Queries>
+		<Outputs>
+			<Column Name="QUEUE_NAME" Label="队列" Type="INT" Display="YES" ContentStyle="NORMAL" HearderStyle="BOLD" />
+			<Column Name="BUSINESS_HOUR_CODE" Label="时间" Type="INT" Display="YES" ContentStyle="NORMAL" HearderStyle="BOLD" />
+			<Column Name="QUEUE_RATE" Label="费率(元/小时)" Type="INT" Display="YES" ContentStyle="NORMAL" HearderStyle="BOLD" />
+			<Column Name="ROW_ID" Label="行号" Type="STRING" Display="NO" />
+		</Outputs>
+	</Select>
+	<Variables>		
+		<Variable Name="QUEUE_NAME" Target="QUEUE_NAME" Source="REQUEST" />
+		<Variable Name="BUSINESS_HOUR_CODE" Target="BUSINESS_HOUR_CODE" Source="REQUEST" />
+		<Variable Name="QUEUE_RATE" Target="QUEUE_RATE" Source="REQUEST" />			
+		<Variable Name="ROW_ID" Target="ROW_ID" Source="REQUEST" />
+					
+		<Variable Name="QUEUE_MAP" Target="" Source="QUEUE_MAP_SOURCE" />
+		
+	</Variables>
+	<Sources>
+		<Source Name="REQUEST" Plug-in="com.platform.perf.report.config.var.source.RequestVariableSource" />
+		<Source Name="QUEUE_MAP_SOURCE" Plug-in="com.platform.perf.report.config.var.source.SQLVaraibleSource">
+			<Parameter Name="QUERIES">
+				<Queries>
+					<Query DBType="STANDARD">
+						<SQL>
+							<![CDATA[
+							SELECT DISTINCT QUEUE_NAME AS QUEUE_CODE, QUEUE_NAME FROM QUEUE_NAME
+						]]>
+						</SQL>
+					</Query>
+				</Queries>
+			</Parameter>
+		</Source>
+		
+	</Sources>
+</TableMaintenance>

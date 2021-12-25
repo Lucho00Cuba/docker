@@ -1,0 +1,5 @@
+<server description="Platform WEBGUI Server">
+    <webApplication id="isgui" location="is/${env.SOAM_VERSION}/isgui" name="isgui">
+		<classloader commonLibraryRef="Platform_GUI,log4jConfig"></classloader>
+    </webApplication>
+</server>

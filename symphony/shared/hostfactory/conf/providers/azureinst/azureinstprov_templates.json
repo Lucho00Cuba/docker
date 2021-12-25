@@ -1,0 +1,45 @@
+{
+    "templates": [
+        {
+            "templateId": "Minimal-Template-VM",
+            "maxNumber": 200,
+            "attributes": {
+                "type": ["String", "X86_64"],
+                "ncpus": ["Numeric", "4"],
+                "nram": ["Numeric", "8192"]
+            },
+            "imageId": "SymphonyDevImage",
+            "storageAccountType": "STANDARD_LRS",
+            "vmType": "Standard_A4_v2",
+            "osType": "Linux",
+            "resourceGroup": "SYM",
+            "virtualNetwork": "SYM-vnet-dev1",
+            "subnet": "sym_dev_subnet1",
+            "securityGroup": "SymphonyDev-nsg",
+            "customScriptUri": "http://10.1.1.1/post_install.sh"
+        },
+        {
+            "templateId": "Template-VM",
+            "maxNumber": 200,
+            "attributes": {
+                "type": ["String", "X86_64"],
+                "ncpus": ["Numeric", "4"],
+                "nram": ["Numeric", "8192"]
+            },
+            "imageId": "SymphonyDevImage",
+            "storageAccountType": "STANDARD_LRS",
+            "vmType": "Standard_A4_v2",
+            "osType": "Linux",
+            "resourceGroup": "SYM",
+            "virtualNetwork": "SYM-vnet-dev1",
+            "subnet": "sym_dev_subnet1",
+            "securityGroup": "SymphonyDev-nsg",
+            "withPublicIP": true,
+            "rootUserName": "symphony",
+            "sshPubKeyFile": "/opt/sym/hostfactory/conf/providers/azure/conf/server-key.pub",
+            "customScriptUri": "http://10.1.1.1/post_install.sh",
+            "hostPrefix": "compute-",
+            "instanceTags": "group=project1"
+        }        
+    ]
+}

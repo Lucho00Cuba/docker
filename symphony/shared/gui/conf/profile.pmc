@@ -1,0 +1,30 @@
+#!/bin/sh
+GUI_VERSION=4.0
+PMC_TOP=@PMC_TOP@
+. ${PMC_TOP}/perf/conf/profile.perf
+
+GUI_BINDIR=${PMC_TOP}/gui/${GUI_VERSION}/bin
+GUI_CONFDIR=${PMC_TOP}/gui/conf
+uname_m=`uname -m`
+case "$uname_m" in
+    x86_64)
+	GUI_LIBDIR=${PMC_TOP}/gui/${GUI_VERSION}/lib/
+	;;
+    ppc64)
+	GUI_LIBDIR=${PMC_TOP}/gui/${GUI_VERSION}/lib/
+	;;
+esac
+
+GUI_LOGDIR=${PMC_TOP}/gui/logs
+CATALINA_TMPDIR=${PMC_TOP}/gui/work
+CATALINA_WORKDIR=${PMC_TOP}/gui/work
+
+echo "${PATH}" | grep "${GUI_BINDIR}" > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+    PATH=$GUI_BINDIR:$PATH
+fi
+
+unset GUI_BINDIR
+export PATH GUI_CONFDIR GUI_LIBDIR GUI_VERSION GUI_LOGDIR CATALINA_TMPDIR CATALINA_WORKDIR PMC_TOP
+
+

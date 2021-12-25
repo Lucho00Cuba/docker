@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionDatabase xmlns="http://www.platform.com/vem/2005/05/schema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.platform.com/vem/2005/05/schema ../ego.xsd">
+  <PermissionDefinition>
+        <ComponentName>HostFactory</ComponentName>
+        <PermissionList>
+            <ObjectEntry>
+               <Object parentObject="Host Factory">HostFactory Service</Object>
+               <Permission ID="HF_SERVICE_VIEW">
+                   <Description>View detailed information host factory service configuration.</Description>
+                   <ContextType>None</ContextType>
+               </Permission>            
+			   <Permission ID="HF_SERVICE_MANAGE">
+                   <Description>Manage host factory service configuration.</Description>
+                   <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+			<ObjectEntry>
+               <Object parentObject="Host Factory">All Requestors</Object>
+               <Permission ID="HF_ALL_REQUESTOR_VIEW">
+                   <Description>View detailed information about all requestors in host factory, such as host and demand details.</Description>
+                   <ContextType>None</ContextType>
+               </Permission>            
+			   <Permission ID="HF_ALL_REQUESTOR_MANAGE">
+                   <Description>Manage all requestors in host factory.</Description>
+                   <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+			<ObjectEntry>
+               <Object parentObject="Host Factory">All Providers</Object>
+               <Permission ID="HF_ALL_PROVIDER_VIEW">
+                   <Description>View detailed information about all providers in host factory.</Description>
+                   <ContextType>None</ContextType>
+               </Permission>            
+			   <Permission ID="HF_ALL_PROVIDER_MANAGE">
+                   <Description>Manage all providers in host factory.</Description>
+                   <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+        </PermissionList>
+  </PermissionDefinition>
+</PermissionDatabase>

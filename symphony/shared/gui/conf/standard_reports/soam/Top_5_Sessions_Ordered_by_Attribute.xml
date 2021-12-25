@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../report.xsd">
+	<Name>Top 5 Sessions Ordered by Attribute</Name>
+	<DisplayName>report.displayname</DisplayName>
+	<Summary>report.summary</Summary>
+	<Description>report.description</Description>
+	<Category>report.category</Category>
+	<Version>1.2.2</Version>
+	<Parameters>
+		<Parameter Name="TIME" Type="TIMEPICK" Label="report.parameter.time.label">
+			<Attributes>
+				<Attribute Name="startTimeName" Value="StartTime"/>
+				<Attribute Name="endTimeName" Value="EndTime"/>
+				<Attribute Name="defaultMethod" Value="RELATIVE"/>
+				<Attribute Name="timeValue" Value="2"/>
+				<Attribute Name="timeUnit" Value="H"/>
+			</Attributes>
+		</Parameter>
+		<Parameter Name="ConditionName" Type="DROPDOWNLIST" DefaultValue="" Label="report.parameter.condition_name.label">
+			<Attributes>
+				<Attribute Name="label" Value="Host"/>
+				<Attribute Name="size" Value="10"/>
+				<Attribute Name="maxSize" Value="10"/>
+				<Attribute Name="script"><![CDATA[
+function displayLayer(whichLayer) {
+	document.getElementById(whichLayer).style.display="block";
+}
+function hiddenLayer(whichLayer) {
+	document.getElementById(whichLayer).style.display="none";
+}
+function func_select(id) {
+	var selValue = document.getElementById(id).value;
+	var opts = document.getElementById(id).options;
+	var i = 0;
+	for(i = 0 ; i < opts.length ; i++) {
+		if( opts[i].value == selValue) {
+			displayLayer("DIV_" + opts[i].value);
+			dynamStats.setpos = i + 2;
+		} else {
+			hiddenLayer("DIV_" + opts[i].value);
+		}
+	}
+}
+				]]></Attribute>
+				<Attribute Name="onChange" Value="javascript:func_select('ConditionName')"/>
+			</Attributes>
+			<ListValue>
+				<Item Value="CONSUMER_NAME" Label="report.parameter.condition_name.consumer.label"/>
+				<Item Value="SUBMISSION_USER" Label="report.parameter.condition_name.submission_user.label"/>
+			</ListValue>
+		</Parameter>
+		<Parameter Name="CONSUMER_NAME" Type="DROPDOWNLIST" DefaultValue="" Label="report.parameter.consumer.label">
+			<Attributes>
+				<Attribute Name="Hidden" Value="false"/>
+			</Attributes>
+			<Query DBType="STANDARD">
+				<SQL><![CDATA[SELECT DISTINCT CONSUMER_NAME FROM SESSION_HISTORY ORDER BY CONSUMER_NAME]]></SQL>
+				<Field Type="Value" Column="CONSUMER_NAME"/>
+				<Field Type="Label" Column="CONSUMER_NAME"/>
+			</Query>
+		</Parameter>
+		<Parameter Name="SUBMISSION_USER" Type="DROPDOWNLIST" DefaultValue="" Label="report.parameter.submission_user.label">
+			<Attributes>
+				<Attribute Name="Hidden" Value="true"/>
+			</Attributes>
+			<Query DBType="STANDARD">
+				<SQL><![CDATA[SELECT DISTINCT SUBMISSION_USER FROM SESSION_HISTORY ORDER BY SUBMISSION_USER]]></SQL>
+				<Field Type="Value" Column="SUBMISSION_USER"/>
+				<Field Type="Label" Column="SUBMISSION_USER"/>
+			</Query>
+		</Parameter>
+		<Parameter Name="Metric" Type="DROPDOWNLIST" DefaultValue="" Label="report.parameter.metric.label">
+			<ListValue>
+				<Item Value="5" Label="report.parameter.metric.item5.label"/>
+				<Item Value="6" Label="report.parameter.metric.item6.label"/>
+				<Item Value="7" Label="report.parameter.metric.item7.label"/>
+				<Item Value="8" Label="report.parameter.metric.item8.label"/>
+				<Item Value="9" Label="report.parameter.metric.item9.label"/>
+				<Item Value="10" Label="report.parameter.metric.item10.label"/>
+				<Item Value="11" Label="report.parameter.metric.item11.label"/>
+				<Item Value="12" Label="report.parameter.metric.item12.label"/>
+			</ListValue>
+		</Parameter>
+		<Parameter Name="CLUSTER" Type="DROPDOWNLIST" DefaultValue="" Label="report.parameter.cluster.label">
+			<Attributes>
+				<Attribute Name="label" Value="Cluster"/>
+			</Attributes>
+			<Query DBType="STANDARD">
+				<SQL><![CDATA[
+					SELECT DISTINCT CLUSTER_NAME FROM SESSION_HISTORY ORDER BY CLUSTER_NAME
+					]]></SQL>
+				<Field Type="Value" Column="CLUSTER_NAME"/>
+				<Field Type="Label" Column="CLUSTER_NAME"/>
+			</Query>
+		</Parameter>
+	</Parameters>
+	<Queries>
+		<Query DBType="DERBY" MaxRowNum="5">
+			<SQL><![CDATA[
+SELECT END_TIME AS "TIME_STAMP",SESSION_ID AS "Session ID", SESSION_NAME AS "Session Name",SESSION_STATE AS "Session State",
+	MAX(NUM_TASK_DONE) AS "Total num of done tasks",
+	MAX(NUM_TASK_ERROR) AS "Total num of error tasks",
+	MAX(NUM_TASK_CANCELED) AS "Total num of canceled tasks",
+	MAX(NUM_TASK_DONE+NUM_TASK_RUNNING+NUM_TASK_ERROR+NUM_TASK_CANCELED+NUM_TASK_PENDING) AS "Total num of tasks",
+	MAX(TOTAL_TASKS_RUNTIME) AS "Total run time (S)",
+	MAX(TOTAL_UNSUCCESS_TASKRUNS) AS "Total num of rerun",
+	MAX(TOTAL_INPUT_SIZE) AS "Total input message size (B)",
+	MAX(TOTAL_OUTPUT_SIZE) AS "Total output message size (B)"                           
+ FROM SESSION_HISTORY
+ WHERE (END_TIME >= %%%StartTime%%% AND END_TIME < %%%EndTime%%%)
+ 				AND CLUSTER_NAME IN (%%%CLUSTER%%%)
+        AND (%%%CONDITION_NAME%%% = %%%CONDITION_VALUE%%%)
+ GROUP BY END_TIME,SESSION_ID, SESSION_NAME,SESSION_STATE
+ ORDER BY %%%Metric%%% DESC FETCH FIRST 5 ROWS ONLY
+  			]]></SQL>
+			<Parameter Name="CLUSTER" Type="STRING"/>
+			<Parameter Name="StartTime" Type="TIMESTAMP"/>
+			<Parameter Name="EndTime" Type="TIMESTAMP"/>
+			<Parameter Name="Metric" Type="NUMERIC"/>
+		</Query>
+			<Query DBType="ORACLE" MaxRowNum="5">
+			<SQL><![CDATA[
+			SELECT * FROM(
+SELECT END_TIME AS "TIME_STAMP",SESSION_ID AS "Session ID", SESSION_NAME AS "Session Name",SESSION_STATE AS "Session State",
+	MAX(NUM_TASK_DONE) AS "Total num of done tasks",
+	MAX(NUM_TASK_ERROR) AS "Total num of error tasks",
+	MAX(NUM_TASK_CANCELED) AS "Total num of canceled tasks",
+	MAX(NUM_TASK_DONE+NUM_TASK_RUNNING+NUM_TASK_ERROR+NUM_TASK_CANCELED+NUM_TASK_PENDING) AS "Total num of tasks",
+	MAX(TOTAL_TASKS_RUNTIME) AS "Total run time (S)",
+	MAX(TOTAL_UNSUCCESS_TASKRUNS) AS "Total num of rerun",
+	MAX(TOTAL_INPUT_SIZE) AS "Total input message size (B)",
+	MAX(TOTAL_OUTPUT_SIZE) AS "Total output message size (B)"                           
+ FROM SESSION_HISTORY
+ WHERE (END_TIME >= %%%StartTime%%% AND END_TIME < %%%EndTime%%%)
+ 				AND CLUSTER_NAME IN (%%%CLUSTER%%%)
+        AND (%%%CONDITION_NAME%%% = %%%CONDITION_VALUE%%%)
+ GROUP BY END_TIME,SESSION_ID, SESSION_NAME,SESSION_STATE
+ ORDER BY %%%Metric%%% DESC )
+ WHERE ROWNUM <=5 
+  			]]></SQL>
+			<Parameter Name="CLUSTER" Type="STRING"/>
+			<Parameter Name="StartTime" Type="TIMESTAMP"/>
+			<Parameter Name="EndTime" Type="TIMESTAMP"/>
+			<Parameter Name="Metric" Type="NUMERIC"/>
+		</Query>
+	<Query DBType="SQLSERVER" MaxRowNum="5">
+			<SQL><![CDATA[
+SELECT TOP 5 * FROM(
+SELECT END_TIME AS "TIME_STAMP",SESSION_ID AS "Session ID", SESSION_NAME AS "Session Name",SESSION_STATE AS "Session State",
+	MAX(NUM_TASK_DONE) AS "Total num of done tasks",
+	MAX(NUM_TASK_ERROR) AS "Total num of error tasks",
+	MAX(NUM_TASK_CANCELED) AS "Total num of canceled tasks",
+	MAX(NUM_TASK_DONE+NUM_TASK_RUNNING+NUM_TASK_ERROR+NUM_TASK_CANCELED+NUM_TASK_PENDING) AS "Total num of tasks",
+	MAX(TOTAL_TASKS_RUNTIME) AS "Total run time (S)",
+	MAX(TOTAL_UNSUCCESS_TASKRUNS) AS "Total num of rerun",
+	MAX(TOTAL_INPUT_SIZE) AS "Total input message size (B)",
+	MAX(TOTAL_OUTPUT_SIZE) AS "Total output message size (B)"                           
+ FROM SESSION_HISTORY
+ WHERE (END_TIME >= %%%StartTime%%% AND END_TIME < %%%EndTime%%%)
+ 				AND CLUSTER_NAME IN (%%%CLUSTER%%%)
+        AND (%%%CONDITION_NAME%%% = %%%CONDITION_VALUE%%%)
+ GROUP BY END_TIME,SESSION_ID, SESSION_NAME,SESSION_STATE
+  )T ORDER BY %%%Metric%%% DESC
+  			]]></SQL>
+			<Parameter Name="CLUSTER" Type="STRING"/>
+			<Parameter Name="StartTime" Type="TIMESTAMP"/>
+			<Parameter Name="EndTime" Type="TIMESTAMP"/>
+			<Parameter Name="Metric" Type="NUMERIC"/>
+		</Query>
+		<Query DBType="DB2" MaxRowNum="5">
+			<SQL><![CDATA[
+SELECT END_TIME AS "TIME_STAMP",SESSION_ID AS "Session ID", SESSION_NAME AS "Session Name",SESSION_STATE AS "Session State",
+	MAX(NUM_TASK_DONE) AS "Total num of done tasks",
+	MAX(NUM_TASK_ERROR) AS "Total num of error tasks",
+	MAX(NUM_TASK_CANCELED) AS "Total num of canceled tasks",
+	MAX(NUM_TASK_DONE+NUM_TASK_RUNNING+NUM_TASK_ERROR+NUM_TASK_CANCELED+NUM_TASK_PENDING) AS "Total num of tasks",
+	MAX(TOTAL_TASKS_RUNTIME) AS "Total run time (S)",
+	MAX(TOTAL_UNSUCCESS_TASKRUNS) AS "Total num of rerun",
+	MAX(TOTAL_INPUT_SIZE) AS "Total input message size (B)",
+	MAX(TOTAL_OUTPUT_SIZE) AS "Total output message size (B)"                           
+ FROM SESSION_HISTORY
+ WHERE (END_TIME >= %%%StartTime%%% AND END_TIME < %%%EndTime%%%)
+ 				AND CLUSTER_NAME IN (%%%CLUSTER%%%)
+        AND (%%%CONDITION_NAME%%% = %%%CONDITION_VALUE%%%)
+ GROUP BY END_TIME,SESSION_ID, SESSION_NAME,SESSION_STATE
+ ORDER BY %%%Metric%%% DESC FETCH FIRST 5 ROWS ONLY
+  			]]></SQL>
+			<Parameter Name="CLUSTER" Type="STRING"/>
+			<Parameter Name="StartTime" Type="TIMESTAMP"/>
+			<Parameter Name="EndTime" Type="TIMESTAMP"/>
+			<Parameter Name="Metric" Type="NUMERIC"/>
+		</Query>
+	</Queries>
+	<Layouts>
+		<!-- The Type refer the report type. e.g. LINE_CHART, TABLE, BAR_CHART, STACKED_BAR_CHART -->
+		<Layout>
+			<Type>TABLE</Type>
+			<Title>report.layout.title</Title>
+			<Subtitles>
+				<Subtitle Variables="%%%CLUSTER%%%">report.layout.subtitle1</Subtitle>
+				<Subtitle Variables="%%%METRIC_TITLE%%%">report.layout.subtitle2</Subtitle>
+			</Subtitles>
+			<TableColumns>
+				<TableColumn Name="TIME_STAMP" Label="report.layout.table_column.time_stamp.label" Type="DATE" Format="report.layout.table_column.time_stamp.format" Style="report.layout.table_column.time_stamp.style"/>
+				<TableColumn Name="SESSION ID" Label="report.layout.table_column.session_id.label" Type="NUMERIC" Style="report.layout.table_column.session_id.style"/>
+				<TableColumn Name="SESSION NAME" Label="report.layout.table_column.session_name.label" Type="STRING" Style="report.layout.table_column.session_name.style"/>
+				<TableColumn Name="SESSION STATE" Label="report.layout.table_column.session_state.label" Type="STRING" Style="report.layout.table_column.session_state.style"/>
+				<TableColumn Name="TOTAL NUM OF DONE TASKS" Label="report.layout.table_column.total_num_of_done_tasks.label" Type="NUMERIC" Style="report.layout.table_column.total_num_of_done_tasks.style"/>
+				<TableColumn Name="TOTAL NUM OF ERROR TASKS" Label="report.layout.table_column.total_num_of_error_tasks.label" Type="NUMERIC" Style="report.layout.table_column.total_num_of_error_tasks.style"/>
+				<TableColumn Name="TOTAL NUM OF CANCELED TASKS" Label="report.layout.table_column.total_num_of_canceled_tasks.label" Type="NUMERIC" Style="report.layout.table_column.total_num_of_canceled_tasks.style"/>
+				<TableColumn Name="TOTAL NUM OF TASKS" Label="report.layout.table_column.total_num_of_tasks.label" Type="NUMERIC" Style="report.layout.table_column.total_num_of_tasks.style"/>
+				<TableColumn Name="TOTAL RUN TIME (S)" Label="report.layout.table_column.total_run_time_s.label" Type="NUMERIC" Style="report.layout.table_column.total_run_time_s.style"/>
+				<TableColumn Name="TOTAL NUM OF RERUN" Label="report.layout.table_column.total_num_of_rerun.label" Type="NUMERIC" Style="report.layout.table_column.total_num_of_rerun.style"/>
+				<TableColumn Name="TOTAL INPUT MESSAGE SIZE (B)" Label="report.layout.table_column.total_input_message_size_b.label" Type="NUMERIC" Style="report.layout.table_column.total_input_message_size_b.style"/>
+				<TableColumn Name="TOTAL OUTPUT MESSAGE SIZE (B)" Label="report.layout.table_column.total_output_message_size_b.label" Type="NUMERIC" Style="report.layout.table_column.total_output_message_size_b.style"/>
+				<TableColumn Name="TOTAL OUTPUT MESSAGE SIZE (B)" Label="Total output message size (B)" Type="NUMERIC" Style="text-align:left"/>
+			</TableColumns>
+			<DataLoader/>
+		</Layout>
+	</Layouts>
+	<DataExports>
+	  <DataExport Name="DEFAULT">
+	    		<Column Name="TIME_STAMP" Label="report.data_exports.time_stamp.label"/>
+				<Column Name="SESSION ID" Label="report.data_exports.session_id.label"/>
+				<Column Name="SESSION NAME" Label="report.data_exports.session_name.label"/>
+				<Column Name="SESSION STATE" Label="report.data_exports.session_state.label"/>
+				<Column Name="TOTAL NUM OF DONE TASKS" Label="report.data_exports.total_num_of_done_tasks.label"/>
+				<Column Name="TOTAL NUM OF ERROR TASKS" Label="report.data_exports.total_num_of_error_tasks.label"/>
+				<Column Name="TOTAL NUM OF CANCELED TASKS" Label="report.data_exports.total_num_of_canceled_tasks.label"/>
+				<Column Name="TOTAL NUM OF TASKS" Label="report.data_exports.total_num_of_tasks.label"/>
+				<Column Name="TOTAL RUN TIME (S)" Label="report.data_exports.total_run_time_s.label"/>
+				<Column Name="TOTAL NUM OF RERUN" Label="report.data_exports.total_num_of_rerun.label"/>
+				<Column Name="TOTAL INPUT MESSAGE SIZE (B)" Label="report.data_exports.total_input_message_size_b.label"/>
+				<Column Name="TOTAL OUTPUT MESSAGE SIZE (B)" Label="report.data_exports.total_output_message_size_b.label"/>
+	  </DataExport>
+	</DataExports>
+	<Variables>
+		<Variable Name="CLUSTER" Target="CLUSTER" Source="REQUEST"/>
+		<Variable Name="StartTime" Target="StartTime" Source="REQUEST"/>
+		<Variable Name="EndTime" Target="EndTime" Source="REQUEST"/>
+		<Variable Name="CONDITION_NAME" Target="ConditionName" Source="REQUEST"/>
+		<Variable Name="CONDITION_VALUE" Target="ConditionValue" Source="CONDITION" Function="TO_COMMA_DELIMITED_QUOTED_STRING"/>
+		<Variable Name="CONDITION_VALUE_FOR_SUBTITLE" Target="ConditionValue" Source="CONDITION" Function="TO_COMMA_DELIMITED_STRING"/>
+		<Variable Name="Metric" Target="Metric" Source="REQUEST"/>
+		<Variable Name="METRIC_TITLE" Target="Metric" Source="MAP"/>
+		<Variable Name="REAL_START_TIME" Target="REAL_START_TIME" Source="REAL_TIME_RANGE">
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM-dd HH:mm"/>
+		</Variable>
+		<Variable Name="REAL_END_TIME" Target="REAL_END_TIME" Source="REAL_TIME_RANGE">
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM-dd HH:mm"/>
+		</Variable>
+	</Variables>
+	<Sources>
+		<Source Name="REQUEST" Plug-in="com.platform.perf.report.config.var.source.RequestVariableSource"/>
+		<Source Name="REAL_TIME_RANGE" Plug-in="com.platform.perf.report.config.var.source.RealTimeRangeSource">
+			<Parameter Name="START_TIME">%%%StartTime%%%</Parameter>
+			<Parameter Name="END_TIME">%%%EndTime%%%</Parameter>
+		</Source>
+		<Source Name="CONDITION" Plug-in="com.platform.perf.report.config.var.source.ConditionVariableSource">
+			<Parameter Name="CONDITION_NAME">%%%CONDITION_NAME%%%</Parameter>
+		</Source>
+		<Source Name="MAP" Plug-in="com.platform.perf.report.config.var.source.MapVariableSource">
+			<Parameter Name="VARIABLE_NAME">%%%Metric%%%</Parameter>
+			<Parameter Name="MAP">
+				<Map>
+					<Entry>
+						<Key>5</Key>
+						<Value>Total num of done tasks</Value>
+					</Entry>
+					<Entry>
+						<Key>6</Key>
+						<Value>Total num of error tasks</Value>
+					</Entry>
+					<Entry>
+						<Key>7</Key>
+						<Value>Total num of canceled tasks</Value>
+					</Entry>
+					<Entry>
+						<Key>8</Key><Value>Total # of tasks</Value>
+					</Entry>
+					<Entry>
+						<Key>9</Key><Value>Total run time (S)</Value>
+					</Entry>
+					<Entry>
+						<Key>10</Key><Value>Total # of rerun</Value>
+					</Entry>
+					<Entry>
+						<Key>11</Key><Value>Total input message size (Byte)</Value>
+					</Entry>
+					<Entry>
+						<Key>12</Key><Value>Total output message size (Byte)</Value>
+					</Entry>
+				</Map>
+			</Parameter>
+		</Source>
+	</Sources>
+</Report>

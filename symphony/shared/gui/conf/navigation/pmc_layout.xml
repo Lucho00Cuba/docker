@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="http://www.platform.com/gui/pmc_layout" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.platform.com/gui/pmc_layout pmc_layout.xsd">
+	<!-- EGO -->
+	<LayoutItem id="egoServiceLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.ego.system.service.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/dashboard/template/redirect.jsp?consumerSensitivePageId=EGO_SERVICE_LIST&amp;moduleName=Service">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="egoProfileLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.ego.service.profile.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/mixWithConsumerTree.jsp?consumerSensitivePageId=EGO_SERVICE_LIST&amp;moduleName=Service&amp;url=/platform/getServiceConfigureList.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="egoServiceGroupLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.ego.service.group.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/serviceGroup.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	
+	<!-- resource -->
+	<LayoutItem id="resourceHostLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.resources.hosts.allocatedhosts}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/dashboard/template/redirect.jsp?moduleName=Resources&amp;consumerSensitivePageId=EGO_ALLOCATION">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+		<LayoutItem id="allHostLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.resources.hosts.allhosts}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/dashboard/template/redirect.jsp?moduleName=allResources">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<!-- host factory begine -->
+		<LayoutItem id="resourceHFRequestLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.resources.cloud.request}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/dashboard/template/redirect.jsp?moduleName=Resources&amp;consumerSensitivePageId=EGO_ALLOCATION">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+		<LayoutItem id="resourceHFHostLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.resources.cloud.request}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/dashboard/template/redirect.jsp?moduleName=allResources">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	       <LayoutItem id="resourceHFConfigurationLayout">
+        <LayoutUnits>
+            <LayoutUnit id="center">
+                <Attribute position="center" header="@{pmc.layout.resources.cloud.configuration}" gutter="0px, 0px, 0px, 0px"
+                    scroll="true" maxHeight="500" minHeight="30"></Attribute>
+                <Source type="iframe"
+                    url="/platform/ego/dashboard/template/redirect.jsp?moduleName=allResources">
+                    <Datasource></Datasource>
+                </Source>
+            </LayoutUnit>
+        </LayoutUnits>
+    </LayoutItem>
+	<!-- host factory end-->
+	<LayoutItem id="resourceGroupLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.resource.resourceGrp.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/getResourceGroup.controller?isMDS=0">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="mdsResourceGroupLayout">
+        <LayoutUnits>
+            <LayoutUnit id="center">
+                <Attribute position="center" header="@{pmc.layout.resource.mdsResourceGrp.label}"
+                    gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+                    minHeight="30"></Attribute>
+                <Source type="iframe" url="/platform/getResourceGroup.controller?isMDS=1">
+                    <Datasource></Datasource>
+                </Source>
+            </LayoutUnit>
+        </LayoutUnits>
+    </LayoutItem>
+	<LayoutItem id="consumerListLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.resource.consumer.label}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/mixWithConsumerTree.jsp?consumerSensitivePageId=EGO_CONSUMER_LIST&amp;moduleName=Consumers&amp;url=/platform/ConsumerTree.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="resourcePlanLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.resourceplan.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/resourcePlanAction.controller?consumerSensitivePageId=EGO_RESOURCE_PLAN_PG&amp;nodePaths=&amp;classStyle=resource&amp;permissionFlag=true">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="MDSResourcePlanLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.MDSResourceplan.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/mdsresplan/toMDSResPlanList.controller?isMigrated=false">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+			<LayoutUnit id="bottom">
+				<Attribute position="bottom" resize="true" height="400"
+					header="&amp;nbsp;" gutter="11px, 0px, 0px, 0px" scroll="true"
+					maxHeight="500" minHeight="30" />
+				<Source type="iframe" tabGroup="egoMDSResPlanTabGroup"
+					highlightTabId="">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="resourceAlloLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.resourceAllo.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/dashboard/template/redirect.jsp?consumerSensitivePageId=EGO_ALLOCATION&amp;moduleName=Resources&amp;flag=consumerAllocation">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="resourceMDSAlloLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.resourceMDSAllo.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/mdsresplan/toMDSResPlanAllocation.controller?isMigrated=true">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="mdsResourceAlloLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.mdsResourceAllo.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/mdsresplan/toMDSResPlanAllocation.controller?isMigrated=false">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="serviceRegionLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.repository.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/getRegionList.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+		<LayoutItem id="lsfJobLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.workload.lsfjob.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/ego/dashboard/template/redirect.jsp?consumerSensitivePageId=GUI_LSF_JOB_PAGE&amp;moduleName=LSFJobs">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="servicePackageLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.servicePackage.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/mixWithConsumerTree.jsp?moduleName=SOAM&amp;consumerSensitivePageId=SOAM_PKG_LIST&amp;url=/platform/servicePackageInfoAction.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="soamServicePackageLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.servicePackage.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/mixWithConsumerTree.jsp?moduleName=SOAM&amp;consumerSensitivePageId=SOAM_PKG_LIST&amp;url=/soamgui/servicePackageInfoAction.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="deservicePackageLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.servicePackage.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/servicePackageInfoAction.controller?reload=1">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	
+	<!-- entitlement layout -->
+	<LayoutItem id="entitlementLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.entitlement.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/getClusterLic.controller?classStyle=license">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="clusterSummaryLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.clusterSummary.label}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/getClusterProp.controller?classStyle=cluster">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="clusterPropertyLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.clusterProperty.label}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/toClusterProperty.controller?winStatus=href&amp;managePara=modify&amp;clusterFlag=true">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="masterFailoverLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.masterLayout.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/MasterCandidate.controller?classStyle=master">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="userAccountsLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.user.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/getUserInfo.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="userRoleLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.userRole.label}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/ego/rbacControl/toRBACControl.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+
+	<!-- Report Logs -->
+	<LayoutItem id="standarReportLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.standarReport.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/perfgui/reportListingAction.controller?reportType=2">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="customReportLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.customReport.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/perfgui/reportListingAction.controller?reportType=1">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="systemReportLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.systemLog.label}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/logManageAction.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="explorerDashboardLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.explorerDashboard.label}" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/logManageAction.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="explorerChartLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.explorerChart.label}" gutter="0px, 0px, 0px, 0px"
+				scroll="true" maxHeight="500" minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/logManageAction.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	
+	<!-- YARN layout -->
+	<LayoutItem id="yarnLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.yarn.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/integration/yarn/toyarn.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	
+
+
+
+	<!-- harvesting layout -->
+	<LayoutItem id="harvestingHostLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.harvestingHost.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/getHarvestingHostInfo.controller?reload=1">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="harvestingConfLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.harvestingConf.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/getHarvestingConfiguration.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	
+	<LayoutItem id="harvestingVMResourceLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.harvestingVMResource.label}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/isgui/getResourceView.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	
+	<LayoutItem id="symDashboardLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header=""
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe" url="/platform/ego/resources/todashboard.controller?hasBranding=false">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	
+</Layout>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.platform.com/gui/pmc_help" 
+	xmlns:tns="http://www.platform.com/gui/pmc_help" 
+	elementFormDefault="qualified">
+
+    <element name="HelpGroups" type="tns:HelpGroupsType"></element>
+    
+    <complexType name="HelpGroupsType">
+    	<sequence>
+    		<element name="HelpGroup" type="tns:HelpGroupType" minOccurs="0" maxOccurs="unbounded"></element>
+    	</sequence>
+    </complexType>
+
+    <complexType name="HelpGroupType">
+    	<sequence>
+    		<element name="Help" type="tns:HelpType" minOccurs="0"
+    			maxOccurs="unbounded">
+    		</element>
+    	</sequence>
+    	<attribute name="id" type="string"></attribute>
+    	<attribute name="navigationId" type="string"></attribute>
+    	<attribute name="url" type="string"></attribute>
+    	<attribute name="role" type="string"></attribute>
+    	<attribute name="urlPrefix" type="string" default="false"></attribute>
+    	<attribute name="width" type="string"></attribute>
+    	<attribute name="height" type="string"></attribute>
+    </complexType>
+
+    <complexType name="HelpType">
+    	<attribute name="id" type="string"></attribute>
+    	<attribute name="value" type="string"></attribute>
+    	<attribute name="display" type="string"></attribute>
+    	<attribute name="url" type="string"></attribute>
+    	<attribute name="role" type="string"></attribute>
+    	<attribute name="status" type="string"></attribute>
+    	<attribute name="urlPrefix" type="string" default="false"></attribute>
+    	<attribute name="width" type="string"></attribute>
+    	<attribute name="height" type="string"></attribute>
+    </complexType>
+</schema>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is a sample Rack chassis Configuration XML file. -->
+<!-- <layout> is the top level element. Child elements can be <rack> elements 
+	or <server> elements. -->
+<layout>
+	<!-- The following is an example of 42U rack with rack servers. -->
+	<rack name="Rack1" size="42" description="Sample rack servers" />
+
+	<!-- The following is an example of a 42U rack with chassis. -->
+	<rack name="Rack2" size="42" description="main centos rack">
+		<!-- The following is an example of a 4U blade chassis, mounted on the 
+			2nd slot of the rack, which can support up to 8 blade servers. -->
+		<chassis name="chassis1A" unit="2" size="4" slots="8"
+			description="old sun chassis" />
+		<chassis name="chassis1B" unit="17" size="10" slots="16" />
+	</rack>
+</layout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Log xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="log.xsd">
+	<Name>sim.log</Name>
+	<Summary>logretrieve.summary.sim.log</Summary>
+	<Category>SOAM</Category>
+	<Scope></Scope>
+	<Module>SOAM</Module>
+	<Directory>${SOAM_HOME}/logs</Directory>
+	<Filter>*sim.hostname*</Filter>
+	<FileFilters>
+		<Parameter Name="which" Type="TEXT" Label="label.filterHosts">
+			<Attributes>
+				<Attribute Name="size" Value="30"/>
+				<Attribute Name="maxSize" Value="10"/>
+			</Attributes>
+		</Parameter>
+		<Parameter Name="RESOURCE_LIST" Type="TRANSFERBOX" Label="Host">
+			<Attributes>
+				<Attribute Name="size" Value="10"/>
+			</Attributes>
+		</Parameter>
+	</FileFilters>
+	<ContentFilters>
+		<Parameter Name="LINE" Type="HIDDEN" DefaultValue="100"/>
+		<Parameter Name="KEYWORD" Type="HIDDEN" DefaultValue="warnning"/>
+	</ContentFilters>
+	<FileListPlugin>com.user.define</FileListPlugin>
+	<ContentPlugin>com.user.define</ContentPlugin>
+</Log>

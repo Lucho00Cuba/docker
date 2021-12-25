@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="AccessController">
+		<xs:annotation>
+			<xs:documentation>ACL root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Role" minOccurs="0" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Role element</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Global" minOccurs="0">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="Privilege" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="Reports" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Reports granted to the role</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element ref="Report" minOccurs="0" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="Name" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>Name of the element</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Report">
+		<xs:annotation>
+			<xs:documentation>Report element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="Privilege" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="Name" type="xs:string" use="required">
+				<xs:annotation>
+					<xs:documentation>Name of the report</xs:documentation>
+				</xs:annotation>
+			</xs:attribute>
+			<xs:attribute name="Type" use="optional" default="STANDARD_REPORT">
+				<xs:annotation>
+					<xs:documentation>Type of the report</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="CUSTOM_REPORT"/>
+						<xs:enumeration value="STANDARD_REPORT"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="Privilege">
+		<xs:annotation>
+			<xs:documentation>Privilege of the report granted to the role</xs:documentation>
+		</xs:annotation>
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="VIEW_INSTANCE"/>
+				<xs:enumeration value="BUILD_ONLINE_REPORT"/>
+				<xs:enumeration value="SCHEDULE_REPORT"/>
+				<xs:enumeration value="CREATE_CUSTOM_REPORT"/>
+				<xs:enumeration value="DELETE_CUSTOM_REPORT"/>
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:element>
+</xs:schema>

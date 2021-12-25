@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataLoader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="dataloader.xsd" >
+	
+	<!-- 
+	Defined which Reader implement will be used to get data. The Class
+	attribute refer the Class name or Reader implements. This Class can be
+	developed by customer. 
+	-->
+	<Reader Class="com.platform.perf.dataloader.ego.HostDynamicResLoader">
+		<Properties> 
+			<Property>
+			 <!--The LoaderType's value indicates the loader type.
+			  There are several value, for example 
+			  0   sampling loader , that we should consider the data may lost.
+			  1   file loader , that we should consider the data lost.
+			  2   file loader , that we needn't consider the data lost.
+			   --> 
+				<Name>LoaderType</Name>
+				<Value>0</Value>
+			</Property> 
+			<Property>
+			 <!--We can use this value to multiply the interval value , and then
+			   using the result to compare with the loader period cost.
+			 -->			
+				<Name>IntervalPercentage</Name>
+				<Value>0.8</Value>
+			</Property> 
+		</Properties>
+	</Reader>
+	
+	<!-- 
+	Defined which Writer will be used to load the output of Reader into
+	DataBase. 
+	Type 		attribute is optional, it defined the DataBase operation type.
+				By default, it is JDBC.
+	BatchSize 	Defined how many records will be committed into DataBase one time.
+     EnableRecover: this tag is set to enable or disable automatic data loss protection. 
+	-->
+	<Writer Type="JDBC" BatchSize="1" EnableRecover="Y">
+		<!-- 
+		Defined the name of which DataSource will be used. This is Optional
+		-->
+		<DataSource>ReportDB</DataSource>
+		
+		<!--
+		The SQL statement will be defined in this element. If  The Field sub
+		elements map the output of Reader to DataBase table. The Name attribute
+		is the key of Reader output. The Column attribute is the column name of
+		DataBase Table.
+		-->
+		<SQL Input="RESOURCE_METRICS">
+   	<Statement><![CDATA[
+   	INSERT INTO RESOURCE_METRICS(
+   	RESOURCE_NAME,
+   	RESOURCE_TYPE,
+   	ATTRIBUTE_NAME,
+   	ATTRIBUTE_TYPE,
+   	ATTRIBUTE_VALUE_STR,
+   	ATTRIBUTE_VALUE_NUM,
+   	TIME_STAMP,
+	TIME_STAMP_GMT,
+	CLUSTER_NAME
+   	)VALUES(?,?,?,?,?,?,?,?,?)
+   	]]>
+   	</Statement>
+   	<Field Name="resName" Column=" RESOURCE_NAME" Type="String"/>
+   	<Field Name="resType" Column=" RESOURCE_TYPE" Type="String"/>
+   	<Field Name="attName" Column=" ATTRIBUTE_NAME" Type="String"/>
+   	<Field Name="attType" Column=" ATTRIBUTE_TYPE" Type="String"/>
+   	<Field Name="attValue_str" Column=" ATTRIBUTE_VALUE_STR" Type="String"/>
+   	<Field Name="attValue_num" Column=" ATTRIBUTE_VALUE_NUM" Type="Float"/>
+   	<Field Name="time" Column=" TIME_STAMP" Type="Timestamp"/>
+	<Field Name="GMT" Column="TIME_STAMP_GMT" Type="Long"/>
+	<Field Name="clustername" Column="CLUSTER_NAME" Type="String"/>
+  	</SQL>
+		
+	</Writer>
+</DataLoader>

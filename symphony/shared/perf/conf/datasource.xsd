@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:loader="http://www.ibm.com/perf/2006/01/datasource" targetNamespace="http://www.ibm.com/perf/2006/01/datasource" elementFormDefault="qualified">
+	<xs:element name="DataSources">
+		<xs:annotation>
+			<xs:documentation>The DataLoader root</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="DataSource">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Properties" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Property" minOccurs="1" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Name" minOccurs="1" maxOccurs="1">
+														<xs:simpleType>
+															<xs:restriction
+																base="xs:string">
+																<xs:minLength
+																	value="1">
+																</xs:minLength>
+															</xs:restriction>
+														</xs:simpleType>
+													</xs:element>
+													<xs:element name="Value" minOccurs="1" maxOccurs="1" type="xs:string"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="Name" type="xs:string" use="required"/>
+						<xs:attribute name="Driver" type="xs:string" use="required"/>
+						<xs:attribute name="ClassPath" type="xs:string" use="optional"/>
+						<xs:attribute name="Connection" type="xs:string" use="required"/>
+						<xs:attribute name="Cipher" type="xs:string" use="optional"/>
+						<xs:attribute name="UserName" type="xs:string" use="required"/>
+						<xs:attribute name="Password" type="xs:string" use="required"/>
+						<xs:attribute name="Default" type="xs:boolean"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

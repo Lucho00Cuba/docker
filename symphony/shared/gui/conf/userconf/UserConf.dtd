@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : UserConf.dtd
+    Created on : September 21, 2005, 12:31 PM
+    Author     : jliu
+    Description:
+        Save user configurations include view preference, session expire time.
+
+    TODO define vocabulary identification data
+    PUBLIC ID  : -//vendor//vocabulary//EN
+    SYSTEM ID  : http://server/path/UserConf.dtd
+-->
+
+<!-- TODO define your own vocabulary/syntax. Example follows:  -->
+<!ELEMENT UserConfs (ViewPreference*,FilterSetting*,SiteMapSetting?,Configuration?,SessionConf?,TaskConf?)>
+<!ELEMENT ViewPreference EMPTY>
+<!ATTLIST ViewPreference Type CDATA #REQUIRED>
+<!ATTLIST ViewPreference MaxPageSize CDATA "">
+<!ATTLIST ViewPreference EnableAutoRefresh CDATA "">
+<!ATTLIST ViewPreference RefreshTime CDATA "">
+<!ATTLIST ViewPreference SelectedColumns CDATA #REQUIRED>
+<!ATTLIST ViewPreference UnselectedColumns CDATA #REQUIRED>
+<!ATTLIST ViewPreference SortBy CDATA "">
+<!ATTLIST ViewPreference SortDir CDATA "">
+<!ATTLIST ViewPreference TitleName CDATA "">
+<!ATTLIST ViewPreference SiteMapType CDATA "">
+<!ELEMENT SessionConf EMPTY>
+<!ATTLIST SessionConf ExpireTime CDATA "">
+<!ELEMENT TaskConf EMPTY>
+<!ATTLIST TaskConf Cap CDATA "">
+<!ELEMENT Configuration (Parameter*)>
+<!ELEMENT Parameter (Name,Value)*>
+<!ELEMENT Name (#PCDATA)>
+<!ELEMENT Value (#PCDATA)>
+<!ELEMENT FilterSetting EMPTY>
+<!ATTLIST FilterSetting Type CDATA #REQUIRED>
+<!ATTLIST FilterSetting Name CDATA #REQUIRED>
+<!ATTLIST FilterSetting Value CDATA #REQUIRED>
+<!ELEMENT SiteMapSetting EMPTY>
+<!ATTLIST SiteMapSetting Type CDATA #REQUIRED>
+<!ATTLIST SiteMapSetting Value CDATA #REQUIRED>

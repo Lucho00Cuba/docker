@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionDatabase xmlns="http://www.platform.com/vem/2005/05/schema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.platform.com/vem/2005/05/schema ../ego.xsd">
+  <PermissionDefinition>
+        <ComponentName>EGO</ComponentName>
+        <PermissionList>
+            <ObjectEntry>
+               <Object parentObject="Allocation and Execution">All Clients</Object>
+               <Permission ID="EGO_CLIENT_VIEW">
+               <Description>View information about registered clients in the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_CLIENT_REMOVE" baseID="EGO_CLIENT_VIEW">
+               <Description>Unregister clients and remove them from the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Allocation and Execution">My Clients</Object>
+               <Permission ID="EGO_MYCLIENT_VIEW">
+               <Description>View information about your own clients registered in the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_MYCLIENT_REGISTER" baseID="EGO_MYCLIENT_VIEW">
+               <Description>Register and unregister your own clients.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_MYCLIENT_REMOVE" baseID="EGO_MYCLIENT_VIEW">
+               <Description>Unregister your own clients and remove them from the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Allocation and Execution">All Allocations</Object>
+               <Permission ID="EGO_ALLOCATION_VIEW">
+               <Description>View information about all allocations in the cluster.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_ALLOCATION_UNBLOCK_HOST" baseID="EGO_ALLOCATION_VIEW">
+               <Description>Unblock hosts so that they can be allocated to the same consumer again.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Allocation and Execution">My Allocations</Object>
+               <Permission ID="EGO_MYALLOCATION_VIEW">
+               <Description>View information about your own clients registered in the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_MYALLOCATE_RESOURCES" baseID="EGO_MYALLOCATION_VIEW">
+               <Description>Manage your own allocations. Permitted actions: request new allocations and more resources, reduce and free allocations, unblock hosts.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+                <Permission ID="EGO_MYALLOCATION_UNBLOCK_HOST" baseID="EGO_MYALLOCATION_VIEW">
+               <Description>Unblock hosts so that they can be used for your own allocations again.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Allocation and Execution">All Activities</Object>
+               <Permission ID="EGO_ACTIVITY_VIEW" >
+               <Description>View detailed information about the activities in the cluster.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_ACTIVITY_KILL" baseID="EGO_ACTIVITY_VIEW">
+               <Description>Kill activities in the cluster.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Allocation and Execution">My Activities</Object>
+               <Permission ID="EGO_MYACTIVITY_VIEW" >
+               <Description>View detailed information about your own activities in the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_ACTIVITY_EXECUTION" baseID="EGO_MYACTIVITY_VIEW">
+               <Description>Start an activity on a host.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_MYACTIVITY_KILL" baseID="EGO_MYACTIVITY_VIEW">
+               <Description>Kill only your own activities in the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Allocation and Execution">Global Standby Service</Object>
+               <Permission ID="EGO_GLOBAL_STANDBY_SVC_VIEW">
+               <Description>View information about global standby instances in the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_GLOBAL_STANDBY_SVC_KILL" baseID="EGO_GLOBAL_STANDBY_SVC_VIEW">
+               <Description>Kill global standby instances in the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Allocation and Execution">Standby Service</Object>
+               <Permission ID="EGO_STANDBY_VIEW">
+               <Description>View standby instances information in the cluster.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_STANDBY_CONTROL" baseID="EGO_STANDBY_VIEW">
+               <Description>Control standby instances in the cluster.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Cluster and Logs">Cluster</Object>
+               <Permission ID="EGO_CLUSTER_VIEW">
+               <Description>View information about the cluster, including the cluster name, entitlement, primary candidate list, and the version of EGO.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_CLUSTER_CONTROL" baseID="EGO_CLUSTER_VIEW">
+               <Description>Modify cluster properties and primary candidate list.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_REGISTER_WINDOWS_PASSWD">
+               <Description>Register password for a Windows execution user account.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Cluster and Logs">Log Level Control</Object>
+               <Permission ID="EGO_LOG_CONTROL">
+               <Description>Change log level.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Cluster and Logs">Log Retrieval</Object>
+               <Permission ID="GUI_ACCESS_SYSTEM_LOGS">
+               <Description>Retrieve system logs from the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="GUI_ACCESS_HOST_LOGS">
+               <Description>Retrieve log files from specified host.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="GUI_ACCESS_APP_LOGS">
+               <Description>Retrieve Symphony application SSM logs file from PMC.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="GUI_ACCESS_TASK_LOGS">
+               <Description>Retrieve Symphony application tasks logs from PMC.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="RFA_FAM_START">
+               <Description>View files on hosts, copy files to and from hosts, and remove files from a host.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>      
+            <ObjectEntry>
+               <Object>Dashboard and Utilities</Object>
+               <Permission ID="GUI_DASHBOARD">
+               <Description>View Dashboard.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="GUI_YARN_LINK">
+               <Description>Access the YARN GUI.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object>Storage</Object>
+               <Permission ID="GUI_HDFS_LINK">
+               <Description>Access the HDFS URL to check the HDFS that has been configured in Symphony.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="EGO Services">Services</Object>
+               <Permission ID="EGO_SERVICE_VIEW">
+               <Description>View information about registered EGO services or service groups.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_SERVICE_CONFIGURE"  baseID="EGO_SERVICE_VIEW">
+               <Description>Add, delete, configure, and modify EGO services.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_SERVICE_CONTROL" baseID="EGO_SERVICE_VIEW">
+               <Description>Start and stop EGO services.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_CLUSTER_CREDENTIAL">
+               <Description>Configure service parameter NeedCredential.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_IMPERSONATE">
+               <Description>Assign own user account for impersonation.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_IMPERSONATE_ASSIGN">
+               <Description>Assign any user account for impersonation.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry> 
+                <Object>Gridsync Datasets</Object>
+                <Permission ID="GS_DATASET_VIEW"> 
+                <Description>View all data sets.</Description>
+                <ContextType>Consumer</ContextType>
+                </Permission>
+                <Permission ID="GS_DATASET_USE" basedID="GS_DATASET_VIEW"> 
+                <Description>Use data sets, including requesting a lock on or releasing a lock from a data set.</Description>
+                <ContextType>Consumer</ContextType>
+                </Permission>
+                <Permission ID="GS_DATASET_CREATE"> 
+                <Description>Create a data sets.</Description>
+                <ContextType>Consumer</ContextType>
+                </Permission>
+                <Permission ID="GS_DATASET_MANAGEMENT" baseID="GS_DATASET_VIEW"> 
+                <Description>Modify and delete data sets. Add and delete a file or directory (and its contents). Enable and disable synchronization of data sets.</Description>
+                <ContextType>Consumer</ContextType>
+                </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Reports and PERF">Standard Reports</Object>
+               <Permission ID="GUI_STANDARDRPT">
+               <Description>Generate standard reports.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Reports and PERF">Custom Reports</Object>
+               <Permission ID="GUI_CUSTOMRPT_USE">
+               <Description>View custom reports.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="GUI_CUSTOMRPT_MANAGE">
+               <Description>Create and modify custom reports.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Reports and PERF">Explorer Reports</Object>
+               <Permission ID="EXPLORER">
+               <Description>Access explorer reports.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Reports and PERF">PERF Loader Controller</Object>
+               <Permission ID="PERF_PLC_VIEW">
+               <Description>View PLC status.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="PERF_PLC_CHANGELOG" baseID="PERF_PLC_VIEW">
+               <Description>Change PLC log level.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Repository">RS Region</Object>
+               <Permission ID="REGION_VIEW">
+               <Description>View information about repository service regions.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="REGION_CONTROL" baseID="REGION_VIEW">
+               <Description>Create and delete repository service regions.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Repository">RS Package</Object>
+               <Permission ID="RSDEPLOY_PKG_VIEW">
+               <Description>View packages in the repository.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="RSDEPLOY_PKG_VIEW_STATUS">
+               <Description>Get the status of deployments, including pending and completed deployments.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="RSDEPLOY_PKG_CONTROL" baseID="RSDEPLOY_PKG_VIEW">
+               <Description>Add and remove packages and cancel the remote deployment of packages on hosts.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="RSDEPLOY_PKG_INSTALL" baseID="RSDEPLOY_PKG_VIEW">
+               <Description>Initiate deployment of a package to hosts and uninstall a package from hosts. This permission is not specific to any consumers.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="RSDEPLOY_PKG_INSTALL_CONSUMER" baseID="RSDEPLOY_PKG_VIEW" >
+               <Description>Initiate deployment of a package to hosts and uninstall a package from hosts. This permission is specific to consumers used to get an allocation to initiate the activity.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Repository">Application Package</Object>
+               <Permission ID="DEPLOY_PKG_VIEW">
+               <Description>View deployed service packages. This permission behaves differently than other permissions. A user with this permission assigned to a consumer, can view all packages deployed at the assigned consumer and all other consumers in the same branch in the consumer tree, whether a parent or child consumer.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="DEPLOY_PKG_CONTROL" baseID="DEPLOY_PKG_VIEW">
+               <Description>Add, modify, and delete service packages.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="DEPLOY_PKG_PUSH" baseID="DEPLOY_PKG_VIEW">
+               <Description>Download service packages to hosts. This permission behaves differently than other permissions. A user with this permission assigned to a consumer, can push all packages deployed at the assigned consumer and all other consumers in the same branch in the consumer tree, whether a parent or child consumer.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Consumers and Resource Plans">Consumers</Object>
+               <Permission ID="EGO_CONSUMER_VIEW">
+               <Description>View details about each consumer in the cluster.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_CONSUMER_CONTROL" baseID="EGO_CONSUMER_VIEW">
+               <Description>Create and delete consumers.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_CONSUMER_MODIFY" baseID="EGO_CONSUMER_VIEW">
+               <Description>Modify consumer properties.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Consumers and Resource Plans">Resource Plans</Object>
+               <Permission ID="EGO_RESPLAN_VIEW" >
+               <Description>View summary of resource plan details.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="EGO_RESPLAN_MODIFY" baseID="EGO_RESPLAN_VIEW">
+               <Description>Modify resource plan.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Resources and Resource Groups">Resources</Object>
+               <Permission ID="EGO_RESOURCE_VIEW">
+               <Description>View information about resources in the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_RESOURCE_CONTROL"  baseID="EGO_RESOURCE_VIEW">
+               <Description>Open and close (including close and reclaim) hosts.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_RESOURCE_REMOVE" baseID="EGO_RESOURCE_VIEW">
+               <Description>Remove resources from the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Resources and Resource Groups">Resource Groups</Object>
+               <Permission ID="EGO_RESGROUP_VIEW">
+               <Description>View information about resource groups.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_RESGROUP_CONTROL" baseID="EGO_RESGROUP_VIEW">
+               <Description>Create, modify, and delete resource groups.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Resources and Resource Groups">Rack View</Object>
+               <Permission ID="GUI_HOST_RACKVIEW" baseID="EGO_RESOURCE_VIEW">
+               <Description>View rack information.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_RES_TOPOLOGY_VIEW">
+               <Description>View information about resource topologies in the cluster.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Users and Roles">Users</Object>
+               <Permission ID="EGO_USER_VIEW">
+               <Description>View information about all user accounts in the EGO user database .</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_USER_MANAGEMENT" baseID="EGO_USER_VIEW">
+               <Description>Add, modify, and delete users.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Users and Roles">Roles</Object>
+               <Permission ID="EGO_ROLE_VIEW">
+               <Description>View information about roles including all user-created roles and built-in roles.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_ROLE_MANAGEMENT"  baseID="EGO_ROLE_VIEW">
+               <Description>Create and delete roles, and modify role permissions.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="EGO_ROLE_ASSIGNMENT"  baseID="EGO_ROLE_VIEW">
+               <Description>Assign and unassign roles.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Harvesting">VM Configuration</Object>
+               <Permission ID="VM_HARVEST_VIEWCONF">
+               <Description>View VM harvesting configuration.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+               <Permission ID="VM_HARVEST_CONFIG" baseID="VM_HARVEST_VIEWCONF" >
+               <Description>Configure VM harvesting.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Harvesting">VM Resources</Object>
+               <Permission ID="VM_RESOURCE_VIEW" >
+               <Description>View desktop, server, and VM resources.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object parentObject="Harvesting">Desktop and Server</Object>
+               <Permission ID="EGO_ELIM_RESTART" baseID="EGO_RESOURCE_VIEW" >
+               <Description>Enable desktop, server, and VM harvesting.</Description>
+               <ContextType>None</ContextType>
+               </Permission>
+            </ObjectEntry>
+            <ObjectEntry>
+               <Object>LSF</Object>
+               <Permission ID="GUI_LSF_JOB_VIEW">
+               <Description>View LSF jobs.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+               <Permission ID="GUI_LSF_JOB_CONTROL" baseID="GUI_LSF_JOB_VIEW">
+               <Description>Kill, suspend, and resume jobs.</Description>
+               <ContextType>Consumer</ContextType>
+               </Permission>
+            </ObjectEntry>
+        </PermissionList>
+  </PermissionDefinition>
+</PermissionDatabase>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+	<Properties>
+		<Property name="log.pattern">%d{MM/dd/yy HH:mm:ss:SSS zzz} [%-5.10t] %-5p [%-15.15c]- %m%n</Property>
+		<Property name="log.file.dir">logs</Property>
+		<Property name="log.file.name">messages_gui_log4j2</Property>
+		<Property name="log.file.name.err">messages_gui_log4j2_error</Property>
+		<Property name="log.file.ext">log</Property>
+		<Property name="log.file.date.pattern">%d{yyyy-MM-dd}</Property>
+		<Property name="log.file.size">10 MB</Property>
+		<Property name="log.files.maxCount">5</Property>
+	</Properties>
+	<Appenders>
+		
+		<!-- Console -->
+		<Console name="CONSOLE" target="SYSTEM_OUT">
+			<PatternLayout>
+				<Pattern>${log.pattern}</Pattern>
+			</PatternLayout>
+		</Console>
+		
+		<!-- File -->
+		<RollingFile name="FILE" 
+					 append="false" 
+					 fileName="${log.file.dir}/${log.file.name}.${log.file.ext}" 
+					 filePattern="${log.file.dir}/${log.file.name}.${log.file.ext}.${log.file.date.pattern}.%i.gz">
+			<PatternLayout>
+				<Pattern>${log.pattern}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="24" modulate="true" />
+				<SizeBasedTriggeringPolicy size="${log.file.size}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${log.files.maxCount}" />
+		</RollingFile>
+	
+		<!-- Error file -->
+		<RollingFile name="ERROR" 
+					 append="false" 
+					 fileName="${log.file.dir}/${log.file.name.err}.${log.file.ext}" 
+					 filePattern="${log.file.dir}/${log.file.name.err}.${log.file.ext}.${log.file.date.pattern}.%i.gz">
+			<ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY" />
+			<PatternLayout>
+				<Pattern>${log.pattern}</Pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="24" modulate="true" />
+				<SizeBasedTriggeringPolicy size="${log.file.size}" />
+			</Policies>
+			<DefaultRolloverStrategy max="${log.files.maxCount}" />
+		</RollingFile>
+		
+	</Appenders>
+	<Loggers>
+		<Root level="ERROR">
+			<AppenderRef ref="CONSOLE" />
+			<AppenderRef ref="FILE" />
+			<AppenderRef ref="ERROR" />
+		</Root>
+	</Loggers>
+</Configuration>
+

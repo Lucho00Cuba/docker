@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" 
+	targetNamespace="http://www.platform.com/gui/pmc_menu" 
+	xmlns:tns="http://www.platform.com/gui/pmc_menu" 
+	elementFormDefault="qualified">
+
+	<element name="Menu" type="tns:MenuType"></element>
+	
+	<complexType name="MenuType">
+		<sequence>
+			<element name="MenuItems" type="tns:MenuItemsType" minOccurs="0" maxOccurs="unbounded"></element>
+		</sequence>
+	</complexType>
+	
+	<element name="MenuItems" type="tns:MenuItemsType"></element>
+	
+	<complexType name="MenuItemsType">
+		<sequence>
+			<element name="MenuItem" type="tns:MenuItemType" minOccurs="1" maxOccurs="unbounded"></element>
+		</sequence>
+		<attribute name="id" type="string"></attribute>
+		<attribute name="highlightMenuId" type="string"></attribute>
+	</complexType>
+	
+	<element name="MenuItem" type="tns:MenuItemType"></element>
+
+	<complexType name="MenuItemType">
+		<sequence>
+			<element ref="tns:MenuItems" minOccurs="0" maxOccurs="1"></element>
+		</sequence>
+		<attribute name="id" type="string"></attribute>
+		<attribute name="label" type="string"></attribute>
+		<attribute name="icon" type="string"></attribute>
+		<attribute name="status" type="string"></attribute>
+		<attribute name="url" type="string"></attribute>
+		<attribute name="layoutSourceId" type="string"></attribute>
+		<attribute name="tabGroup" type="string"></attribute>
+		<attribute name="helpGroupId" type="string"></attribute>
+		<attribute name="highlightTabId" type="string"></attribute>
+		<attribute name="childUrl" type="string"></attribute>
+		<attribute name="param" type="string"></attribute>
+		<attribute name="aclResource" type="string"></attribute>
+		<attribute name="aclPermission">
+			<simpleType>
+				<restriction base="int">
+					<minInclusive value="1"></minInclusive>
+					<maxExclusive value="7"></maxExclusive>
+				</restriction>
+			</simpleType>
+		</attribute>
+		<attribute name="disabled" type="boolean"></attribute>
+	</complexType>
+	
+</schema>

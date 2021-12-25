@@ -1,0 +1,17 @@
+{
+    "version": 2,
+    "requestorplugins":[
+        {
+            "name": "symA",
+            "enabled": 1,
+            "needEGOCredential": 1,
+            "scriptPath": "${HF_TOP}/${HF_VERSION}/requestorplugins/symA/scripts/"
+        },
+        {
+            "name": "cws",
+            "enabled": 1,
+            "needEGOCredential": 1,
+            "scriptPath": "${HF_TOP}/${HF_VERSION}/requestorplugins/cws/scripts/"
+        }
+    ]
+}

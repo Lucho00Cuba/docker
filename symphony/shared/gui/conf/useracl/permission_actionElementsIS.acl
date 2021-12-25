@@ -1,0 +1,22 @@
+
+
+//Desktop and server hosts
+getHarvestingHostInfo=IS_DESKTOP_SERVER_HOSTS_TAB
+getHarvestingConfiguration=IS_DESKTOP_SERVER_CONFIG_TAB,IS_VM_CONFIG_TAB
+globalConfigurationAcion=IS_DESKTOP_SERVER_CONFIG_TAB,IS_VM_CONFIG_TAB
+##getResourceView=IS_VM_RESOURCE_PAGE
+
+## page: citrix VMs list page and name link
+getVMClusterInfo=IS_CITRIX_VMNAME_LINK
+
+## page: VMware VMs List page and name link
+getVMHostInfo=IS_VMWARE_VMNAME_LINK
+
+## page: VMware vCenter list page
+getVCenterInfo=CITRIX_VMWARE_GLOBAL_ACTION
+
+#################################
+# Accessibility GUI             #
+#################################
+harvestingSetting=IS_DESKTOP_SERVER_CONFIG_TAB,IS_VM_CONFIG_TAB,IS_VM_CONFIG_TAB_EDIT,IS_DESKTOP_SERVER_CONFIG_TAB_EDIT
+harvestingResources=IS_VM_RESOURCE_VIEW,IS_EGO_RESOURCE_VIEW,IS_VM_CONFIG_TAB_EDIT

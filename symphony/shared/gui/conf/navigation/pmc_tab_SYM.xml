@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tab xmlns="http://www.platform.com/gui/pmc_tab" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.platform.com/gui/pmc_tab pmc_tab.xsd">
+	<TabGroups>
+		<TabGroup id="appBottomTabGroup"
+			tabIds="symAppProperties,symAppSessions,symAppServices,symAppProfiles,symAppPerformance,symAppSLBlockedHosts,symAppBlockedHosts,symAppResources,symAppPackage,symPhysicalApps" />
+		<TabGroup id="sessionTabGroup"
+			tabIds="SymSessionSummary,sessionTasks,sessionPerformance" />
+		<TabGroup id="symTaskTabGroup"
+			tabIds="symTaskSummary,symTaskAttempts" />
+		
+	</TabGroups>
+	
+
+	<TabItems>
+		
+		<!-- workload application -->
+		<TabItem id="SymSessionSummary" label="@{pmc.tab.sym.workload.session.summary}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/session/tosymsessionsummary.controller">
+			<Datasource></Datasource>
+		</TabItem>
+
+		<TabItem id="sessionTasks" label="@{pmc.tab.sym.workload.session.tasks}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/task/toTask.controller">
+			<Datasource></Datasource>
+		</TabItem>
+
+		<TabItem id="sessionPerformance" label="@{pmc.tab.sym.workload.session.performance}"
+			status="display" disabled="false" type="iframe"
+			url="/soamgui/getTaskInfo.controller?&amp;viewType=charts&amp;isEmbed=true">
+			<Datasource></Datasource>
+		</TabItem>
+
+		
+
+		<!-- Sympnony workload applicaiton tabs -->
+		<TabItem id="symAppProperties" label="@{pmc.tab.sym.workload.application.proerties}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/application/toApplicationProperties.controller">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symAppServices" label="@{pmc.tab.sym.workload.application.services}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/application/toSymAppServiceList.controller">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symAppSessions" label="@{pmc.tab.sym.workload.application.sessions}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/session/tosessions.controller">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symAppProfiles" label="@{pmc.tab.sym.workload.application.profile}"
+			status="display" disabled="false" type="iframe"
+			url="/soamgui/getApplicationProfile.controller?&amp;viewType=profile&amp;isEmbed=true">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symAppPerformance" label="@{pmc.tab.sym.workload.application.performance}"
+			status="display" disabled="false" type="iframe"
+			url="/soamgui/getApplicationPerformance.controller?&amp;viewType=charts&amp;isEmbed=true">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symAppSLBlockedHosts" label="@{pmc.tab.sym.workload.application.sl.blockedhosts}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/application/toSLBlockedHostList.controller">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symAppBlockedHosts" label="@{pmc.tab.sym.workload.application.blockedhosts}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/application/toBlockedHostList.controller">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symAppResources" label="@{pmc.tab.sym.workload.application.resources}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/application/toResourceList.controller">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symAppPackage"
+			label="@{pmc.tab.sym.workload.application.package.downloads}" status="display"
+			disabled="false" type="iframe"
+			url="/symgui/sym/application/toDownloadPackageList.controller">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symPhysicalApps"
+			label="@{pmc.tab.sym.workload.application.physicalApps}" status="display"
+			disabled="false" type="iframe"
+			url="/symgui/sym/application/toPhysAppsList.controller">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symTaskSummary" label="@{pmc.tab.sym.workload.task.summary}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/task/toTaskSummry.controller">
+			<Datasource></Datasource>
+		</TabItem>
+		<TabItem id="symTaskAttempts" label="@{pmc.tab.sym.workload.task.attempts}"
+			status="display" disabled="false" type="iframe"
+			url="/symgui/sym/task/toTaskAttempts.controller">
+			<Datasource></Datasource>
+		</TabItem>		
+		
+	</TabItems>
+	
+	
+</Tab>
+
+

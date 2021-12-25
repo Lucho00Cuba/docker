@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : PostAction.dtd
+    Created on : December 20, 2006, 3:31 PM
+    Author     : Whu
+    Description:
+        post install for upgrade
+
+    TODO define vocabulary identification data
+    PUBLIC ID  : -//vendor//vocabulary//EN
+    SYSTEM ID  : http://server/path/PostAction.dtd
+-->
+
+<!-- TODO define your own vocabulary/syntax. Example follows:  -->
+<!ELEMENT PostAction (Action+)>
+<!ELEMENT Action ((Param+))>
+<!ATTLIST Action Description CDATA ""
+	Head CDATA ""
+	Name CDATA ""
+	Optional CDATA ""
+	Type CDATA ""
+>
+<!ELEMENT Param (#PCDATA)>
+<!ATTLIST Param
+	Name CDATA #REQUIRED
+>

@@ -1,0 +1,461 @@
+#!/bin/csh
+# $Id: TMPL.cshrc.ego.x86_64,v 1.1.4.2 2013/10/31 07:13:55 lunzhou Exp $
+#--------------------------------------------------------------------------
+# This code gets the binary type when setting EGO user environment.
+#---------------------------------------------------------------------------
+
+set _CUR_PATH_ENV = "$PATH"
+setenv PATH /usr/bin:/bin:/usr/local/bin:/local/bin:/sbin:/usr/sbin:/usr/ucb:/usr/sbin:/usr/bsd:${PATH}
+
+# handle difference between system V and BSD echo
+# To echo "foo" with no newline, do
+# echo $enf "foo" $enl
+
+if ( "`echo -n`" == "-n" )  then
+set enf=
+set enl="\c"
+else
+set enf=-n
+set enl=
+endif
+
+set LSNULFILE=/dev/null
+
+# Find a version of awk we can trust
+
+set echo_on = `set | grep ^echo | grep -v ^echo_`
+if ( "$echo_on" == "echo" ) then
+unset echo
+endif
+
+set AWK=""
+foreach tmp (awk  /usr/toolbox/nawk gawk nawk)
+#   This is the real test, for functions & tolower
+#    if foo=`(echo FOO | $tmp 'function tl(str) { return tolower(str) } { print tl($1) }') 2>$LSNULFILE` \
+#       && test "$foo" = "foo"
+#   A simpler test, just for executability
+set val_tmp=`$tmp 'BEGIN{ } { }'< $LSNULFILE |& cat`
+if ( "$val_tmp" == "" )  then
+set AWK=$tmp
+break
+endif
+end
+
+if ( "$echo_on" == "echo" ) then
+set echo
+endif
+unset echo_on
+
+if (  "$AWK" == "") then
+echo "Cannot find a correct version of awk."
+echo "Exiting ..."
+exit 1
+endif
+
+setenv EGO_TOP /opt/ibm/spectrumcomputing
+setenv EGO_VERSION 4.0
+
+set uname_val=`uname -a`
+set EGO_BINARY_TYPE="fail"
+set EGO_BINARY_TYPE_PRIMARY=""
+set field1=`echo $uname_val |$AWK '{print $1}'`
+
+switch ($field1)
+case Darwin:
+set EGO_BINARY_TYPE="macosx"
+breaksw
+
+case SunOS:
+set version=`echo $uname_val | $AWK '{split($3, a, "."); print a[1]}'`
+set minorver=`echo $uname_val | $AWK '{split($3, a, "."); print a[2]}'`
+set machine=`echo $uname_val | $AWK '{print $5}'`
+if ( $version == "4" ) then
+set EGO_BINARY_TYPE="sunos4"
+else
+if ( "$machine" == "i86pc" ) then
+set BIT64=`/usr/bin/isainfo -vk | grep -c '64.bit'`
+
+if ( "$BIT64" == "0" ) then
+
+if ( "$minorver" == "7" || "$minorver" == "8" || "$minorver" == "9" ) then
+set EGO_BINARY_TYPE="x86-sol7"
+else
+if ( "$minorver" >= "10" ) then
+set EGO_BINARY_TYPE="x86-sol10"
+else
+set EGO_BINARY_TYPE="x86-sol2"
+endif
+endif
+else
+if ("$minorver" >= "10") then
+set EGO_BINARY_TYPE="x86-64-sol10"
+endif
+endif
+else
+set EGO_BINARY_TYPE="sparc-sol2"
+if ( "$minorver" >= "7" && "$minorver" <= "9" ) then
+set BIT64=`/usr/bin/isainfo -vk | grep -c '64.bit'`
+
+if ( "$BIT64" == "0" ) then
+set EGO_BINARY_TYPE="sparc-sol7-32"
+else
+set EGO_BINARY_TYPE="sparc-sol7-64"
+endif
+else if ( "$minorver" >= "10" ) then
+set BIT64=`/usr/bin/isainfo -vk | grep -c '64.bit'`
+
+if ( "$BIT64" == "0" ) then
+set EGO_BINARY_TYPE="sparc-sol10-32"
+else
+set EGO_BINARY_TYPE="sparc-sol10-64"
+endif
+endif
+endif
+endif
+breaksw
+
+case IRIX*:
+set version=`echo $uname_val | $AWK '{split($3, a, "."); print a[1]}'`
+set release=`echo $uname_val | $AWK '{split($3, a, "."); print a[2]}'`
+if ( $version == "6" && $release >= "2" ) then
+set mls=`sysconf MAC`
+if ( "$mls" == "1" ) then
+if ( $version == "6" && $release == "5" ) then
+set modification=`/sbin/uname -R | awk '{split($2, a, "."); print a[3]}' | awk -F'[.a-zA-Z]' '{print $1}'`
+if ( "$modification" >= "8" ) then
+set EGO_BINARY_TYPE="trix6.5.24"
+else
+set EGO_BINARY_TYPE="trix6"
+endif
+else
+set EGO_BINARY_TYPE="trix6"
+endif
+else
+if ( $version == "6" && $release == "5" ) then
+set modification=`/sbin/uname -R | awk '{split($2, a, "."); print a[3]}' | awk -F'[.a-zA-Z]' '{print $1}'`
+if ( "$modification" >= "8" ) then
+set EGO_BINARY_TYPE="irix6.5.24"
+else
+set EGO_BINARY_TYPE="sgi6.5"
+endif
+else if ( $version == "6" && $release == "4" ) then
+set EGO_BINARY_TYPE="sgi6"
+else if ( $version == "6" && $release == "2" ) then
+set EGO_BINARY_TYPE="sgi6"
+endif
+endif
+else
+set EGO_BINARY_TYPE="sgi5"
+endif
+
+breaksw
+case HI-UX:
+set EGO_BINARY_TYPE="hppa"
+breaksw
+case HP-UX:
+# spp need to run uname -C to find the version
+uname -C >& $LSNULFILE
+if ( $status == "1" ) then
+set version=`echo $uname_val | $AWK '{split($3, a, "."); print a[2]}'`
+if ( $version == "09" ) then
+set EGO_BINARY_TYPE="hppa9"
+else if ( $version == "10" ) then
+set subver=`echo $uname_val | $AWK '{split($3, a, "."); print a[3]}'`
+if ( $subver == "10" ) then
+set EGO_BINARY_TYPE="hppa10"
+else if ( $subver == "20" ) then
+set EGO_BINARY_TYPE="hppa10.20"
+endif
+else if ( $version == "11" ) then
+set machine=`echo $uname_val | $AWK '{print $5}'`
+set subver=`echo $uname_val | $AWK '{split($3, a, "."); print a[3]}'`
+set kernel=`/usr/bin/getconf KERNEL_BITS`
+
+if ("$machine" == "ia64" ) then
+set EGO_BINARY_TYPE_PRIMARY="hpuxia64 hppa11i-64 hppa11-64"
+set EGO_BINARY_TYPE="hppa11-64"
+else
+if ( "$subver" == "00" ) then
+if ( "$kernel" == "32" ) then
+set EGO_BINARY_TYPE="hppa11-32"
+else
+set EGO_BINARY_TYPE="hppa11-64"
+endif
+else
+if ( "$kernel" == "32" ) then
+set EGO_BINARY_TYPE="hppa11-32"
+set EGO_BINARY_TYPE_PRIMARY="hppa11i-32 hppa11-32"
+# reset to standard EGO binary type
+foreach ARCH (hppa11i-32 hppa11-32)
+if ( -f $EGO_TOP/$EGO_VERSION/$ARCH/etc/vemkd ) then
+set EGO_BINARY_TYPE="$ARCH"
+break;
+endif
+end
+else
+set EGO_BINARY_TYPE="hppa11-64"
+set EGO_BINARY_TYPE_PRIMARY="hppa11i-64 hppa11-64"
+# reset to standard EGO binary type
+foreach ARCH (hppa11i-64 hppa11-64)
+if ( -f $EGO_TOP/$EGO_VERSION/$ARCH/etc/vemkd ) then
+set EGO_BINARY_TYPE="$ARCH"
+break;
+fi
+end
+endif
+endif
+endif
+else
+echo "Cannot figure out the HP version."
+exit 1
+endif
+else
+set version=`uname -C -a |  $AWK '{split($3, a, "."); print a[1]}'`
+if ( $version == "5" ) then
+set  EGO_BINARY_TYPE="spp"
+else if  ( $version == "4" ) then
+set  EGO_BINARY_TYPE="spp4"
+endif
+endif
+breaksw
+case Linux:
+set version=`echo $uname_val | $AWK '{split($3, a, "."); print a[1]}'`
+
+if ( $version == "1" ) then
+set EGO_BINARY_TYPE="linux"
+endif
+if (  $version == "2" ) then
+set subver=`echo $uname_val | $AWK '{split($3, a, "."); print a[1]"."a[2]}'`
+
+if ( $subver == "2.0" ) then
+set EGO_BINARY_TYPE="linux2"
+set machine=`echo $uname_val | $AWK '{print $11}'`
+if ( "$machine" == "alpha" ) then
+set EGO_BINARY_TYPE="linux2-alpha"
+else
+set EGO_BINARY_TYPE="linux2-intel"
+endif
+endif
+
+if ( $subver == "2.2" ) then
+set EGO_BINARY_TYPE="linux2.2"
+
+set smp=`echo $uname_val | $AWK '{print $5}'`
+if ( "$smp" == "SMP" ) then
+set machine=`echo $uname_val | $AWK '{print $12}'`
+else
+set machine=`echo $uname_val | $AWK '{print $11}'`
+endif
+
+if ( "$machine" == "alpha" ) then
+set EGO_BINARY_TYPE="linux2.2-glibc2.1-alpha"
+else
+if ( "$machine" == "sparc" || "$machine" == "sparc64" ) then
+set EGO_BINARY_TYPE="linux2.2-glibc2.1-sparc"
+else if ( "$machine" == "ppc" ) then
+set EGO_BINARY_TYPE="linux2.2-glibc2.1-powerpc"
+else
+set EGO_BINARY_TYPE="linux2.2-glibc2.1-x86"
+endif
+endif
+endif
+
+if ( $subver == "2.4" ) then
+set EGO_BINARY_TYPE="linux2.4"
+
+# ia64 is the family of 64-bit CPUs from Intel. We shouldn't need a new
+# distribution for each processor
+set smp=`echo $uname_val | $AWK '{print $5}'`
+if ( "$smp" == "SMP" ) then
+set machine=`echo $uname_val | $AWK '{print $12}'`
+else
+set machine=`echo $uname_val | $AWK '{print $11}'`
+endif
+
+if ( "$machine" == "ia64" ) then
+set EGO_BINARY_TYPE="linux2.4-glibc2.3-ia64"
+
+else if ( "$machine" == "alpha" ) then
+set EGO_BINARY_TYPE="linux2.4-glibc2.2-alpha"
+else if ( "$machine" == "ppc64" ) then
+set EGO_BINARY_TYPE="linux2.4-glibc2.2-ppc64"
+else if ( "$machine" == "s390" ) then
+set EGO_BINARY_TYPE="linux2.4-glibc2.2-s390-32"
+else if ( "$machine" == "s390x" ) then
+set EGO_BINARY_TYPE="linux2.4-glibc2.2-s390x-64"
+else if ( "$machine" == "armv5l" ) then
+set EGO_BINARY_TYPE="linux2.4-glibc2.2-armv5l"
+else if ( "$machine" == "x86_64" ) then
+set EGO_BINARY_TYPE="linux2.4-glibc2.2-x86_64"
+else
+set EGO_BINARY_TYPE="linux2.4-glibc2.3-x86"
+endif
+endif
+if ( $subver == "2.6" ) then
+set EGO_BINARY_TYPE="fail"
+set machine=`uname -m`
+
+set is_slurm_host="1"
+if ( -f /var/lsf/lsfslurm ) then
+set is_slurm_host="0"
+endif
+
+switch ($machine)
+case ia64:
+set EGO_BINARY_TYPE_PRIMARY="linux2.6-glibc2.5-sn-ipf"
+
+# Check for SLURM
+if ( "$is_slurm_host" == "0" ) then
+# slurm: it needs slurm binaries.
+# no need to fall back to normal LSF binary type
+set EGO_BINARY_TYPE="${EGO_BINARY_TYPE}-slurm"
+endif
+breaksw
+case x86_64:
+set _cputype=`cat /proc/cpuinfo | grep -i vendor | $AWK '{print $3}' | uniq`
+set EGO_BINARY_TYPE="linux-x86_64"
+if ( -f /etc/node_classes ) then
+set nid=`xtuname`
+set nid=`expr ${nid}`
+set role=`grep "^${nid}:" /etc/node_classes | cut -f2 -d':' `
+else
+set role=unknown
+endif
+
+if ( "$role" == "login" || "$role" == "service" ) then
+set EGO_BINARY_TYPE="${EGO_BINARY_TYPE}-xt3"
+endif
+
+# Check SLURM
+if ( "$is_slurm_host" == "0" ) then
+# slurm: it needs slurm binaries.
+# no need to fall back to normal LSF binary type
+set EGO_BINARY_TYPE="${EGO_BINARY_TYPE}-slurm"
+endif
+breaksw
+case k1om:
+set EGO_BINARY_TYPE="linux2.6-glibc2.14-k1om"
+breaksw
+case i[3456]86:
+set EGO_BINARY_TYPE="linux-x86"
+breaksw
+case ppc64:
+set EGO_BINARY_TYPE="linux2.6-glibc2.5-ppc64"
+breaksw
+case s390x:
+set EGO_BINARY_TYPE="linux2.6-glibc2.4-s390x-64"
+breaksw
+endsw
+endif
+endif
+if (  $version == "3" || $version == "4" || $version == "5" ) then
+set subver=`echo $uname_val | $AWK '{split($3, a, "."); print a[0]}'`
+set EGO_BINARY_TYPE="fail"
+set machine=`uname -m`
+switch ($machine)
+case x86_64:
+set EGO_BINARY_TYPE="linux-x86_64"
+breaksw
+case ppc64:
+set EGO_BINARY_TYPE="linux2.6-glibc2.5-ppc64"
+breaksw
+case ppc64le:
+set EGO_BINARY_TYPE="linux3.10-glibc2.17-ppc64le"
+breaksw
+endsw
+endif
+breaksw
+case AIX:
+set version=`echo $uname_val | $AWK '{print $4}'`
+set release=`echo $uname_val | $AWK '{print $3}'`
+if ( $version == "4" && $release >= "1" ) then
+if ( $release < "2" ) then
+set EGO_BINARY_TYPE="aix4"
+else
+set EGO_BINARY_TYPE="aix4.2"
+endif
+else if ( $version == "5" && $release >= "1" ) then
+#On AIX, only in 64bit mode, you can see shlap64 process
+#check shlap64 process is safer than check kernel_bit
+set _shlap64=`ps -e -o "comm" |grep -c shlap64`
+if ( "$_shlap64" != "0" )  then
+set EGO_BINARY_TYPE="aix-64"
+else
+set EGO_BINARY_TYPE="aix-32"
+endif
+else if ( $version == "3" ) then
+set EGO_BINARY_TYPE="aix3"
+else if ( $version == "6" ) then
+set _shlap64=`ps -e -o "comm" |grep -c shlap64`
+if ( "$_shlap64" != "0" )  then
+set EGO_BINARY_TYPE="aix-64"
+else
+set EGO_BINARY_TYPE="aix-32"
+endif
+endif
+breaksw
+default:
+breaksw
+endsw
+if ( $EGO_BINARY_TYPE == "fail" ) then
+echo "Cannot get binary type."
+endif
+if ( "$EGO_BINARY_TYPE_PRIMARY" != "" ) then
+foreach ARCH ($EGO_BINARY_TYPE_PRIMARY)
+if ( -f $EGO_TOP/$EGO_VERSION/$ARCH/etc/vemkd ) then
+set EGO_BINARY_TYPE="$ARCH"
+break
+endif
+end
+endif
+
+setenv EGO_BINDIR $EGO_TOP/$EGO_VERSION/$EGO_BINARY_TYPE/bin
+setenv EGO_SERVERDIR $EGO_TOP/$EGO_VERSION/$EGO_BINARY_TYPE/etc
+setenv EGO_LIBDIR "$EGO_TOP/$EGO_VERSION/$EGO_BINARY_TYPE/lib"
+setenv EGO_ESRVDIR /shared/eservice
+
+if ($?LD_LIBRARY_PATH) then
+setenv LD_LIBRARY_PATH $EGO_TOP/$EGO_VERSION/$EGO_BINARY_TYPE/lib:${LD_LIBRARY_PATH}
+else
+setenv LD_LIBRARY_PATH $EGO_TOP/$EGO_VERSION/$EGO_BINARY_TYPE/lib
+endif
+
+set _NEW_PATH_ENV="$_CUR_PATH_ENV"
+set _NEW_PATH_ENV="${EGO_BINDIR}:${_CUR_PATH_ENV}"
+
+set _NEW_PATH_ENV="${EGO_SERVERDIR}:${_NEW_PATH_ENV}"
+set _NEW_PATH_ENV="$EGO_TOP/$EGO_VERSION/install:${_NEW_PATH_ENV}"
+
+setenv PATH $_NEW_PATH_ENV
+
+#remove duplicated entries
+set LD_LIBRARY_PATH_TMP=`echo $LD_LIBRARY_PATH | $AWK 'BEGIN{RS=":";ORS=":"}{if (a[$1]==0)  {if (NR > 1) printf ORS; printf $a[$1]}; a[$1]++;}'`
+set PATH_TMP=`echo $PATH | $AWK 'BEGIN{RS=":";ORS=":"}{if (a[$1]==0)  {if (NR > 1) printf ORS; printf $a[$1]}; a[$1]++;}'`
+setenv LD_LIBRARY_PATH $LD_LIBRARY_PATH_TMP
+setenv PATH $PATH_TMP
+unset LD_LIBRARY_PATH_TMP
+unset PATH_TMP
+
+setenv EGO_CONFDIR /shared/kernel/conf
+setenv EGO_LOCAL_CONFDIR $EGO_TOP/kernel/conf
+
+if ($?MANPATH) then
+setenv MANPATH $EGO_TOP/$EGO_VERSION/man:${MANPATH}
+else
+setenv MANPATH $EGO_TOP/$EGO_VERSION/man
+uname -a | grep "Linux" >& /dev/null
+if ( "$status" == "0" ) then
+setenv MANPATH ${MANPATH}:
+endif
+endif
+#unsetenv EGO_VERSION
+unset AWK
+
+#set user's JAVA_HOME to temp var
+if ( $EGO_BINARY_TYPE == "linux-x86_64" || $EGO_BINARY_TYPE == "linux2.6-glibc2.5-ppc64" || $EGO_BINARY_TYPE == "sparc-sol10-64" ) then
+if ($?JAVA_HOME) then
+setenv JAVA_HOME_TEMP $JAVA_HOME
+endif
+endif
+
+source /shared/perf/conf/cshrc.perf

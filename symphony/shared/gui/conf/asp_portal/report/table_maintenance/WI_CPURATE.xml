@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TableMaintenance xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="table_maintenance.xsd">
+	<Descriptions>
+		<Name>CPU Rate Table Maintenance</Name>
+		<Summary>CPU费率表的维护</Summary>
+		<Folder>TableMaintenance</Folder>
+		<Discription>CPU费率表的维护</Discription>
+		<DisplayName>CPU费率表的维护</DisplayName>
+		<Category>计费表的维护</Category>
+	</Descriptions>
+	<Insert>
+		<Parameters>
+			<Parameter Name="CPU_RATE" Type="TEXT" Label="CPU费率(/小时/CPU)">	
+			</Parameter>
+		</Parameters>
+		<Queries>
+			<Query DBType="ORACLE">
+				<SQL>
+				<![CDATA[
+INSERT INTO 
+       CPU_RATE(CPU_RATE) 
+       VALUES(${CPU_RATE})
+ ]]>
+				</SQL>
+			</Query>
+		</Queries>
+	</Insert>
+	<Delete>
+		<Parameters>
+		</Parameters>
+		<Queries>
+			<Query DBType="ORACLE">
+				<SQL>
+				<![CDATA[
+DELETE CPU_RATE 
+WHERE ROWID='${ROW_ID}'
+ ]]>
+				</SQL>
+			</Query>
+		</Queries>
+	</Delete>
+	<Update>
+		<Parameters>
+			<Parameter Name="CPU_RATE" Type="TEXT" Label="CPU费率(/小时/CPU)">	
+			</Parameter>
+		</Parameters>
+		<Queries>
+			<Query DBType="ORACLE">
+				<SQL>
+				<![CDATA[
+UPDATE CPU_RATE 
+SET 
+  CPU_RATE = ${CPU_RATE} 
+WHERE ROWID='${ROW_ID}'
+ ]]>
+				</SQL>
+			</Query>
+		</Queries>
+	</Update>
+	<Select>
+		<Parameters>
+			<Parameter Name="CPU_RATE" Type="TEXT" Label="CPU费率(/小时/CPU)">	
+			</Parameter>
+		</Parameters>
+		<Queries>
+			<Query DBType="ORACLE">
+				<SQL>
+					<![CDATA[
+SELECT ROWIDTOCHAR(CR.ROWID) AS ROW_ID, CR.*
+FROM CPU_RATE CR
+ ]]>
+				</SQL>
+			</Query>
+		</Queries>
+		<Outputs>
+			<Column Name="CPU_RATE" Label="CPU费率(/小时/CPU)" Type="INT" Display="YES" ContentStyle="NORMAL" HearderStyle="BOLD" />
+			<Column Name="ROW_ID" Label="行号" Type="STRING" Display="NO" />
+		</Outputs>
+	</Select>
+	<Variables>		
+		<Variable Name="CPU_RATE" Target="CPU_RATE" Source="REQUEST" />			
+		<Variable Name="ROW_ID" Target="ROW_ID" Source="REQUEST" />
+	</Variables>
+	<Sources>
+		<Source Name="REQUEST" Plug-in="com.platform.perf.report.config.var.source.RequestVariableSource" />
+	</Sources>
+</TableMaintenance>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../report.xsd">
+	<Name>Host Resource Usage</Name>
+	<DisplayName>report.displayname</DisplayName>
+	<Summary>report.summary</Summary>
+	<Description>report.description</Description>
+	<Category>report.category</Category>
+	<Parameters>
+		<Parameter Name="TIME" Type="TIMEPICK" Label="report.parameter.time.label">
+			<Attributes>
+				<Attribute Name="startTimeName" Value="StartTime"/>
+				<Attribute Name="endTimeName" Value="EndTime"/>
+				<Attribute Name="defaultMethod" Value="RELATIVE"/>
+				<Attribute Name="timeValue" Value="1"/>
+				<Attribute Name="timeUnit" Value="d"/>
+			</Attributes>
+		</Parameter>
+		<Parameter Name="CLUSTER_NAME" Type="DROPDOWNLIST" DefaultValue="" Label="report.parameter.cluster.label">		
+			<Attributes>
+				<Attribute Name="label" Value="Cluster"/>
+				<Attribute Name="script"><![CDATA[
+var lang = "";
+if(window.navigator.appName.toLowerCase()=="microsoft internet explorer"){
+   lang = window.navigator.userLanguage;
+}else {
+   lang = window.navigator.language;
+}
+function refreshResourceValues() {
+	var key = dwr.util.getValue("CLUSTER_NAME");
+	var keys = [key];
+	var params = { "CLUSTER_NAME" : keys};
+	ReportDWRUtil.getParameterValuesWithArgs("Host Resource Usage", "RESOURCE_NAME", params, lang, function(data) {
+		dwr.util.removeAllOptions("RESOURCE_NAME");
+		dwr.util.addOptions("RESOURCE_NAME", data);
+		var oResource = document.getElementById("RESOURCE_NAME");
+		if (oResource.options.length > 0) {
+			oResource.selectedIndex = 0;
+			enableProduceButtons();
+		} else {
+			disableProduceButtons();
+		}
+	});
+}
+				]]></Attribute>
+				<Attribute Name="onChange" Value="refreshResourceValues()"/>
+			</Attributes>
+			<Query DBType="STANDARD">
+				<SQL><![CDATA[
+					SELECT DISTINCT CLUSTER_NAME FROM RESOURCES_RESOURCE_METRICS ORDER BY CLUSTER_NAME
+					]]></SQL>
+				<Field Type="Value" Column="CLUSTER_NAME"/>
+				<Field Type="Label" Column="CLUSTER_NAME"/>
+			</Query>
+		</Parameter>
+		<Parameter Name="RESOURCE_NAME" Type="LISTBOX" DefaultValue="" Label="report.parameter.host.label" Lazy="true">		
+			<Attributes>
+				<Attribute Name="label" Value="Host"/>
+				<Attribute Name="size" Value="10"/>
+				<Attribute Name="maxSize" Value="10"/>
+				<Attribute Name="script">initDynamStats.push("refreshResourceValues()");</Attribute>
+			</Attributes>
+			<Query DBType="STANDARD">
+				<SQL><![CDATA[SELECT DISTINCT RESOURCE_NAME FROM RESOURCES_RESOURCE_METRICS WHERE CLUSTER_NAME IN (%%%CLUSTER_NAME_VALUE%%%) ORDER BY RESOURCE_NAME]]></SQL>
+				<Field Type="Value" Column="RESOURCE_NAME"/>
+				<Field Type="Label" Column="RESOURCE_NAME"/>
+			</Query>
+		</Parameter>
+		<Parameter Name="ATTRIBUTE_NAME" Type="DROPDOWNLIST" Label="report.parameter.metric.label">		
+			<Attributes>
+				<Attribute Name="label" Value="Metric"/>
+				<Attribute Name="defaultValue" Value="ut"/>
+				<Attribute Name="textCarrier" Value="ATTRIBUTE_LONG_NAME"/>
+			</Attributes>
+			<VarValue Name="%%%METRICS_MAP%%%">
+				<Field Type="Value" Column="ATTRIBUTE_NAME"/>
+				<Field Type="Label" Column="ATTRIBUTE_LONG_NAME"/>
+			</VarValue>
+		</Parameter>
+	</Parameters>
+	<Queries>
+		<Query DBType="STANDARD">
+			<SQL><![CDATA[
+SELECT TIME_STAMP, RESOURCE_NAME, ATTRIBUTE_NAME, ATTRIBUTE_VALUE_NUM
+  FROM RESOURCE_METRICS
+  WHERE RESOURCE_NAME IN (%%%RESOURCE_NAME%%%)
+    AND ATTRIBUTE_NAME = %%%ATTRIBUTE_NAME%%%
+    AND (TIME_STAMP >= %%%StartTime%%% AND TIME_STAMP < %%%EndTime%%%)
+  ORDER BY TIME_STAMP, RESOURCE_NAME
+  			]]></SQL>
+			<!--<Parameter Name="CLUSTER" Type="STRING"/>-->
+			<Parameter Name="RESOURCE_NAME" Type="STRING"/>
+			<Parameter Name="ATTRIBUTE_NAME" Type="STRING"/>
+			<Parameter Name="StartTime" Type="TIMESTAMP"/>
+			<Parameter Name="EndTime" Type="TIMESTAMP"/>
+		</Query>
+	</Queries>
+	<Layouts>
+		<!-- The Type refer the report type. e.g. LineChart, Table, ClusteredBarChart, StackedBarChart -->
+		<Layout>
+			<Type>LINE_CHART</Type>
+			<Title>report.layout.title</Title>			
+			<Subtitles>
+				<!--<Subtitle>CLUSTER NAME : %%%CLUSTER%%%</Subtitle>-->
+				<Subtitle Variables="%%%ATTRIBUTE_LONG_NAME%%%">report.layout.subtitle1</Subtitle>
+				<Subtitle Variables="%%%REAL_START_TIME%%%,%%%REAL_END_TIME%%%">report.layout.subtitle2</Subtitle>		
+			</Subtitles>
+			<!-- The label will display in chart Time-->
+			<X-Axis Label="report.layout.x-axis.label" Type="TIME" Start="%%%REAL_START_TIME%%%" End="%%%REAL_END_TIME%%%" Period="5m">			
+				<!-- The column map the name from sql statement. Type refer maybe Timestamp and Catetory(String), The Period attribute only for Timestamp type.-->
+				<Column>TIME_STAMP</Column>
+			</X-Axis>
+			<Y-Axis Label="%%%Y_LABEL%%%" Format="%%%Y_FORMAT%%%"/>
+			<Series>
+				<FromRows ValueColumn="ATTRIBUTE_VALUE_NUM">
+					<Column>RESOURCE_NAME</Column>
+				</FromRows>
+				<!--
+				<FromColumns>
+					<Column>NUM</Column>
+				</FromColumns>
+				-->
+			</Series>
+			<DataLoader>hostmetricsloader</DataLoader>
+		</Layout>
+	</Layouts>
+	<DataExports>
+		<DataExport Name="DEFAULT">
+			<Column Name="TIME_STAMP" Label="report.data_exports.time_stamp.label" />
+			<Column Name="RESOURCE_NAME" Label="report.data_exports.resource_name.label" />
+			<Column Name="ATTRIBUTE_NAME" Label="report.data_exports.attribute_name.label" />
+			<Column Name="ATTRIBUTE_VALUE_NUM" Label="report.data_exports.attribute_value_num.label" />
+		</DataExport>
+	</DataExports>
+	<Variables>
+		<!--<Variable Name="CLUSTER" Target="CLUSTER" Source="REQUEST" />-->
+		<Variable Name="StartTime" Target="StartTime" Source="REQUEST" />
+		<Variable Name="EndTime" Target="EndTime" Source="REQUEST" />
+		<Variable Name="RESOURCE_NAME" Target="RESOURCE_NAME" Source="REQUEST" />
+		<Variable Name="ATTRIBUTE_NAME" Target="ATTRIBUTE_NAME" Source="REQUEST" />
+		<Variable Name="ATTRIBUTE_LONG_NAME" Target="ATTRIBUTE_LONG_NAME" Source="REQUEST" />
+		<Variable Name="METRICS_MAP"  Target="METRICS_MAP" Source="METRICS_MAP" />
+		
+		<Variable Name="Y_LABEL" Target="chart.%%%ATTRIBUTE_NAME%%%.yLabel" Source="PROPERTIES" Default="%%%ATTRIBUTE_NAME%%%" />
+		<Variable Name="Y_FORMAT" Target="chart.%%%ATTRIBUTE_NAME%%%.yFormat" Source="PROPERTIES" Default="#,###,###,##0.00" />
+
+		<Variable Name="REAL_START_TIME" Target="REAL_START_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM-dd HH:mm" />
+		</Variable>
+
+		<Variable Name="REAL_END_TIME" Target="REAL_END_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM-dd HH:mm" />
+		</Variable>
+		<Variable Name="CLUSTER_NAME" Target="CLUSTER_NAME" Source="REQUEST" />
+		<Variable Name="CLUSTER_NAME_VALUE" Source="QUERY_BUILD_SOURCE" Target="CLUSTER_NAME" Function="TO_COMMA_DELIMITED_QUOTED_STRING" />
+	</Variables>
+	<Sources>
+		<Source Name="METRICS_MAP" Plug-in="com.platform.perf.report.config.var.source.metrics.MetricsMapGetter" />
+		
+		<Source Name="REQUEST" Plug-in="com.platform.perf.report.config.var.source.RequestVariableSource" />
+		<Source Name="REAL_TIME_RANGE" Plug-in="com.platform.perf.report.config.var.source.RealTimeRangeSource">
+			<Parameter Name="START_TIME">%%%StartTime%%%</Parameter>
+			<Parameter Name="END_TIME">%%%EndTime%%%</Parameter>
+		</Source>
+		<Source Name="PROPERTIES" Plug-in="com.platform.perf.report.config.var.source.PropertiesVariableSource" />
+		<Source Name="QUERY_BUILD_SOURCE" Plug-in="com.platform.perf.report.config.var.source.QueryBuildSource">
+			<Parameter Name="CLUSTER_NAME">%%%CLUSTER_NAME%%%</Parameter>
+		</Source>
+	</Sources>
+
+</Report>

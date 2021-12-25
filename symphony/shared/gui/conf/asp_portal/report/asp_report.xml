@@ -1,0 +1,4 @@
+<Context docBase="${GUI_TOP}/asp_portal/report" 
+	workDir="${GUI_TOP}/work/wlp/localhost/asp_report" 
+	privileged="true" antiResourceLocking="false" antiJARLocking="false">
+</Context>

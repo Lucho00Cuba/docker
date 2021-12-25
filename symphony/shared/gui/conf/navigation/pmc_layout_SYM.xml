@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Layout xmlns="http://www.platform.com/gui/pmc_layout" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.platform.com/gui/pmc_layout pmc_layout.xsd">
+	<LayoutItem id="applicationLayout" minWidth="400" minHeight="400">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="" gutter="0px, 0px, 0px, 0px"
+					scroll="true" minWidth="100" minHeight="100" />
+				<Source type="iframe"
+					url="/symgui/sym/application/toApplicationList.controller" tabGroup=""
+					highlightTabId="">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+			<LayoutUnit id="bottom">
+				<Attribute position="bottom" resize="true" height="370"
+					header="&amp;nbsp;" gutter="8px, 0px, 0px, 0px" scroll="true"
+					minWidth="100" minHeight="100" />
+				<Source type="iframe" url="" tabGroup="appBottomTabGroup"
+					highlightTabId="">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+
+	<LayoutItem id="symSessionLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30" />
+				<Source type="iframe" url="/symgui/sym/session/tosessions.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+			<LayoutUnit id="bottom">
+				<Attribute position="bottom" resize="true" height="400"
+					header="&amp;nbsp;" gutter="11px, 0px, 0px, 0px" scroll="true"
+					maxHeight="500" minHeight="30" />
+				<Source type="iframe" tabGroup="sessionTabGroup"
+					highlightTabId="">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+
+	<!-- Symphony Tasks layout -->
+	<LayoutItem id="symTasksLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="" gutter="0px, 0px, 0px, 0px"
+					scroll="true" maxHeight="500" minHeight="30" />
+				<Source type="iframe" url="/symgui/sym/task/toTask.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+			<LayoutUnit id="bottom">
+				<Attribute position="bottom" resize="true" height="400"
+					header="&amp;nbsp;" gutter="11px, 0px, 0px, 0px" scroll="true"
+					maxHeight="500" minHeight="30" />
+				<Source type="iframe" tabGroup="symTaskTabGroup"
+					highlightTabId="">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+
+	<!-- jobs without right pane -->
+	<LayoutItem id="symAppProfileLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.app.profile.header}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/platform/mixWithConsumerTree.jsp?consumerSensitivePageId=SOAM_APP_CONF_LIST&amp;moduleName=Service&amp;url=/soamgui/getAppConfInfo.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+	<LayoutItem id="desymAppProfileLayout">
+		<LayoutUnits>
+			<LayoutUnit id="center">
+				<Attribute position="center" header="@{pmc.layout.app.profile.header}"
+					gutter="0px, 0px, 0px, 0px" scroll="true" maxHeight="500"
+					minHeight="30"></Attribute>
+				<Source type="iframe"
+					url="/soamgui/getAppConfInfo.controller">
+					<Datasource></Datasource>
+				</Source>
+			</LayoutUnit>
+		</LayoutUnits>
+	</LayoutItem>
+</Layout>

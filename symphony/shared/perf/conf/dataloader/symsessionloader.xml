@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataLoader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:noNamespaceSchemaLocation="dataloader.xsd" >
+	
+	<!-- 
+	Defines the reader used to get data. The Class attribute refers to the class name or reader name. This class can be developed by you. 
+
+	-->
+	<Reader Class="com.platform.perf.dataloader.soam.SessionReaderMgr">
+	    <Properties>
+			<Property>
+				<Name>SOAPTimeOut</Name>
+				<!--This value is in seconds-->
+				<Value>180</Value>
+			</Property>
+			<Property>
+				<Name>Apps</Name> 
+				<Set>
+					<!--Value>symping</Value-->
+				</Set>
+			</Property>
+			<Property>
+				<Name>SessionCap</Name>
+				<!--define the cap for getting the session list-->
+				<Value>5000</Value>
+			</Property>
+		</Properties>
+	</Reader>	
+	<!-- 
+	Defines the writer that is used to load the output of the reader into the database. The Type attribute is optional and defines the database operation type. The default is JDBC.
+		BatchSize defines how many records will be committed into the database at one time.
+   EnableRecover: this tag is set to enable or disable automatic data loss protection.
+	-->
+	<Writer Type="JDBC" BatchSize="1" EnableRecover="Y">
+		<!-- 			Defines the name of the data source that will be used. This is optional. -->
+
+		<DataSource>ReportDB</DataSource>
+		
+		<!--
+		This element defines the SQL statement if the Field sub-elements map the output of the reader to the database table. The Name attribute is the key for the reader output. The Column attribute is the column name of the database table.
+
+		-->
+	<SQL Input="SESSION_ATTRIBUTES">
+   	<Statement><![CDATA[     
+	  INSERT INTO SESSION_ATTRIBUTES( 
+      TIME_STAMP                ,                   
+      TIME_STAMP_GMT            ,      
+      SESSION_ID                ,             
+      SESSION_NAME              ,             
+      APP_NAME                  ,              
+      CONSUMER_NAME             ,          
+      PRIORITY                  ,          
+      SESSION_STATE             ,        
+      NUM_TASK_PENDING          ,       
+      NUM_TASK_RUNNING          ,       
+      NUM_TASK_DONE             ,       
+      NUM_TASK_ERROR            ,      
+      NUM_TASK_CANCELED         ,     
+      SERVICE_INSTANCES         ,  
+      SUBMISSION_USER           ,
+      REASON                    ,
+      ABORT_SESSION_IF_TASK_FAIL,
+      RECOVERABLE               ,
+      SESSION_TYPE              ,
+      CREATE_TIME               ,     
+      LAST_ERROR_TIME           ,
+      TASK_RETRY_LIMIT          ,
+      SERVICE                   ,      
+      PERSIST_SESSION_HISTORY   ,
+      PERSIST_TASK_HISTORY      ,
+	  
+	  SESSION_RETRY_LIMIT       ,
+	  TOTAL_UNSUCCESS_TASKRUNS        ,
+	  TOTAL_UNSUCCESS_TASKSRUNTIME       ,
+	  TOTAL_TASKS_RUNTIME              ,
+	  TOTAL_INPUT_SIZE            ,
+	  TOTAL_OUTPUT_SIZE           ,
+	  TOTAL_TASKS_SUBMIT2START_TIME        ,
+	  COMMON_DATA_SIZE             ,
+	  SESSION_TAG                  ,
+	  PROTOCOL_VERSION             ,
+	  SYMPHONY_VERSION             ,
+	  CLUSTER_NAME                 ,
+	  SESSION_BINDING_FAILURES     ,
+	  SESSION_UPDATE_FAILURES              ,    
+      NUM_COMMON_DATA_UPDATES              ,
+      TOTAL_COMMON_DATA_UPDATE_SIZE         ,
+      COMPRESSION_ENABLED          ,
+      COMMON_DATA_COMPRESSED ,
+      RAW_COMMON_DATA_SIZE            ,
+      COMPRESSION_THRESHOLD        ,
+      DIRECT_DATA_TRANSFER_ENABLED,
+      SSN_ABORT_IFCLIENT_DISCONNECT,
+      SSN_DISCARD_RESULT_ONDELIVERY,
+      PREEMPTIVE,
+      CLIENT_VERSION,
+      CLIENT_HOST_NAME,
+      CLIENT_IP_ADDRESS,
+      CLIENT_OS_USER_NAME,
+      SERVICE_TO_SLOT_RATIO,
+      RESOURCE_GROUP_FILTER,
+      PREEMPTION_RANK,
+      TASKS_INTERRUPTED_BY_PREEMPT,
+      PREEMPT_TIME,
+      TASKS_INTERRUPTED_BY_RECLAIM,
+      RECLAIM_TIME,
+      NUM_MAP_CANCEL_TASKS ,
+      NUM_MAP_DONE_TASKS ,
+      NUM_MAP_ERR_TASKS ,
+      NUM_MAP_PEND_TASKS ,
+      NUM_MAP_RUN_TASKS ,
+      NUM_REDUCE_CANCEL_TASKS ,
+      NUM_REDUCE_DONE_TASKS ,
+      NUM_REDUCE_ERR_TASKS ,
+      NUM_REDUCE_PEND_TASKS ,
+      NUM_REDUCE_RUN_TASKS, 
+      SESSION_METADATA,
+      NUM_TASK_YIELDED,
+      NUM_TASK_RESUMING,
+      PARENT_ID,
+      ROOT_SESSION_ID,
+      TASK_DISPATCH_ORDER,
+      POLICY_TAG_PATH,
+      SESSION_TIMEOUT,
+      TASK_EXECUTION_TIMEOUT
+	)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+   	]]>
+   	</Statement>
+
+   	<Field Name="TIME_STAMP" Column="TIME_STAMP" Type="Timestamp"/>
+   	<Field Name="TIME_STAMP_GMT" Column="TIME_STAMP_GMT" Type="Long"/>
+   	<Field Name="SESSION_ID" Column="SESSION_ID" Type="Long"/>
+   	<Field Name="SESSION_NAME" Column="SESSION_NAME" Type="String"/>
+   	<Field Name="APP_NAME" Column="APP_NAME" Type="String"/>
+   	<Field Name="CONSUMER_NAME" Column="CONSUMER_NAME" Type="String"/>
+   	<Field Name="PRIORITY" Column="PRIORITY" Type="Integer"/>
+   	<Field Name="SESSION_STATE" Column="SESSION_STATE" Type="String"/>
+   	<Field Name="NUM_TASK_PENDING" Column="NUM_TASK_PENDING" Type="Long"/>
+    <Field Name="NUM_TASK_RUNNING" Column="NUM_TASK_RUNNING" Type="Long"/>
+        
+   	<Field Name="NUM_TASK_DONE" Column="NUM_TASK_DONE" Type="Long"/>
+   	<Field Name="NUM_TASK_ERROR" Column="NUM_TASK_ERROR" Type="Long"/>	
+   	<Field Name="NUM_TASK_CANCELED" Column="NUM_TASK_CANCELED" Type="Long"/>
+   	<Field Name="SERVICE_INSTANCES" Column="SERVICE_INSTANCES" Type="Integer"/>
+   	<Field Name="SUBMISSION_USER" Column="SUBMISSION_USER" Type="String"/>
+   	<Field Name="ABORT_REASON" Column="REASON" Type="String"/>
+   	<Field Name="ABORT_SESSION_IF_TASK_FAIL" Column="ABORT_SESSION_IF_TASK_FAIL" Type="Boolean"/>
+   	<Field Name="RECOVERABLE" Column="RECOVERABLE" Type="Boolean"/>
+   	<Field Name="SESSION_TYPE" Column="SESSION_TYPE" Type="String"/>
+   	<Field Name="CREATE_TIME" Column="CREATE_TIME" Type="Timestamp"/>  
+   	<Field Name="LAST_ERROR_TIME" Column="LAST_ERROR_TIME" Type="Timestamp"/>
+   	<Field Name="TASK_RETRY_LIMIT" Column="TASK_RETRY_LIMIT" Type="Integer"/>
+   	<Field Name="SERVICE" Column="SERVICE" Type="String"/>   	
+   	<Field Name="PERSIST_SESSION_HISTORY" Column="PERSIST_SESSION_HISTORY" Type="String"/>
+   	<Field Name="PERSIST_TASK_HISTORY" Column="PERSIST_TASK_HISTORY" Type="String"/>
+	
+	<!--Symphony 3.2-->
+	<Field Name="SESSION_RETRY_LIMIT" Column="SESSION_RETRY_LIMIT" Type="Integer"/>
+	<Field Name="TOT_NUM_RERUN_TASK" Column="TOTAL_UNSUCCESS_TASKRUNS" Type="Long"/>
+	
+	<Field Name="TOT_TASK_RERUN_TIME" Column="TOTAL_UNSUCCESS_TASKSRUNTIME" Type="Long"/>
+	<Field Name="TOT_RUN_TIME" Column="TOTAL_TASKS_RUNTIME" Type="Long"/>
+	<Field Name="TOT_INPUT_SIZE" Column="TOTAL_INPUT_SIZE" Type="Long"/>
+	
+	<Field Name="TOT_OUTPUT_SIZE" Column="TOTAL_OUTPUT_SIZE" Type="Long"/>
+	<Field Name="TOT_TASK_WAIT_TIME" Column="TOTAL_TASKS_SUBMIT2START_TIME" Type="Long"/>
+	<Field Name="COMMON_DATA_SIZE" Column="COMMON_DATA_SIZE" Type="Long"/>
+	
+	<Field Name="SESSION_TAG" Column="SESSION_TAG" Type="String"/>
+	<Field Name="PROTOCOL_VERSION" Column="PROTOCOL_VERSION" Type="Integer"/>
+	<Field Name="SSM_VERSION" Column="SYMPHONY_VERSION" Type="String"/>
+	<Field Name="clustername" Column="CLUSTER_NAME" Type="String"/>
+    <!--Symphony 4.1-->
+    <Field Name="SESSION_BINDING_FAILURES" Column="SESSION_BINDING_FAILURES" Type="String"/>
+    <Field Name="SESSION_UPDATE_FAILURES" Column="SESSION_UPDATE_FAILURES" Type="String"/>
+	<Field Name="NUM_COMMON_DATA_UPDATES" Column="NUM_COMMON_DATA_UPDATES" Type="Long"/>
+	<Field Name="TOTAL_COMMON_DATA_UPDATE_SIZE" Column="TOTAL_COMMON_DATA_UPDATE_SIZE" Type="Long"/>
+	<Field Name="COMPRESSION_ENABLED" Column="COMPRESSION_ENABLED" Type="Boolean"/>
+	<Field Name="COMMON_DATA_COMPRESSED" Column="COMMON_DATA_COMPRESSED" Type="Boolean"/>
+	<Field Name="RAW_COMMON_DATA_SIZE" Column="RAW_COMMON_DATA_SIZE" Type="Long"/>
+	<Field Name="COMPRESSION_THRESHOLD" Column="COMPRESSION_THRESHOLD" Type="Integer"/>
+	<Field Name="DIRECT_DATA_TRANSFER_ENABLED" Column="DIRECT_DATA_TRANSFER_ENABLED" Type="Boolean"/>
+	<!--Symphony 5.0-->
+	<Field Name="SESSION_ABORT_IF_CLIENT_DISCONNECT" Column="SSN_ABORT_IFCLIENT_DISCONNECT" Type="Boolean"/>
+	<Field Name="SESSION_DISCARD_RESULTS_ON_DELIVERY" Column="SSN_DISCARD_RESULT_ONDELIVERY" Type="Boolean"/>
+	<Field Name="PREEMPTIVE" Column="PREEMPTIVE" Type="Boolean"/>
+	<Field Name="CLIENT_VERSION" Column="CLIENT_VERSION" Type="String"/>
+	<Field Name="CLIENT_HOST_NAME" Column="CLIENT_HOST_NAME" Type="String"/>
+	<Field Name="CLIENT_IP_ADDRESS" Column="CLIENT_IP_ADDRESS" Type="String"/>
+	<Field Name="CLIENT_OS_USER_NAME" Column="CLIENT_OS_USER_NAME" Type="String"/>
+	<Field Name="SERVICE_TO_SLOT_RATIO" Column="SERVICE_TO_SLOT_RATIO" Type="String"/>
+	<Field Name="RESOURCE_GROUP_FILTER" Column="RESOURCE_GROUP_FILTER" Type="String"/>
+	<Field Name="PREEMPTION_RANK" Column="PREEMPTION_RANK" Type="String"/>
+	<Field Name="TASKS_INTERRUPTED_BY_PREEMPT" Column="TASKS_INTERRUPTED_BY_PREEMPT" Type="Long"/>
+	<Field Name="PREEMPT_TIME" Column="PREEMPT_TIME" Type="Long"/>
+	<Field Name="TASKS_INTERRUPTED_BY_RECLAIM" Column="TASKS_INTERRUPTED_BY_RECLAIM" Type="Long"/>
+	<Field Name="RECLAIM_TIME" Column="RECLAIM_TIME" Type="Long"/>
+	<Field Name="NUM_MAP_CANCEL_TASKS" Column="NUM_MAP_CANCEL_TASKS" Type="Long"/> 
+	<Field Name="NUM_MAP_DONE_TASKS" Column="NUM_MAP_DONE_TASKS" Type="Long"/>
+	<Field Name="NUM_MAP_ERR_TASKS" Column="NUM_MAP_ERR_TASKS"  Type="Long"/>
+	<Field Name="NUM_MAP_PEND_TASKS" Column="NUM_MAP_PEND_TASKS" Type="Long"/>
+	<Field Name="NUM_MAP_RUN_TASKS" Column="NUM_MAP_RUN_TASKS" Type="Long"/>
+	<Field Name="NUM_REDUCE_CANCEL_TASKS" Column="NUM_REDUCE_CANCEL_TASKS" Type="Long"/>
+	<Field Name="NUM_REDUCE_DONE_TASKS" Column="NUM_REDUCE_DONE_TASKS" Type="Long"/>
+	<Field Name="NUM_REDUCE_ERR_TASKS" Column="NUM_REDUCE_ERR_TASKS" Type="Long"/>
+	<Field Name="NUM_REDUCE_PEND_TASKS" Column="NUM_REDUCE_PEND_TASKS" Type="Long"/>
+	<Field Name="NUM_REDUCE_RUN_TASKS" Column="NUM_REDUCE_RUN_TASKS" Type="Long"/>
+
+	<!--Symphony 7.1.0-->
+	<Field Name="SESSION_METADATA" Column="SESSION_METADATA"/>
+	<Field Name="NUM_TASK_YIELDED" Column="NUM_TASK_YIELDED"/>
+	<Field Name="NUM_TASK_RESUMING" Column="NUM_TASK_RESUMING"/>
+	<Field Name="PARENT_ID" Column="PARENT_ID"/>
+	<Field Name="ROOT_SESSION_ID" Column="ROOT_SESSION_ID"/>
+	<Field Name="TASK_DISPATCH_ORDER" Column="TASK_DISPATCH_ORDER"/>
+	<Field Name="POLICY_TAG_PATH" Column="POLICY_TAG_PATH"/>
+	<Field Name="SESSION_TIMEOUT" Column="SESSION_TIMEOUT"/>
+	<Field Name="TASK_EXECUTION_TIMEOUT" Column="TASK_EXECUTION_TIMEOUT"/>
+	</SQL>		
+	</Writer>
+</DataLoader>

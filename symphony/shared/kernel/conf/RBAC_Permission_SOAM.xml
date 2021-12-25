@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionDatabase xmlns="http://www.platform.com/vem/2005/05/schema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.platform.com/vem/2005/05/schema ../ego.xsd">
+  <PermissionDefinition>
+    <ComponentName>SOAM</ComponentName>
+    <PermissionList>
+        <ObjectEntry>
+           <Object parentObject="Applications and Workload">Workload Submission API</Object>
+           <Permission ID="SOAM_APP_LOGIN" baseID="SOAM_APP_VIEW"> 
+           <Description>Connect to IBM Spectrum Symphony application.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_SN_CREATION"> 
+           <Description>Create only your own sessions.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_SN_CONFIG_OVERRIDE">
+           <Description>Override configuration via API for your current and future sessions.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_ADD_DOCKER_MOUNT_VOLUME">
+           <Description>Add data volumes on host OS that mount to docker containers for the session.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+        </ObjectEntry>
+        <ObjectEntry>
+           <Object parentObject="Applications and Workload">Profiles</Object>
+           <Permission ID="SOAM_APP_VIEWCONF">
+           <Description>View application profile.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+        </ObjectEntry>
+        <ObjectEntry>
+           <Object parentObject="Applications and Workload">Application</Object>
+           <Permission ID="SOAM_APP_VIEW">
+           <Description>View application summary information.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_APP_CONTROL" baseID="SOAM_APP_VIEW">
+           <Description>Enable and disable applications.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_APP_MANAGEMENT" baseID="SOAM_APP_VIEWCONF">
+           <Description>Register, update, and unregister applications.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_CONFIGURE_DOCKER_SERVICE_OS_EXECUTION_USER" baseID="SOAM_APP_VIEWCONF">
+           <Description>Register an application profile with Docker OS user mapping.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_POLICY_VIEW">
+           <Description>View application allocation information by host, session or policy tag for configured scheduling policy.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_PKG_VIEW">
+           <Description>View service package download details.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_SERVICE_VIEW">
+           <Description>View application service instance information.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+        </ObjectEntry>
+        <ObjectEntry>
+           <Object parentObject="Applications and Workload">All Sessions</Object>
+           <Permission ID="SOAM_SN_VIEW">
+           <Description>View session summary information.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_SN_MODIFY" baseID="SOAM_SN_VIEW">
+           <Description>Change priority for current and future sessions.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_SN_CONTROL" baseID="SOAM_SN_VIEW">
+           <Description>Kill, suspend, and resume sessions.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+        </ObjectEntry>
+        <ObjectEntry>
+           <Object parentObject="Applications and Workload">My Sessions</Object>
+           <Permission ID="SOAM_MYSN_VIEW">
+           <Description>View summary information for your own sessions.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_MYSN_CONTROL" baseID="SOAM_MYSN_VIEW">
+           <Description>Kill, suspend, and resume your own sessions.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_MYSN_MODIFY" baseID="SOAM_MYSN_VIEW">
+           <Description>Change priority of your own sessions.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+        </ObjectEntry>
+        <ObjectEntry>
+           <Object parentObject="Applications and Workload">All Tasks</Object>
+           <Permission ID="SOAM_TASK_VIEW">
+           <Description>View task summary information.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_TASK_MODIFY" baseID="SOAM_TASK_VIEW">
+           <Description>Change task priority.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_TASK_CONTROL" baseID="SOAM_TASK_VIEW">
+           <Description>Kill tasks in running or pending sessions.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+        </ObjectEntry>
+        <ObjectEntry>
+           <Object parentObject="Applications and Workload">My Tasks</Object>
+           <Permission ID="SOAM_MYTASK_VIEW">
+           <Description>View summary information about your own tasks.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_MYTASK_MODIFY" baseID="SOAM_MYTASK_VIEW">
+           <Description>Change priority of your own tasks.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+           <Permission ID="SOAM_MYTASK_CONTROL" baseID="SOAM_MYTASK_VIEW">
+           <Description>Kill only your own tasks in running or pending sessions.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+        </ObjectEntry>   
+        <ObjectEntry>
+           <Object parentObject="Cluster and Logs">Log Level Control</Object>
+           <Permission ID="SOAM_SD_LOG_CONTROL">
+           <Description>Change the log level of Symphony components.</Description>
+           <ContextType>None</ContextType>
+           </Permission>
+           <Permission ID="SOAM_APP_LOG_CONTROL">
+           <Description>Change log level of application daemon.</Description>
+           <ContextType>Consumer</ContextType>
+           </Permission>
+        </ObjectEntry>
+        <ObjectEntry>
+           <Object>Dashboard and Utilities</Object>
+           <Permission ID="GUI_RUN_SYMEXEC">
+           <Description>Run executables.</Description>
+           <ContextType>None</ContextType>
+           </Permission>
+           <Permission ID="GUI_RUN_SYMPING">
+           <Description>Run Symping.</Description>
+           <ContextType>None</ContextType>
+           </Permission>
+           <Permission ID="GUI_MAPREDUCE_SUBMIT">
+           <Description>Submit MapReduce jobs to the cluster.</Description>
+           <ContextType>None</ContextType>
+           </Permission>
+        </ObjectEntry>  
+    </PermissionList>
+  </PermissionDefinition>
+</PermissionDatabase>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DistributionPolicyConfiguration xmlns="http://www.platform.com/vem/2005/05/schema"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.platform.com/vem/2005/05/schema ../ego.xsd">
+  <Version>4.0</Version>
+  <ClusterAdmin>Admin</ClusterAdmin>
+  <ConsumerHierarchy>
+    <Consumer ConsumerName="ManagementServices">
+      <ConsumerProperties>
+ <Admin>Admin</Admin>
+ <User>Admin</User>
+      </ConsumerProperties>
+      <Consumer ConsumerName="EGOManagementServices">
+ <ConsumerProperties>
+   <Admin>Admin</Admin>
+   <User>Admin</User>
+   <ExecutionUser>egoadmin</ExecutionUser>
+   <ReclamationTimeout>210</ReclamationTimeout>
+   <Rebalance>false</Rebalance>
+ </ConsumerProperties>
+      </Consumer>
+      <Consumer ConsumerName="SymphonyManagementServices">
+        <ConsumerProperties>
+          <ExecutionUser>egoadmin</ExecutionUser>
+        </ConsumerProperties>
+      </Consumer>
+    </Consumer>
+    <Consumer ConsumerName="SymTesting">
+      <Consumer ConsumerName="Symping732">
+        <ConsumerProperties>
+          <ExecutionUser>egoadmin</ExecutionUser>
+        </ConsumerProperties>
+      </Consumer>
+    </Consumer>
+    <Consumer ConsumerName="SampleApplications">
+      <Consumer ConsumerName="SOASamples">
+        <ConsumerProperties>
+          <ExecutionUser>egoadmin</ExecutionUser>
+        </ConsumerProperties>
+      </Consumer>
+      <Consumer ConsumerName="EclipseSamples">
+  <ConsumerProperties>
+   <Admin>Admin</Admin>
+   <ExecutionUser>egoadmin</ExecutionUser>
+   <!-- The format for Timeout is an XML Schema duration. It's  -->
+   <!-- described at http://www.w3.org/TR/xmlschema-2/#duration -->
+   <!-- reclaim lent resources within 30 seconds -->
+   <ReclamationTimeout>30</ReclamationTimeout>
+   <Rebalance>false</Rebalance>
+  </ConsumerProperties>
+      </Consumer>
+      <Consumer ConsumerName="SOADemo">
+        <ConsumerProperties>
+          <ExecutionUser>egoadmin</ExecutionUser>
+        </ConsumerProperties>
+      </Consumer>
+    </Consumer>
+    <!--  Consumer for symexec  -->
+    <Consumer ConsumerName="SymExec">
+      <Consumer ConsumerName="SymExec732">
+        <ConsumerProperties>
+          <ExecutionUser>egoadmin</ExecutionUser>
+        </ConsumerProperties>
+      </Consumer>
+    </Consumer>
+    <Consumer ConsumerName="ClusterServices">
+      <Consumer ConsumerName="EGOClusterServices">
+        <ConsumerProperties>
+        <Admin>Admin</Admin>
+        <User>Admin</User>
+        <ExecutionUser>egoadmin</ExecutionUser>
+        </ConsumerProperties>
+      </Consumer>
+      <Consumer ConsumerName="SymphonyClusterServices">
+        <ConsumerProperties>
+        <Admin>Admin</Admin>
+        <User>Admin</User>
+        <ExecutionUser>egoadmin</ExecutionUser>
+        </ConsumerProperties>
+      </Consumer>
+    </Consumer>
+    <Consumer ConsumerName="YARN">
+      <ConsumerProperties>
+        <Admin>Admin</Admin>
+        <User>Admin</User>
+        <ExecutionUser>egoadmin</ExecutionUser>
+      </ConsumerProperties>
+      <Consumer ConsumerName="ResourceManagerConsumer">
+        <ConsumerProperties>
+          <Admin>Admin</Admin>
+          <User>Admin</User>
+          <ExecutionUser>egoadmin</ExecutionUser>
+        </ConsumerProperties>
+      </Consumer>
+      <Consumer ConsumerName="NodeManagerConsumer">
+        <ConsumerProperties>
+          <Admin>Admin</Admin>
+          <User>Admin</User>
+          <ExecutionUser>egoadmin</ExecutionUser>
+        </ConsumerProperties>
+      </Consumer>
+    </Consumer>
+    <Consumer ConsumerName="YARNComputeConsumer">
+      <ConsumerProperties>
+        <Admin>Admin</Admin>
+        <User>Admin</User>
+      </ConsumerProperties>
+    </Consumer>
+  </ConsumerHierarchy>
+  <DistributionTree DistributionTreeName="ManagementHosts">
+    <ResourceGroupName>ManagementHosts</ResourceGroupName>
+    <Consumer ConsumerName="ManagementServices">
+      <DistributionPolicies>
+ <Priority>50</Priority>
+ <SharingPolicy>
+   <Shares Type="ratio">1</Shares>
+ </SharingPolicy>
+ <OwnershipPolicy>
+   <Ownership Type="absolute">9</Ownership>
+ </OwnershipPolicy>
+      </DistributionPolicies>
+      <Consumer ConsumerName="EGOManagementServices">
+ <DistributionPolicies>
+   <Priority>50</Priority>
+   <SharingPolicy>
+     <Shares Type="ratio">1</Shares>
+   </SharingPolicy>
+   <OwnershipPolicy>
+     <Ownership Type="absolute">7</Ownership>
+   </OwnershipPolicy>
+ </DistributionPolicies>
+      </Consumer>
+      <Consumer ConsumerName="SymphonyManagementServices">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+          <OwnershipPolicy>
+            <Ownership Type="absolute">2</Ownership>
+          </OwnershipPolicy>
+        </DistributionPolicies>
+      </Consumer>
+   </Consumer>
+   <Consumer ConsumerName="SymTesting">
+      <DistributionPolicies>
+        <SharingPolicy>
+          <Shares Type="ratio">1</Shares>
+        </SharingPolicy>
+      </DistributionPolicies>
+      <Consumer ConsumerName="Symping732">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+   </Consumer>
+   <Consumer ConsumerName="SampleApplications">
+      <DistributionPolicies>
+        <SharingPolicy>
+          <Shares Type="ratio">1</Shares>
+        </SharingPolicy>
+      </DistributionPolicies>
+      <Consumer ConsumerName="SOASamples">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+   <Consumer ConsumerName="EclipseSamples">
+  <DistributionPolicies>
+   <Priority>50</Priority>
+   <SharingPolicy>
+    <Shares Type="ratio">1</Shares>
+   </SharingPolicy>
+  </DistributionPolicies>
+      </Consumer>
+      <Consumer ConsumerName="SOADemo">
+        <DistributionPolicies>
+            <Priority>50</Priority>
+            <SharingPolicy>
+                <Shares Type="ratio">1</Shares>
+            </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+    </Consumer>
+   <Consumer ConsumerName="SymExec">
+      <DistributionPolicies>
+        <SharingPolicy>
+          <Shares Type="ratio">1</Shares>
+        </SharingPolicy>
+      </DistributionPolicies>
+      <Consumer ConsumerName="SymExec732">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+    </Consumer>
+ </DistributionTree>
+  <DistributionTree DistributionTreeName="ComputeHosts">
+    <ResourceGroupName>ComputeHosts</ResourceGroupName>
+   <Consumer ConsumerName="SymTesting">
+      <DistributionPolicies>
+        <SharingPolicy>
+          <Shares Type="ratio">1</Shares>
+        </SharingPolicy>
+      </DistributionPolicies>
+      <Consumer ConsumerName="Symping732">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+   </Consumer>
+    <Consumer ConsumerName="SampleApplications">
+      <DistributionPolicies>
+        <SharingPolicy>
+          <Shares Type="ratio">1</Shares>
+        </SharingPolicy>
+      </DistributionPolicies>
+      <Consumer ConsumerName="SOASamples">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+      <Consumer ConsumerName="EclipseSamples">
+  <DistributionPolicies>
+   <Priority>50</Priority>
+   <SharingPolicy>
+    <Shares Type="ratio">1</Shares>
+   </SharingPolicy>
+  </DistributionPolicies>
+     </Consumer>
+     <Consumer ConsumerName="SOADemo">
+        <DistributionPolicies>
+            <Priority>50</Priority>
+            <SharingPolicy>
+                <Shares Type="ratio">1</Shares>
+            </SharingPolicy>
+        </DistributionPolicies>
+     </Consumer>
+    </Consumer>
+    <Consumer ConsumerName="SymExec">
+      <DistributionPolicies>
+        <SharingPolicy>
+          <Shares Type="ratio">1</Shares>
+        </SharingPolicy>
+      </DistributionPolicies>
+      <Consumer ConsumerName="SymExec732">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+    </Consumer>
+  </DistributionTree>
+  <DistributionTree DistributionTreeName="InternalResourceGroup">
+    <ResourceGroupName>InternalResourceGroup</ResourceGroupName>
+    <Consumer ConsumerName="ClusterServices">
+      <DistributionPolicies>
+        <SharingPolicy>
+          <Shares Type="ratio">1</Shares>
+        </SharingPolicy>
+      </DistributionPolicies>
+      <Consumer ConsumerName="EGOClusterServices">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+      <Consumer ConsumerName="SymphonyClusterServices">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+    </Consumer>
+    <Consumer ConsumerName="YARN">
+      <DistributionPolicies>
+        <SharingPolicy>
+          <Shares Type="ratio">1</Shares>
+        </SharingPolicy>
+        <OwnershipPolicy>
+          <Ownership Type="absolute">1</Ownership>
+        </OwnershipPolicy>
+      </DistributionPolicies>
+      <Consumer ConsumerName="ResourceManagerConsumer">
+        <DistributionPolicies>
+          <Priority>0</Priority>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+          <OwnershipPolicy>
+            <Ownership Type="absolute">1</Ownership>
+          </OwnershipPolicy>
+        </DistributionPolicies>
+      </Consumer>
+      <Consumer ConsumerName="NodeManagerConsumer">
+        <DistributionPolicies>
+          <SharingPolicy>
+            <Shares Type="ratio">1</Shares>
+          </SharingPolicy>
+        </DistributionPolicies>
+      </Consumer>
+    </Consumer>
+  </DistributionTree>
+</DistributionPolicyConfiguration>

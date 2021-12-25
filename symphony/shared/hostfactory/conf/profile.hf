@@ -1,0 +1,61 @@
+#!/bin/sh
+
+# Find a version of awk we can trust
+LSNULFILE=/dev/null
+AWK=""
+for tmp in nawk  /usr/toolbox/nawk gawk awk 
+do
+#   This is the real test, for functions & tolower
+#    if foo=`(echo FOO | $tmp 'function tl(str) { return tolower(str) } { print tl($1) }') 2>$LSNULFILE` \
+#       && test "$foo" = "foo"
+#   A simpler test, just for executability
+    if ($tmp 'BEGIN{ } { }') < $LSNULFILE > $LSNULFILE 2>&1  
+    then
+	AWK=$tmp
+        break
+    fi
+done
+
+if test "$AWK" = ""
+then
+    echo "Cannot find a correct version of awk."
+    echo "Exiting ... "
+    exit 1
+fi
+export AWK
+
+HF_VERSION=1.2
+HF_TOP=/opt/ibm/spectrumcomputing/hostfactory
+
+_CUR_PATH_ENV="$PATH"
+
+BINARY_TYPE="linux-x86_64"
+machine=`uname -m`
+case "$machine" in
+    x86_64)
+        BINARY_TYPE="linux-x86_64"
+        ;;
+    ppc64le)
+        BINARY_TYPE="linux3.10-glibc2.17-ppc64le"
+        ;;
+esac
+
+
+HF_ETCDIR=$HF_TOP/$HF_VERSION/$BINARY_TYPE/etc
+HF_LIBDIR=$HF_TOP/$HF_VERSION/$BINARY_TYPE/lib
+
+PATH=$HF_ETCDIR:$_CUR_PATH_ENV
+
+if [ -z "$LD_LIBRARY_PATH" ] ; then
+    LD_LIBRARY_PATH=$HF_LIBDIR
+else
+    LD_LIBRARY_PATH=${HF_LIBDIR}:$LD_LIBRARY_PATH
+fi
+
+#remove duplicated entries
+LD_LIBRARY_PATH=$(echo "$LD_LIBRARY_PATH" | $AWK 'BEGIN{RS=":";ORS=":"} !a[$1]++ {if (NR > 1) printf ORS; printf $a[$1]}')
+PATH=$(echo "$PATH" | $AWK 'BEGIN{RS=":";ORS=":"} !a[$1]++ {if (NR > 1) printf ORS; printf $a[$1]}')
+
+unset enf enl AWK
+export HF_ETCDIR HF_LIBDIR LD_LIBRARY_PATH PATH HF_VERSION HF_TOP
+

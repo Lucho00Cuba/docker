@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceDirectorConfiguration>
+  <ESD_PLUGIN param="esddefault.xml">esd_ego_default</ESD_PLUGIN>
+</ServiceDirectorConfiguration>

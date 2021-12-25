@@ -1,0 +1,12 @@
+$ORIGIN .
+$TTL 0	; 0 seconds
+@EGO_SD_EGODOMAIN@.@EGO_SD_CORPDOMAIN@.	IN SOA	@EGO_SD_NAMESERVER@.@EGO_SD_CORPDOMAIN@. root.@EGO_SD_EGODOMAIN@.@EGO_SD_CORPDOMAIN@. (
+				77         ; serial
+				10800      ; refresh (3 hours)
+				900        ; retry (15 minutes)
+				604800     ; expire (1 week)
+				0          ; minimum (0 seconds)
+				)
+			NS	@EGO_SD_NAMESERVER@.@EGO_SD_CORPDOMAIN@.
+			NS	@EGO_SD_NAMESERVER@.@EGO_SD_EGODOMAIN@.@EGO_SD_CORPDOMAIN@.
+

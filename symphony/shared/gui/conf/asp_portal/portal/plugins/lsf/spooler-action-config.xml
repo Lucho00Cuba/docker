@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<spooler-action-config>
+	<action name="tar">${ASP_TOP}/plugins/lsf/exec/spooler_action.sh tar</action>
+	<action name="tarz">${ASP_TOP}/plugins/lsf/exec/spooler_action.sh tarz</action>
+	<action name="tgz">${ASP_TOP}/plugins/lsf/exec/spooler_action.sh tgz</action>
+	<action name="zip">${ASP_TOP}/plugins/lsf/exec/spooler_action.sh zip</action>
+</spooler-action-config>

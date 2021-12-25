@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ServiceControllerConfiguration>
+  <ESC_PORT>17872</ESC_PORT>
+  <ESC_LOGDIR>/opt/ibm/spectrumcomputing/eservice/esc/log</ESC_LOGDIR>
+  <ESC_WORKDIR>/shared/kernel/work</ESC_WORKDIR>
+  <ESC_LOG_MASK>LOG_WARNING</ESC_LOG_MASK>
+  <ESC_AUDIT_LOG>OFF</ESC_AUDIT_LOG>
+  <ESC_HOLD_SLOT_FOR_JOB_CONTROLLER>Y</ESC_HOLD_SLOT_FOR_JOB_CONTROLLER>
+</ServiceControllerConfiguration>

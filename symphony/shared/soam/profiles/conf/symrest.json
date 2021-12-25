@@ -1,0 +1,27 @@
+{
+    "symrest": 
+    {
+        "portRange": [8050, 8060],
+        "transport": "TCPIPv4SSL",
+        "transportArg": "$EGO_DEFAULT_TS_PARAMS",
+        "soamConnectionTimeoutInSeconds": 15,
+        "soamRequestTimeoutInSeconds": 15,
+        "soamSessionIdleTimeoutInMinutes": 60, 
+        "workerThreads" : 8
+    },
+    "inclusionList": 
+    {
+        "clusters": {
+        },
+        "applications": {
+            "symping7.3.2": [],
+            "Demo7.3.2": []
+         }        
+    },      
+    "loadBalancer": 
+    {
+        "ETCD": "",
+        "loadUpdateIntervalSecond": 60,
+        "caFileForETCD": ""
+    }
+}

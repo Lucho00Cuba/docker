@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ESDDefaultPluginConfiguration>
+  <!-- EGO DNS server name -->
+  <!-- ESD_EGO_NAMESERVER>@EGO_SD_NAMESERVER@</ESD_EGO_NAMESERVER -->
+  <ESD_EGO_NAMESERVER>egonameserver</ESD_EGO_NAMESERVER>
+  <!-- EGO DNS domain name -->
+  <!-- ESD_EGO_DOMAIN>@EGO_SD_EGODOMAIN@</ESD_EGO_DOMAIN -->
+  <ESD_EGO_DOMAIN>ego</ESD_EGO_DOMAIN>
+  <!-- Corporation DNS domain name -->
+  <!-- ESD_CORP_DOMAIN>@EGO_SD_CORPDOMAIN@</ESD_CORP_DOMAIN -->
+  <!-- EGO DNS sub-domain TSIG key created by dnssec-keygen -->
+  <!-- ESD_EGO_KEY name="@EGO_SD_EGOKEYNAME@">@EGO_SD_EGOKEY@</ESD_EGO_KEY -->
+  <ESD_EGO_KEY name="ego.">rUlWkhrNFCsXkOwZBu/xVA==</ESD_EGO_KEY>
+  <!-- CORP DNS domain TSIG key created by dnssec-keygen -->
+  <!-- ESD_CORP_KEY name="@EGO_SD_CORPKEYNAME@">@EGO_SD_CORPKEY@</ESD_CORP_KEY -->
+</ESDDefaultPluginConfiguration>

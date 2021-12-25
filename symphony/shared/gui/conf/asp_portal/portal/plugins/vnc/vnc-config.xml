@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<vnc-config xmlns:eup="http://www.platform.com/2008/eup/schema">
+  <admin-config>
+    <attribute name="viewerType">_blank</attribute>
+    <attribute name="authMethod">random</attribute>
+    <attribute name="XStartupScript"><![CDATA[#!/bin/sh
+xsetroot -solid white &
+/apps/lsf/bin/gconfcmd > /dev/null 2>&1 
+/usr/bin/gnome-session > /dev/null 2>&1
+
+
+
+]]></attribute>
+  </admin-config>
+  <user-config>
+    <user name="lplin">
+      <attribute name="width">768</attribute>
+      <attribute name="height">768</attribute>
+      <attribute name="password"><![CDATA[oRlU/e5Ed+A=]]></attribute>
+    </user>
+    <user name="sxu">
+      <attribute name="width">1024</attribute>
+      <attribute name="height">768</attribute>
+      <attribute name="password"><![CDATA[M7Kl3GPkh0M=]]></attribute>
+    </user>
+  </user-config>
+</vnc-config>

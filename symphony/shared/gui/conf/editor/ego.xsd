@@ -1,0 +1,2868 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:ego="http://www.platform.com/ego/2005/05/schema"
+    xmlns:sc="http://www.platform.com/ego/2005/05/schema/sc"
+    targetNamespace="http://www.platform.com/ego/2005/05/schema" elementFormDefault="qualified">
+    
+    <xsd:import namespace="http://www.platform.com/ego/2005/05/schema/sc" schemaLocation="sc.xsd"/>
+    <!-- Some simple type elements used throughout the schema and WSDL files -->
+    <xsd:element name="ActivityID" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                An identifier that uniquely identifies an Activity within the
+                EGO cluster at a particular point in time.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="ActivityName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                A name used to refer to an Activity. Not guaranteed to be
+                unique within an EGO cluster.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="Admin" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                The name of a principal within the EGO user database, 
+                acting in an administrative role.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+  
+    <xsd:element name="AllocationID" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                An identifier that uniquely identifies an allocation 
+                at a certain point in time.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+  
+    <xsd:element name="AllocationName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                A non-unique string that can be used to provide names
+                for allocations. 
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+  
+    <xsd:element name="AllocationStartTime" type="xsd:dateTime">
+        <xsd:annotation>
+            <xsd:documentation>
+                The point in time at which an allocation is active. The 
+                format of the XML Schema "dateTime" datatype can be found
+                <a href="http://www.w3.org/TR/xmlschema-2/#dateTime">here</a>.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="AllocationDuration" type="xsd:duration">
+        <xsd:annotation>
+            <xsd:documentation>
+                The length of time for which an allocation is active. The
+                format of the XML Schema "duration" datatype can be found
+                <a href="http://www.w3.org/TR/xmlschema-2/#duration">here</a>.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+  
+    <xsd:element name="AllocationTimeout" type="xsd:duration">
+        <xsd:annotation>
+            <xsd:documentation>
+                The maximum amount of time an EGO client should wait before 
+                getting a notification about the status of an allocation. Clients
+                are notified when resources are added or removed from an allocation.
+                This timeout indicates that a notification should be sent even
+                if resources are not being added or removed. Can be thought of as
+                a notification heartbeat interval.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="AllocationPriority" type="xsd:int">
+        <xsd:annotation>
+            <xsd:documentation>
+                The relative priority of this allocation relative to other
+                allocation requests from the same consumer.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="Borrowed" type="xsd:int">
+        <xsd:annotation>
+            <xsd:documentation>
+                The current number of resources borrowed from other Consumers.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="CandidateMaster" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                The hostname of a node in the EGO cluster that potentially
+                could become the primary host of the cluster as the result of
+                the primary host election algorithm.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="ClientDescription" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                A string provided by the client during registration that provides
+                some extra meta data about the client. It is not guaranteed to be
+                unique amongst all consumers.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="ClientLocation" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                A string, usually in the form of IPaddress:portnumber, that
+                indicates where a client registration was made from. 
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="ClientName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                A unique identifier that is used to distinguish between EGO clients.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="ClusterName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                An identifier used to name an instance of an EGO cluster.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="PreCommand">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies an optional pre-execution command to run before running the command.
+                Specify the full command line of the program to be run, including arguments:
+                For example:
+                "/usr/local/bin/myprecmd -args".
+                The timeout, stdOutFile, and stdErrFile attributes are optional (available only with IBM Spectrum Conductor).
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="timeout" type="xsd:int">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                The timeout attribute indicates amount of time, in seconds, before the pre-execution command times out.
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="stdOutFile" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                The stdOutFile attribute indicates the file path to the message output file for the pre-execution command.
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="stdErrFile" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                The stdErrFile attribute indicates the file path to the error log file for the pre-execution command.
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>					
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>	
+    </xsd:element>
+   
+    <xsd:element name="Command">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies the command to be run as part of an activity.
+                Specify the full command line of the program to be run, including
+                arguments. For example:
+                "/usr/local/bin/blastall -p blastn -d nt -i sequences".
+                The stdOutFile and stdErrFile attributes are optional.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="stdOutFile" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                Specifies the file path to the message output file for the command (available only with IBM Spectrum Conductor).
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="stdErrFile" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                Specifies the file path to the error log file for the command (available only with IBM Spectrum Conductor).
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>	
+    </xsd:element>
+
+    <xsd:element name="PostCommand">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies an optional post-execution command to run after running the command.
+                Specify the full command line of the program to be run, including arguments.
+                For example:
+                "/usr/local/bin/mypostcmd -args".
+                The timeout, stdOutFile, and stdErrFile attributes are optional (available only with IBM Spectrum Conductor).
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="timeout" type="xsd:int">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                The timeout attribute indicates amount of time, in seconds, before the post-execution command times out.
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="stdOutFile" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                The stdOutFile attribute indicates the file path to the message output file for the post-execution command.
+                            </xsd:documentation>
+                        </xsd:annotation>
+					</xsd:attribute>
+                    <xsd:attribute name="stdErrFile" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                The stdErrFile attribute indicates the file path to the error log file for the post-execution command.
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>	
+    </xsd:element> 
+   
+    <xsd:element name="ConsumerName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                The name assigned to a specific consumer without specifying 
+                its place in the distribution tree hierarchy.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ConsumerID" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Specifies the fully-qualified name of a consumer in the consumer tree.
+                 For example: "/DeptA/ProjB/ConsumerC" indicates that ConsumerC is
+                 part of ProjB, which is in turn part of DeptA.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="KeepBlockHostList" type="xsd:boolean">
+        <xsd:annotation>
+            <xsd:documentation>
+                 With the value "TRUE", the block host list for an allocation of service 
+                 will be kept in the case that an allocation is replaced by a new one, 
+                 or the block host list will not be kept.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="ConsumerTreeName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                An identifier given to a particular ConsumerTree configuration.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="ConsumerHosts">
+        <xsd:annotation>
+            <xsd:documentation>
+               Hosts allocated to the consumer 
+	    </xsd:documentation>
+        </xsd:annotation>
+	<xsd:complexType>
+	    <xsd:sequence>
+	        <xsd:element ref="ego:ConsumerID"/>
+	        <xsd:element ref="ego:Resource" minOccurs="0" maxOccurs="unbounded"/>
+	    </xsd:sequence>
+	</xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="ContactName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                The full name of a contact associated with a particular user
+                within the EGO user database.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="ContactPhone" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                The phone number of a contact associated with a particular
+                user within the EGO user database.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ContactEmail" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                The email address of a contact associated with a particular
+                user within the EGO user database.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ControlWaitPeriod" type="xsd:duration">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies a grace period to wait before killing an activity.
+                Specify the duration in the format PTnHnMnS,
+                nH the number of hours, nM the number of minutes and nS the number of seconds.
+                The number of seconds can include decimal digits to arbitrary precision.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="Description" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                A generic element used for providing extra meta data 
+                to another element.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="DistributionTreeName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                The name associated with a Distribution Tree.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="EndTime" type="xsd:dateTime">
+        <xsd:annotation>
+            <xsd:documentation>
+                A date and time stamp indicating the time at which
+                something has finished. Used, for example, to indicate when
+                an Activity has completed.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ExecutionUser" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Specifies the operating system user ID to use when 
+                 running an activity.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ExitReason" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                An indication as to why an Activity has failed in its execution. 
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ExitStatus" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                This is the exit code produced by the command that was
+                run as part of an Activity. The code can be interpreted 
+                using the same semantics as described in the Unix wait(3)
+                man page.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="JobController" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies a command to run when controlling the activity. 
+                Specify the full command line of the program to be run, including 
+                arguments. For example: 
+                "/usr/local/jboss/bin/shutdown all". 
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:element name="CleanupCommand" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies a command to run when there are no active service instances belonging to the service 
+                and the host does not meet the serivce's ResReq anymore. 
+                Specify the full command line of the program to be run, including 
+                arguments; for example: 
+                "/opt/biginsights/scripts/uninstall.sh all" (available only with IBM Spectrum Conductor).
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   <xsd:element name="CleanupFinishWaitPeriod" type="xsd:duration">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies the duration that the service controller waits for the cleanup command to complete 
+                before terminating the activity for the cleanup (available only with IBM Spectrum Conductor).
+                Specify the duration in the format PTnHnMnS, where:
+                nH identifies the number of hours
+                nM identifies the number of minutes
+                nS identifies the number of seconds (including decimal digits)
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:element name="InactivityPeriod" type="xsd:duration">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies the duration that the service controller waits for starting the cleanup command 
+                since there are no active service instances belonging to the service on the host (available only with IBM Spectrum Conductor).
+                Specify the duration in the format PTnHnMnS, where:
+                nH identifies the number of hours
+                nM identifies the number of minutes
+                nS identifies the number of seconds (including decimal digits)
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   <xsd:element name="JobMonitor">
+     <xsd:annotation>
+         <xsd:documentation>
+             Specifies a command to run besides the activity.
+             Specify the full command line of the program to be run, including
+             arguments; for example:
+             "/mypath/mycommand myArge" (available only with IBM Spectrum Conductor).
+         </xsd:documentation>
+     </xsd:annotation>    
+    </xsd:element>
+    
+    <xsd:element name="JobMonitorMaxUpdateInterval" type="xsd:int">
+     <xsd:annotation>
+         <xsd:documentation>
+             Specifies how frequently, in seconds, the job monitor updates activity's status; for example:
+             "60" (available only with IBM Spectrum Conductor).
+             The default value is infinite, if is not defined.
+         </xsd:documentation>
+     </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="Lent" type="xsd:int">
+        <xsd:annotation>
+            <xsd:documentation>
+                How many resources have been lent to other Consumers.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="MasterName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                The hostname of the current EGO primary host. This is the
+                node that runs vemkd.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="MaxResources" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Indicates the maximum number of consumable resources required
+                to satisfy an allocation.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="MinResources" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Indicates the minimum number of consumable resources required
+                to satisfy an allocation.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="NonShared" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Used to represent the amount of resources allocated for
+                a consumer and are not shared with other consumers.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="NotificationEndpoint" type="xsd:anyURI">
+        <xsd:annotation>
+            <xsd:documentation>
+                The SOAP endpoint provided by an EGO client at registration 
+                time that is used to send various notifications. 
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="Option" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                A generic element used to attach "flags" to operations. These
+                flags are not value based parameters, but usually booleans that
+                turn on or off a particular behaviour.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="OwnedInUse" type="xsd:int">
+        <xsd:annotation>
+            <xsd:documentation>
+                The amount of resources from a Consumer's owned pool that are 
+                currently in use.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="OwnedFree" type="xsd:int">
+        <xsd:annotation>
+            <xsd:documentation>
+                The amount of resources from a Consumer's owned pool that are
+                currently free.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="Priority" type="xsd:integer" default="1">
+        <xsd:annotation>
+            <xsd:documentation>
+                An element used to indicate priority of a Consumer relative
+                to other Consumers in the Resource Distribution Tree.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="Rebalance" type="xsd:boolean" default="true">
+        <xsd:annotation>
+            <xsd:documentation>
+                Used to indicate the reclaim behavior of EGO when the
+                configuration changes.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ReclamationTimeout" type="xsd:duration" default="PT0S">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to indicate a reclamation timeout
+                when redistributing owned and borrowed resources when
+                the configuration of the Resource Distribution Tree changes.
+                The default value of zero indicates that reclamation happens
+                immediately. The format of the duration is specified as in the
+                XML Schema documentation (http://www.w3.org/TR/xmlschema-2/#duration).
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+   <xsd:element name="ResourceGroupName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Identifies a particular resource group within the EGO cluster.
+                Specify a unique name of up to 120 alphanumeric characters, including underscores and dashes.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+   <xsd:element name="SelectType"> 
+        <xsd:annotation>
+	    <xsd:documentation>
+                Type of hosts in the group.Can be either
+		1)static configured
+		2)dynamic selected from resource requirement
+	    </xsd:documentation>
+	</xsd:annotation>
+       <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+	      <xsd:enumeration value="static"/>
+	      <xsd:enumeration value="dynamic"/>
+	  </xsd:restriction>
+       </xsd:simpleType>
+    </xsd:element>
+    
+    <xsd:element name="ResourceName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                An identifier that uniquely identifies a Resource within the
+                EGO cluster.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ResourceRequirement" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies the resources required to run. Specify an expression in a string. 
+                This expression is evaluated when selecting candidate resources
+                to fulfill an allocation, and as such, could be very dependent 
+                on the type of resources requested (that is, the syntax
+                of a resource requirement for compute hosts could be different 
+                from the syntax for a storage resource requirement).
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="ResourceType" type="xsd:anyURI">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to indicate the type of a Resource. 
+                The URI is intended to match with the URI of the 
+                namespace of an XML schema that is used to further
+                describe the resource.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+   
+    <xsd:element name="RoleContext" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Within a particular role, the RoleContext is used to provide
+                information about where the role applies. For example, if the
+                role is for a consumer admin, the context of this role is within
+                a particular node in the consumer tree, thus the RoleContext is
+                a ConsumerID.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+  
+    <xsd:element name="RoleName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                An identifier used to uniquely identify a particular role 
+                defined within the system.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ShareInUse" type="xsd:int">
+        <xsd:annotation>
+            <xsd:documentation>
+                The amount of resources from the shared pool in use by
+                a particular Consumer.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="ShareFree" type="xsd:int">
+        <xsd:annotation>
+            <xsd:documentation>
+                The amount of resources from the shared pool that 
+                a particular Consumer has not used from its entitled amount.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ShareReserved" type="xsd:int">
+        <xsd:annotation>
+            <xsd:documentation>
+                The amount of resources from the shared pool that a 
+                particular consumer is entitled based on their share ratio.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="Signal" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                This is a string representation of a particular signal
+                that can be delivered to an activity. Currently it is envisioned
+                that this be a string representing a POSIX signal (e.g. SIGKILL),
+                but the format does not preclude any other signalling or
+                notification mechanisms. 
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="StartTime" type="xsd:dateTime">
+        <xsd:annotation>
+            <xsd:documentation>
+                A date and time stamp indicating the time at which
+                something has started. Used, for example, to indicate when
+                an Activity has started execution.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="TileResources" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Indicates that EGO should tile an allocation
+                across resources.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="Umask" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies the file creation mask used within the context of a running
+                activity, which determines the default permissions given
+                to files created by the activity. 
+                This is an absolute mode.
+                Specify a 4-digit octal number (from 0-7) as described in the POSIX
+                chmod(1) man page.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="User" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                The name of a principal within the EGO user database.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="Version" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                A generic element used to indicate the version of something.
+                Can be used to describe file format versions, software 
+                versions, etc.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="PolicyParameter">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines a parameter for tuning the behaviour of the distribution engine.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="ParameterName" type="xsd:string" use="required"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="WorkingDirectory" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specfies the full path to the directory in which an activity
+                executes. 
+                Specify a path that is valid when interpreted on the resource used for
+                execution.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+        
+    <xsd:element name="AllocationStatus">
+        <xsd:annotation>
+            <xsd:documentation>
+                Once an allocation has been created (that is, an AllocationID) 
+                has been assigned, the allocation status can be in one of three
+                states: "satisfied" means that at least minResources have been
+                assigned to this allocation, "unsatisfied" means that less than
+                minResources have been assigned, and "completed" means that the
+                allocation has been released, or that it has expired.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="satisfied"/>
+                <xsd:enumeration value="unsatisfied"/>
+                <xsd:enumeration value="completed"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="ActivityState">
+        <xsd:annotation>
+            <xsd:documentation>
+                Once an Activity has been accepted and assigned an ActivityID, 
+                it can be in one of the following states: "null" indicates that 
+                it has not yet been sent to a host for execution, "start" indicates
+                that it has been accepted by a host but has not yet been executed,
+                "run" means that it has been executed and is still running,
+                "suspend" means that the PEM has suspended the task via policy or
+                user/admin request, "finish" means that the processes making up
+                the Activity have exited, "unknown" means that vemkd cannot contact
+                PEM to determine the status, and "zombie" means that vemkd cannot
+                contact the PEM to determine the status but there has been a
+                request to terminate the Activity.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="null"/>
+                <xsd:enumeration value="start"/>
+                <xsd:enumeration value="run"/>
+                <xsd:enumeration value="suspend"/>
+                <xsd:enumeration value="finish"/>
+                <xsd:enumeration value="unknown"/>
+                <xsd:enumeration value="zombie"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="ResourceControlOperation">
+        <xsd:annotation>
+            <xsd:documentation>
+                The "open" operation is used to make a resource available
+                for allocation. The "close" operation is used to take a 
+                resource away from the allocatable pool.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="open"/>
+                <xsd:enumeration value="close"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="AgentControlOperation">
+        <xsd:annotation>
+            <xsd:documentation>
+                The "start" operation is used to start up the EGO 
+                agent processes on a node, the "stop" operation is 
+                to kill the EGO agent processes on a node, and the 
+                "restart" operation is used to request that an agent
+                restart itself, most likely to effect a configuration 
+                change.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="start"/>
+                <xsd:enumeration value="stop"/>
+                <xsd:enumeration value="restart"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+  
+    <xsd:element name="MasterControlOperation">
+        <xsd:annotation>
+            <xsd:documentation>
+                The "stop" operation is used to tell the vemkd to
+                exit. The "restart" operation is used to tell the
+                vemkd to reboot itself, most likely to effect a 
+                configuration change.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="stop"/>
+                <xsd:enumeration value="restart"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+    
+    <xsd:element name="ActivityControlOperation">
+        <xsd:annotation>
+            <xsd:documentation>
+                An Activity can support the following operations:
+                "signal" sends an indicated Signal to the processes
+                of the Activity, "terminate" is used to cancel the
+                Activity and cleanup the associated processes, "suspend"
+                is used to request it to stop processing, "resume" is 
+                used to request the Activity to start processing after
+                a suspend operation, "checkpoint" tells the Activity to 
+                checkpoint its running state, and "resume" tells the 
+                Activity to restart itself from a previous checkpoint.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="signal"/>
+                <xsd:enumeration value="terminate"/>
+                <xsd:enumeration value="suspend"/>
+                <xsd:enumeration value="resume"/>
+                <xsd:enumeration value="checkpoint"/>
+                <xsd:enumeration value="restart"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+  
+    <xsd:element name="AddResourceResponseCode">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to respond to the AddResource
+                notification that EGO sends a client when a resource
+                is added to an allocation. "ok" means that the resource
+                has been accepted, "no_more" means that the resource has
+                been accepted and further resources are not necessary 
+                in this allocation, and "reject" means that this resource
+                is not acceptible and should not be part of the allocation.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="ok"/>
+                <xsd:enumeration value="no_more"/>
+                <xsd:enumeration value="reject"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+  
+    <xsd:element name="ResourceState">
+        <xsd:annotation>
+            <xsd:documentation>
+                The state of a Resource can be: "ok" where vemkd can 
+                communicate with the resource and it is available for
+                assignment to an allocation, "unavail" where vemkd can't
+                communicate with the resource, "closed" indicating that
+                there are no more consumable resources available on the
+                resource for allocation or it has been made unavailble for
+                allocation by an administrator, and "removed" which indicates
+                that the resource is part of an allocation but is no longer
+                part of the EGO cluster.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="ok"/>
+                <xsd:enumeration value="unavail"/>
+                <xsd:enumeration value="closed"/>
+                <xsd:enumeration value="removed"/>
+                <xsd:enumeration value="inactive"/>            
+                <xsd:enumeration value="unknown"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+    
+    <xsd:element name="ManageUserOperation">
+        <xsd:annotation>
+            <xsd:documentation>
+                "add" means to add a user to the EGO user database, "modify"
+                means to modify the user's meta data such as password or 
+                contact information, and "delete" means to remove the user
+                from the EGO user database.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="add"/>
+                <xsd:enumeration value="modify"/>
+                <xsd:enumeration value="delete"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="ManageRoleOperation">
+        <xsd:annotation>
+            <xsd:documentation>
+                "add" means to attach a role to a given user and
+                "delete" means to remove a role from a particular 
+                user.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="add"/>
+                <xsd:enumeration value="delete"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+    
+    <xsd:element name="ManageConsumerOperation">
+        <xsd:annotation>
+            <xsd:documentation>
+                "add" is used to add a consumer to the consumer tree,
+                "delete" is used to remove a consumer from the tree,
+                and "set" is used to change the properties associated
+                with a particular node of the consumer tree.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="add"/>
+                <xsd:enumeration value="delete"/>
+                <xsd:enumeration value="set"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+    
+    <xsd:simpleType name="rlimitName">
+        <xsd:annotation>
+            <xsd:documentation>
+                This type is used in an Rlimit to indicate which limit
+                is being specified. The limits described are the same
+                as in the getrlimit(2) man page.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="CPU"/>
+            <xsd:enumeration value="FSIZE"/>
+            <xsd:enumeration value="DATA"/>
+            <xsd:enumeration value="STACK"/>
+            <xsd:enumeration value="CORE"/>
+            <xsd:enumeration value="RSS"/>
+            <xsd:enumeration value="NOFILE"/>
+            <xsd:enumeration value="VMEM"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="rlimitType">
+        <xsd:annotation>
+            <xsd:documentation>
+                Limits can be either "hard" limits (generally set by
+                administrators) indicating an upper bound to resource
+                usage, or "soft" limits (often set by the user) that 
+                are often used to constrain application behaviour.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="soft"/>
+            <xsd:enumeration value="hard"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:element name="Rlimit">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies an operating system limit within the context of a running activity.
+                The "type"
+                attribute is optional, and can be used to indicate whether a 
+                soft or hard limit is being specified.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:integer">
+                    <xsd:attribute name="name" type="ego:rlimitName" use="required"/>
+                    <xsd:attribute name="type" type="ego:rlimitType" default="soft"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+ 
+    <xsd:element name="Attribute" nillable="true">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies a name/value pair of any type. The name
+                provides an identifier for this attribute, and type indicates the XML Schema type.
+                The value of the Attribute is in the element content, which
+                is optional (i.e. nillable). Thus, Attribute can be used both
+                to provide the value of a given attribute, or can be used to express
+                the names and types of attributes that are supported by various 
+                objects within EGO.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:anySimpleType">
+                    <xsd:attribute name="name" type="xsd:string" use="required">
+                        <xsd:annotation>
+			                      <xsd:documentation>
+			                           Specifies an identifier for the attribute. 
+			                      </xsd:documentation>
+                        </xsd:annotation>
+		                </xsd:attribute>
+                    <xsd:attribute name="type" type="xsd:NCName" use="required">
+                         <xsd:annotation>
+			                       <xsd:documentation>
+			                            Specifies an NCName that indicates the XML Schema
+                                  type that represents this attribute. The type attribute must contain
+                                  one of the names of the built-in types from the XML Schema 
+                                  http://www.w3.org/TR/xmlschema-2/#built-in-datatypes specification. 
+			                       </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+ 
+    <xsd:element name="ConsumableAttribute">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used within Resource and ResourceGroup elements
+                to indicate which of the Attributes associated with the Resource
+                or ResourceGroup can be consumed within an allocation. This is
+                indicated by the attributeName attribute. For example, on a compute 
+                node, the consumable attribute is a CPU slot, and thus the attributeName
+                might be "numSlots". The attributeCost attribute is used to indicate 
+                how many "tokens" each one of the consumable attributes costs in the
+                context of the consumer share tree.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="attributeName" type="xsd:string" use="required"/>
+            <xsd:attribute name="attributeCost" type="xsd:float" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Resource">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element represents the most basic manageable entity within EGO.
+                A Resource is basically a set of name/value pairs (as modelled by
+                Attribute elements), which has a state, and a description of which
+                attribute is consumable within allocations. The ResourceName attribute
+                uniquely names this Resource within EGO, and ResourceType is the URI of
+                an XML namespace that indicates what type of resource this is (e.g.
+                compute node, license, network link, etc). The ResourceType is optional,
+                with the default type being that of an EGO compute node. This element 
+                supports extensible content via the XML Schema any element, where the
+                element must come from another namespace other than the EGO namespace. 
+                Most likely, the element would come from the same namespace as is named
+                in ResourceType.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ResourceState" minOccurs="0"/>
+                <xsd:element ref="ego:ConsumableAttribute" minOccurs="0"/>
+                <xsd:element ref="ego:Attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:any namespace="##other" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+            <xsd:attribute name="ResourceName" type="xsd:string" use="required"/>
+            <xsd:attribute name="ResourceType" type="xsd:anyURI"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ResourceSpecification">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element provides a means for specifying a request for
+                an amount of consumable resource (indicated with MinResources
+                and MaxResources), and any constraints on resource selection
+                (using a ResourceGroupName and/or a ResourceRequirement). This
+                element, like Resource, also supports extensible content, for 
+                supporting other resource specification schemas. ResourceType is
+                an optional element indicating what sort of resource is being
+                asked for, and defaults to an EGO compute node.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:MinResources"/>
+                <xsd:element ref="ego:MaxResources"/>
+                <xsd:element ref="ego:TileResources" minOccurs="0"/>
+                <xsd:element ref="ego:ResourceGroupName" minOccurs="0"/>
+                <xsd:element ref="ego:ResourceRequirement" minOccurs="0"/>
+                <xsd:any namespace="##other" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+            <xsd:attribute name="ResourceType" type="xsd:anyURI" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ResourceUsage">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element contains a number of name/value pairs that describe
+                the consumption of resources (not just allocatable resources)
+                by a given Activity and/or Allocation. The names depend on what type
+                of resource is being reported on, indicated via the optional 
+                ResourceType attribute. This element also supports extensible 
+                content, so that resource usage reports that are structured using
+                some external schema can also be provided.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:any namespace="##other" minOccurs="0" processContents="lax"/>
+            </xsd:sequence>
+            <xsd:attribute name="ResourceType" type="xsd:anyURI"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="AllocationSpecification">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to describe a request to EGO for 
+                an allocation of resources. The only required elements 
+                are the ConsumerID to charge this allocation to, and 
+                the ResourceSpecification of what is being requested. An
+                optional AllocationName attribute can be provided, but
+                there is no guarantee that this name is unique amongst
+                all of EGO's allocations.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ConsumerID"/>
+                <xsd:element ref="ego:KeepBlockHostList" minOccurs="0"/>
+                <xsd:element ref="ego:AllocationStartTime" minOccurs="0"/>
+                <xsd:element ref="ego:AllocationDuration" minOccurs="0"/>
+                <xsd:element ref="ego:AllocationTimeout" minOccurs="0"/>
+                <xsd:element ref="ego:AllocationPriority" minOccurs="0"/>
+                <xsd:element ref="ego:ResourceSpecification" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="AllocationName" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+ 
+    <xsd:element name="AllocationInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                The current status of an Allocation, and a description
+                of the allocated resources, are provided within this 
+                element. 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:AllocationID"/>
+                <xsd:element ref="ego:ConsumerID"/>
+                <xsd:element ref="ego:AllocationStatus"/>
+                <xsd:element ref="ego:AllocationSpecification"/>
+                <xsd:element ref="ego:Resource" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="AllocationDetailInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                The status of an allocation and the description of 
+                the resources are described within this element.
+                Moreover,it contains the client name ,user name and names of
+                hosts in the block list.It is a representation of
+                vem data structure vem_allocation_t
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:AllocationInfo"/>
+                <xsd:element ref="ego:BlockHost" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:ClientName"/>
+                <xsd:element ref="ego:User"/>
+            </xsd:sequence>
+       </xsd:complexType>
+    </xsd:element>
+    
+     <xsd:element name="BlockHost">
+          <xsd:annotation> 
+              <xsd:documentation> 
+                  Host in the block list.
+              </xsd:documentation>
+          </xsd:annotation> 
+          <xsd:simpleType>
+              <xsd:restriction base="xsd:string">
+              </xsd:restriction> 
+          </xsd:simpleType>
+       </xsd:element>     
+       
+    <xsd:element name="EnvironmentVariable" nillable="true">
+        <xsd:annotation>
+            <xsd:documentation>
+                Models an operating system environment variable to indicate which
+                environment variables should be set within the running context of an activity.	
+                A content of 'nil' indicates that this variable should be unset in the environment.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="name" type="xsd:NCName" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                Specifies the name of the environment variable.
+                                Specify the name of the environment variable (e.g. PATH or LD_LIBRARY_PATH),
+                                and specify any string for the content.
+                                (For service instance location substitution, ${SERVICE_serviceName_LOCATION} or ${SERVICE_serviceName_LOCATIONS} is available only with IBM Spectrum Conductor)
+                            </xsd:documentation>
+                        </xsd:annotation>
+		    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    
+     <xsd:element name="DefaultURL">
+     <xsd:annotation>
+         <xsd:documentation>
+             Optional. Specifies a default URL for the service instance if job monitor is not defined (available only with IBM Spectrum Conductor). For example: "http://${HOSTNAME}:8080/mypath", where ${HOSTNAME} will be replaced at run time with the host name where the instance is running. If job monitor is defined and updates the service instance information, the default URL is overwritten by job monitor.
+         </xsd:documentation>
+     </xsd:annotation>    
+    </xsd:element>
+    
+    <xsd:element name="Name" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+               Required. A unique identifier that is used to distinguish an object.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ImageRegistryURL" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Optional. Specifies the path to the registry to pull the image.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+     <xsd:element name="Image" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+               Required. Specifies the image name.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="CPUShares" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+               Optional. Specifies the CPU shares (relative weight). The range is from 0-1024.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="CPUSet" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+     			Optional. Specifies the CPUs to allow execution (e.g. 0-3, 0,1)
+     		</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:simpleType name="PublishedPortProtocolEnum">
+        <xsd:annotation>
+            <xsd:documentation>
+                Optional. Specifies the protocol for the published port, tcp, or udp. Default is tcp.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="tcp"/>
+            <xsd:enumeration value="udp"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:element name="PublishedPort">
+        <xsd:annotation>
+            <xsd:documentation>
+                Optional. Specifies the port number to be published to the host.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="hostPort" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                               Optional. Specifies the host port number.  
+                            </xsd:documentation>
+                        </xsd:annotation>
+		    		</xsd:attribute>
+		    		<xsd:attribute name="ip" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                Optional. Specifies the IP address of the host. 
+                            </xsd:documentation>
+                        </xsd:annotation>
+		    		</xsd:attribute>
+		    		<xsd:attribute name="protocol" type="ego:PublishedPortProtocolEnum" >                    
+             	        <xsd:annotation>
+                            <xsd:documentation>
+                                Optional. Specifies the protocol for the published port, tcp, or udp. Default is tcp.
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="ExternalScriptVariable" nillable="true">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Specifies a variable name and its value as content.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="name" type="xsd:NCName" use="required">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                Specifies the name of the variable.(e.g. PATH or LD_LIBRARY_PATH),
+                                and specify any string for the content. 
+                            </xsd:documentation>
+                        </xsd:annotation>
+		    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+ 	
+    
+    <xsd:element name="DNSServer" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+               Optional. Specifies the DNS server IP address. For example, 123.123.123.123.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:element name="PodName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+               Optional. Specifies the Pod name.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="SDNName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+               Optional. Specifies the SDN name.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="DNSSearchDomain" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+               Optional. Specifies the DNS search domain. For example, abc.com. 
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+ 	
+    <xsd:element name="NetworkType" >
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies the network type. 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="bridge"/>
+                <xsd:enumeration value="host"/>
+                <xsd:enumeration value="external"/>
+                <xsd:enumeration value="sdn"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+      
+     <xsd:element name="DockerNetwork">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Optional. Specifies Docker network parameters.          
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:NetworkType" minOccurs="1" maxOccurs="1" />
+                <xsd:element ref="ego:SDNName" minOccurs="0" maxOccurs="unbounded"/>         
+                <xsd:element ref="ego:DNSServer" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:DNSSearchDomain" minOccurs="0" maxOccurs="unbounded"/>       
+                <xsd:element ref="ego:PodName" minOccurs="0" maxOccurs="1"/>        
+                <xsd:element ref="ego:ExternalScriptVariable" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="StopTimeout" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies, in seconds, the maximal allowed duration for the overall stop operation for the containers in a pod. Default is 20 seconds multiplied by the number of containers in a pod plus 60 seconds.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+        <xsd:simpleType name="DockerContainerVolPermEnum">
+        <xsd:annotation>
+            <xsd:documentation>
+                Optional. Specify the permission for the volume, ro for read only, rw for read and write. Default is rw.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="rw"/>
+            <xsd:enumeration value="ro"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:element name="ContainerVolume">
+        <xsd:annotation>
+            <xsd:documentation>
+                Optional. Specifies a volume to mount into the Docker container.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="hostpath" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                               Optional. Specifies the host path of the volume.
+                            </xsd:documentation>
+                        </xsd:annotation>
+		    		</xsd:attribute>
+		    		<xsd:attribute name="permission" type="ego:DockerContainerVolPermEnum" >                    
+             	        <xsd:annotation>
+                            <xsd:documentation>
+                                Optional. Specify the permission for the volume, ro for read only, rw for read and write. Default is rw.
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+		    		<xsd:attribute name="envname" type="xsd:string">
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                Optional. Specifies the environment variable name to set for the container. The value will be the volume path in the container volume.
+                            </xsd:documentation>
+                        </xsd:annotation>
+		    		</xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="RequiredContainerPort" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Optional. Specifies the container port number that needs to be listening in order for the container to be considered ready.
+        	</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="RequiredContainerProcess" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Optional. Specifies a process name that must be running in the container in order for the container to be considered ready.
+        	</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ReadyCheckScript" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Optional. The ready check script is a user-defined script on the host machine that returns with either exit code 0 if a Docker container is ready, or a non zero exit code if a Docker container is not ready. The script serves as a brief check that is called multiple times, and should return quickly rather than blocking and waiting for the Docker container to be ready.
+        	</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ReadyConditions">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Optional. Specifies user-defined conditions to determine when a container is ready during startup. If no ready conditions are specified, the container is considered to be ready immediately after starting.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:RequiredContainerPort" minOccurs="0"  maxOccurs="unbounded"/>                
+                <xsd:element ref="ego:RequiredContainerProcess" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:ReadyCheckScript" minOccurs="0" maxOccurs="1"/>                
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="GracefulStop" type="xsd:boolean">
+        <xsd:annotation>
+            <xsd:documentation>
+                 The value can be "true" or "false". With the value "true", the Docker container will not be forcibly stopped until the time value (in seconds) that is set by the stop timeout parameter for ego:Docker. The default is "False", which means that the container will be stopped immediately.
+            </xsd:documentation>
+    	</xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="Privileged" type="xsd:boolean" default="false">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Optional. The value can be "true" or "false". Default is "false". With the value "true", extended privileges are given to this Docker container. 
+            </xsd:documentation>
+    	</xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ShortRunning" type="xsd:boolean" default="false">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Optional. The value can be "true" or "false". Default is "false". With the value "true", the Docker container can exit without affecting Docker pod status. 
+            </xsd:documentation>
+    	</xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="EntryPoint" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+     			Optional. Specifies the path to overwrite the default ENTRYPOINT of the Docker image. For example, /bin/bash.
+     		</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="ExtraParameter" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+     			Optional. Specifies extra parameters, if needed, in the format of a string that is passed to Docker controller for future use.
+     		</xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+        
+    <xsd:element name="ImpersonateMode">
+        <xsd:annotation>
+            <xsd:documentation>
+                Optional. Impersonate execution user as host level user when specified.  Allowed Value: "merge" or "overwrite".
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="merge"/>
+                <xsd:enumeration value="overwrite"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+    
+    <xsd:element name="ImpersonateUserName" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+               Optional.  Additional usernames that need to be impersonated as host user.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="DockerContainer">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Required. Specifies Docker container parameters.               
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Name" minOccurs="1"  maxOccurs="1"/>                
+                <xsd:element ref="ego:Image" minOccurs="1" maxOccurs="1"/>
+                <xsd:element ref="ego:ImpersonateMode" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:ImpersonateUserName" minOccurs="0" maxOccurs="unbounded" />
+                <xsd:element ref="ego:EntryPoint" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:Command" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:PublishedPort" minOccurs="0" maxOccurs="unbounded" />
+                <xsd:element ref="ego:CPUShares" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:CPUSet" minOccurs="0" maxOccurs="1"/>                
+                <xsd:element ref="ego:MemoryLimit" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:ImageRegistryURL" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:EnvironmentVariable" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:ContainerVolume" minOccurs="0" maxOccurs="unbounded" />
+                <xsd:element ref="ego:ExecutionUser" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:GracefulStop" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:Privileged" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:ShortRunning" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="sc:Dependency" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:ReadyConditions" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:ExtraParameter" minOccurs="0" maxOccurs="1"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="StartupTimeout" type="xsd:int">
+     <xsd:annotation>
+         <xsd:documentation>
+             Optional. Specifies, in seconds, the maximal allowed duration of the overall start operation for the containers in a pod.            
+             Default is 20 seconds multiplied by the number of containers in a pod plus 60 seconds.
+         </xsd:documentation>
+     </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="SharedProperties">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Optional. Specifies common parameters for all Docker containers             
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+            	<xsd:element ref="ego:DockerNetwork" minOccurs="1" maxOccurs="1"/>
+            	<xsd:element ref="ego:StopTimeout" minOccurs="0" maxOccurs="1"/>
+            	<xsd:element ref="ego:StartupTimeout" minOccurs="0" maxOccurs="1"/>
+            	<xsd:element ref="ego:EnvironmentVariable" minOccurs="0" maxOccurs="unbounded"/>
+            	<xsd:element ref="ego:ContainerVolume" minOccurs="0" maxOccurs="unbounded" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+     <xsd:element name="Docker">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Optional. Specifies common parameters for all Docker containers and parameters for individual Docker containers (available only with IBM Spectrum Conductor).           
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+            	<xsd:element ref="ego:SharedProperties" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:DockerContainer" minOccurs="1"  maxOccurs="unbounded"/>          
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="ActivitySpecification">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Describes the execution parameters
+                 for an activity. The only required sub-element is the 
+                 command that needs to be run to start the activity.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ActivityName" minOccurs="0"/>
+                <xsd:element ref="ego:Command"/>
+                <xsd:element ref="ego:ExecutionUser" minOccurs="0"/>
+                <xsd:element ref="ego:Umask" minOccurs="0"/>
+                <xsd:element ref="ego:WorkingDirectory" minOccurs="0"/>
+                <xsd:element ref="ego:EnvironmentVariable" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:Rlimit" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:JobController" minOccurs="0"/>
+                <xsd:element ref="ego:CleanupCommand" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:CleanupFinishWaitPeriod" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:InactivityPeriod" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:JobMonitor" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:Container" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:DefaultURL" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:JobMonitorMaxUpdateInterval" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:ControlWaitPeriod" minOccurs="0"/>
+                <xsd:element ref="ego:PreCommand" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:PostCommand" minOccurs="0" maxOccurs="1"/>
+                <xsd:element ref="ego:Docker" minOccurs="0" maxOccurs="1"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+ 	
+ 	<xsd:element name="DiskIOLimit" >
+        <xsd:annotation>
+            <xsd:documentation>
+                 Specify the upper limit on the number of read or write operations a device can perform. The rate of the operations is in bytes per second.                 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>           
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:integer">     
+                    <xsd:attribute name="operation" type="ego:ContainerDiskioOpEnumeration" use="required">                    
+             	        <xsd:annotation>
+                            <xsd:documentation>
+                                Specify the disk operation, either "read" or "write"
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                    <xsd:attribute name="device" type="xsd:string" use="required">                    
+                        <xsd:annotation>
+                            <xsd:documentation>
+                                Specify the device id. For an example, "8:0"
+                            </xsd:documentation>
+                        </xsd:annotation>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    
+ 	<xsd:element name="CPULimit" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specify the max number of cores the activity can use, must be greater than 0.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>    
+    
+    <xsd:element name="PriorityClass" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specify an integer for the job object priority class level. 0-IDLE_PRIORITY_CLASS, 1-BELOW_NORMAL_PRIORITY_CLASS, 2-NORMAL_PRIORITY_CLASS, 3-ABOVE_NORMAL_PRIORITY_CLASS, 4-HIGH_PRIORITY_CLASS, 5-REALTIME_PRIORITY_CLASS.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>    
+    
+ 	<xsd:element name="MemoryLimit" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specifies the maximum memory to use in MB.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:element name="MemorySwapLimit" type="xsd:integer">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specify the total of memory and swap limit for the activity, the unit is MB.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+    <xsd:simpleType name="ContainerTypeEnumeration">
+        <xsd:annotation>
+            <xsd:documentation>
+                This enumeration type is used to identify the different types of container. The value can be "cgroups" for Linux or "jobObject" for Windows"
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="cgroups"/>
+            <xsd:enumeration value="jobObject"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:simpleType name="ContainerDiskioOpEnumeration">
+        <xsd:annotation>
+            <xsd:documentation>
+                Disk IO operation type, read or write
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="read"/>
+            <xsd:enumeration value="write"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:element name="NetworkClassID" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Specify a class identifier that allows the linux traffic controller to identify packets originating from cgroup
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    
+ 	<xsd:element name="Container">
+        <xsd:annotation>
+            <xsd:documentation>
+                 Describes container type and properties to limit CPU, memory, and DiskIO usage for the activity. 
+                 The type of the container can be "cgroups" for Linux or "jobObject" for Windows.
+                 (available only with IBM Spectrum Conductor)                 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+               <xsd:element ref="ego:CPULimit" minOccurs="0"/>
+               <xsd:element ref="ego:DiskIOLimit" minOccurs="0" maxOccurs="unbounded"/>      
+               <xsd:element ref="ego:MemoryLimit" minOccurs="0"/>               
+               <xsd:element ref="ego:MemorySwapLimit" minOccurs="0"/>     
+               <xsd:element ref="ego:NetworkClassID" minOccurs="0"/> 
+               <xsd:element ref="ego:PriorityClass" minOccurs="0"/>               
+            </xsd:sequence>
+             <xsd:attribute name="type" type="ego:ContainerTypeEnumeration" use="required"/>                    
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:complexType name="pidInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                This type describes where a process fits in the operating
+                system process tree. 'pid' is the process ID, 'ppid' is the
+                process ID of the parent that created the process 'pid', 'pgid' 
+                is the process group ID, and 'jobid' is the job container
+                identifier for operating systems that support the concept.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="pid" type="xsd:integer"/>
+            <xsd:element name="ppid" type="xsd:integer"/>
+            <xsd:element name="pgid" type="xsd:integer"/>
+            <xsd:element name="jobid" type="xsd:integer" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    
+    <xsd:element name="ActivityResourceUsage">
+        <xsd:annotation>
+            <xsd:documentation>
+                The ActivityResourceUsage is different from ResourceUsage, in that 
+                is describes the aggregate resource usage of all processes that 
+                are used to run an Activity. 'mem' is the aggregate real memory
+                usage, 'swap' is the aggregate virtual memory usage, 'utime' is the
+                number of cpu seconds spent in user space, 'stime' is the number
+                of cpu seconds spent in kernel space, 'nthreads' is the number
+                of threads created within the Activity's processes, and there
+                is a 'pidInfo' element for each process in the Activity.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="mem" type="xsd:integer"/>
+                <xsd:element name="swap" type="xsd:integer"/>
+                <xsd:element name="utime" type="xsd:integer"/>
+                <xsd:element name="stime" type="xsd:integer"/>
+                <xsd:element name="nthreads" type="xsd:integer"/>
+                <xsd:element name="pidInfo" type="ego:pidInfo" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="ActivityInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element describes the state of an Activity within EGO. 
+                There is both EGO meta data described (ActivityID, ActivityState, 
+                AllocationID, ConsumerID, ActivitySpecification) as well as run 
+                time state (StartTime, EndTime, ResourceName, ExitStatus, ExitReason, 
+                ResourceUsage, ActivityResourceUsage). Optional Attribute elements
+                can also be provided in order to extend the set of reported 
+                meta data.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ActivityID"/>
+                <xsd:element ref="ego:ActivityState"/>
+                <xsd:element ref="ego:AllocationID"/>
+                <xsd:element ref="ego:ConsumerID"/>
+                <xsd:element ref="ego:StartTime" minOccurs="0"/>
+                <xsd:element ref="ego:EndTime" minOccurs="0"/>
+                <xsd:element ref="ego:ResourceName" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:ActivitySpecification"/>
+                <xsd:element ref="ego:ExitStatus" minOccurs="0"/>
+                <xsd:element ref="ego:ExitReason" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:ResourceUsage" minOccurs="0"/>
+                <xsd:element ref="ego:ActivityResourceUsage" minOccurs="0"/>
+                <xsd:element ref="ego:Attribute" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+ 
+    <xsd:simpleType name="weekDay">
+        <xsd:annotation>
+            <xsd:documentation>
+                This type represents the day of the week as an integer.
+                The week starts on Sunday, with a value of 1.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:nonNegativeInteger">
+            <xsd:minInclusive value="1"/>
+            <xsd:maxInclusive value="7"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:attributeGroup name="TimeWindowAttributes">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="startDay" type="ego:weekDay"/>
+        <xsd:attribute name="startTime" type="xsd:time"/>
+        <xsd:attribute name="endDay" type="ego:weekDay"/>
+        <xsd:attribute name="endTime" type="xsd:time"/>        
+    </xsd:attributeGroup>
+    
+    <xsd:simpleType name="proportionType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="absolute"/>
+            <xsd:enumeration value="ratio"/>
+            <xsd:enumeration value="percentage"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    
+    <xsd:element name="Ownership">
+        <xsd:annotation>
+            <xsd:documentation>
+                The number of consumable resources "owned" by a particular consumer
+                within a resource group. Can also be represented as a percentage
+                of resources within a resource group.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:integer">
+                    <xsd:attribute name="Type" type="ego:proportionType"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="OwnershipPolicy">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Ownership"/>
+            </xsd:sequence>
+            <xsd:attributeGroup ref="ego:TimeWindowAttributes"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="LendingLimit">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:integer">
+                    <xsd:attribute name="Type" type="ego:proportionType"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="LendTo">
+        <xsd:annotation>
+            <xsd:documentation>
+                An element that contains the ConsumerID that indicates 
+                a Consumer that can borrow resources against the enclosing 
+                LendingPolicy, and the limit of how much you're willing 
+                to lend to this consumer.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ConsumerID"/>
+                <xsd:element ref="ego:LendingLimit" minOccurs="0"/>
+            </xsd:sequence>        
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="LendingPolicy">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:LendingLimit" minOccurs="0"/>
+                <xsd:element ref="ego:LendTo" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attributeGroup ref="ego:TimeWindowAttributes"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="BorrowLimit">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:integer">
+                    <xsd:attribute name="Type" type="ego:proportionType"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="BorrowFrom">
+        <xsd:annotation>
+            <xsd:documentation>
+                An element that contains the ConsumerID that indicates 
+                a consumer that this consumer may borrow resources from, 
+                and the limit of how much you're willing to borrow from 
+                this consumer.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ConsumerID"/>
+                <xsd:element ref="ego:BorrowLimit" minOccurs="0"/>
+                <xsd:element ref="ego:DistributionProperties" minOccurs="0"/>
+            </xsd:sequence>        
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="BorrowingPolicy">
+        <xsd:annotation>
+            <xsd:documentation></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:BorrowLimit" minOccurs="0"/>
+                <xsd:element ref="ego:BorrowFrom" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:DistributionProperties" minOccurs="0"/>
+            </xsd:sequence>
+            <xsd:attributeGroup ref="ego:TimeWindowAttributes"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Shares">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element represents how much share of the resources 
+                a consumer gets with respect to other consumers with 
+                which it is a peer (i.e. on the same level of the consumer
+                tree). Amongst all the peers at one level of the tree, 
+                the Shares values represent a ratio of relative priority
+                or a percentage of the resources to be assigned. 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:integer">
+                    <xsd:attribute name="Type" type="ego:proportionType"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="ShareLimit">
+        <xsd:annotation>
+            <xsd:documentation>
+                Indicates the maximum number of consumable resources that
+                maybe be used by a consumer within a particular resource
+                group's share pool.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:integer">
+                    <xsd:attribute name="Type" type="ego:proportionType"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="SharingPolicy">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to constrain which resources a 
+                particular consumer can allocate, or which ones are "owned"
+                by the consumer. If no ResourceGroupName is specified, then
+                the UsageLimit applies to all the resources
+                under the control of EGO. If no UsageLimit
+                element is present, then the constraint is on which named
+                resources can be part of this consumer's allocations.
+                The optional attributes 'startDay', 'startTime', 'endDay' 
+                and 'endTime' can be used to represent a "time window" when
+                this policy is in effect within the configuration. If the 
+                time window is specified, the startTime and endTime attributes
+                follow the semantics defined at http://www.w3.org/TR/xmlschema-2/#time.
+                If no time zone is specified in startTime or endTime, then the 
+                time will be considered as local to the vemkd.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Shares"/>
+                <xsd:element ref="ego:ShareLimit" minOccurs="0"/>
+            </xsd:sequence>
+            <xsd:attributeGroup ref="ego:TimeWindowAttributes"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="ConsumerProperties">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to collect together meta-data about
+                the consumers configured in EGO.
+                The Admin elements name EGO users that have the right to manipulate
+                the parameters of this consumer (e.g. modify the User list, etc).
+                The User elements name EGO users that have the right to allocate
+                resources associated with the consumer. 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Admin" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:User" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:ExecutionUser" minOccurs="0"/>
+                <xsd:element ref="ego:ReclamationTimeout" minOccurs="0"/>
+                <xsd:element ref="ego:Rebalance" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="DistributionProperties">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element describes some of the run time parameters of
+                the allocation algorithm associated with a particular node
+                of a DistributionTree.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:OwnedInUse"/>
+                <xsd:element ref="ego:ShareInUse"/>
+                <xsd:element ref="ego:ShareReserved"/>
+                <xsd:element ref="ego:Borrowed"/>
+                <xsd:element ref="ego:Lent"/>
+                <xsd:element ref="ego:OwnedFree"/>
+                <xsd:element ref="ego:ShareFree"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="DistributionPolicies">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to describe the configuration of 
+                the EGO distribution policies for a given consumer in
+                a particular resource distribution tree.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Priority" minOccurs="0"/>
+                <xsd:element ref="ego:SharingPolicy" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:OwnershipPolicy" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:LendingPolicy" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:BorrowingPolicy" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attributeGroup ref="ego:TimeWindowAttributes"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Consumer">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element describes a node within the ConsumerHierarchy. 
+                or within a DistributionTree. It is used either to express
+                meta-data about a particular node in the ConsumerHierarchy,
+                or is used to associate a particular set of distribution 
+                policies between consumers and resources. ConsumerName is a
+                required attribute used to identify this consumer within
+                the tree. The ConsumerName is not the full ConsumerID (i.e. 
+                describing the consumer's position in the hierarchy), but 
+                the component of the ConsumerID that identifies this node.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:choice>
+                <xsd:sequence>
+                    <xsd:element ref="ego:ConsumerProperties" minOccurs="0"/>
+                </xsd:sequence>
+                <xsd:sequence>
+                    <xsd:element ref="ego:DistributionPolicies" maxOccurs="unbounded"/>
+                    <xsd:element ref="ego:DistributionProperties" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:choice>
+            <xsd:element ref="ego:Consumer" minOccurs="0" maxOccurs="unbounded"/>
+          </xsd:sequence>
+          <xsd:attribute name="ConsumerName" type="xsd:string" use="required"/>
+          <xsd:attribute name="RevisionVersion" type="xsd:int" use="optional"/>
+          <xsd:attribute name="Exclusive" type="xsd:int" use="optional"/>          
+        </xsd:complexType>
+    </xsd:element>
+  
+    <xsd:element name="DistributionTree">
+        <xsd:annotation>
+            <xsd:documentation>
+                This is the root element for a resource distribution tree. 
+                There is at least one ResourceGroupName that is used to indicate
+                what set of resources this distribution tree is applied to, and
+                then a tree of consumers that specify the distribution policies.
+                The DistributionTree must be named with a DistributionTreeName
+                attribute.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ResourceGroupName" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:PolicyParameter" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:Consumer" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:DistributionProperties" minOccurs="0"/>
+            </xsd:sequence>
+            <xsd:attribute name="DistributionTreeName" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="ConsumerHierarchy">
+        <xsd:annotation>
+            <xsd:documentation>
+                This is the root element for describing the hierarchy of 
+                consumers in an organization. The ConsumerHierarchy is used
+                to describe the relationship between individual consumers, and
+                to configure consumer-level meta-data. The ConsumerProperties
+                element within the ConsumerHierarchy can be used to specify 
+                default values for nodes within the hierarchy for which these
+                properties are not specified.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ConsumerProperties" minOccurs="0"/>
+                <xsd:element ref="ego:Consumer" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="DistributionPolicyConfiguration">
+        <xsd:annotation>
+            <xsd:documentation>
+                This provides a wrapper element for a configuration file
+                that is used to describe the organization of consumers, and 
+                the allocation policies mapping consumers to allowed resources. 
+                Meta data about the configuration can be provided here, such 
+                as the Version of the file format.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Version"/>
+                <xsd:element ref="ego:Admin" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:PolicyParameter" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:ConsumerHierarchy"/>
+                <xsd:element ref="ego:DistributionTree" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+ 
+    <xsd:element name="ResourceEntry">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is a wrapper element used to build lists of Resource
+                elements, with ResourceType information indicated for each 
+                ResourceName if required so that heterogeneous ResourceGroups can
+                be constructed. It is used within the EGO configuration file
+                for resource groups.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="ResourceName" type="xsd:string" use="required"/>
+            <xsd:attribute name="ResourceType" type="xsd:string"/>
+            <xsd:anyAttribute processContents="lax"/>
+        </xsd:complexType>
+    </xsd:element>
+ 
+    <xsd:element name="ResourceList">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to build lists of named Resources.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ResourceEntry" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+ 
+    <xsd:simpleType name="ResourcePluginName">
+        <xsd:annotation>
+            <xsd:documentation>
+                An identifier that uniquely identifies a Resource Plugin. 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+
+    <xsd:element name="Plugin">
+        <xsd:annotation>
+            <xsd:documentation>
+                A Plugin name.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="Name" type="ego:ResourcePluginName" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="ResourcePlugins">
+        <xsd:annotation>
+            <xsd:documentation>
+                A list of resource plugins by name.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element ref="ego:Plugin" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ResourcePlugin">
+        <xsd:annotation>
+            <xsd:documentation>
+                This type represents a resource plugin.
+                Its name is used within the EGO configuration file for resource groups.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Name"        type="ego:ResourcePluginName" />
+            <xsd:element name="DisplayName" type="xsd:string"             />
+            <xsd:element name="Description" type="xsd:string"             />
+        </xsd:sequence>
+    </xsd:complexType>
+
+ 
+    <xsd:simpleType name="SchedulerPluginName">
+        <xsd:annotation>
+            <xsd:documentation>
+                An identifier that uniquely identifies a Scheduler Plugin. 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string"/>
+    </xsd:simpleType>
+
+    <xsd:complexType name="SchedulerPlugin">
+        <xsd:annotation>
+            <xsd:documentation>
+                This type represents a Scheduler plugin.
+                Its name is used within the EGO configuration file for resource groups.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="Name"        type="ego:SchedulerPluginName" />
+            <xsd:element name="DisplayName" type="xsd:string"             />
+            <xsd:element name="Description" type="xsd:string"             />
+        </xsd:sequence>
+    </xsd:complexType>
+
+
+    <xsd:element name="ResourceGroup">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to build collections of resources, both
+                dynamically using ResourceRequirement strings, or by naming
+                resources explicitly using a ResourceList. Each ResourceGroup
+                has a unique name, indicated with the ResourceGroupName 
+                attribute. For resource groups of the same ResourceType, you
+                can define the ConsumableAttribute for the entire group, 
+                providing a notational convenience from having to define this 
+                in configuration for every Resource managed by EGO. 
+                The Attribute elements provide a list of the attribute names and
+                types that are represented by this ResourceGroup, and as such
+                should not contain values (i.e. should be 'nil').
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Description" minOccurs="0"/>
+                <xsd:choice minOccurs="0">
+                    <xsd:element ref="ego:ResourceRequirement"/>
+                    <xsd:element ref="ego:ResourceList"/>
+                </xsd:choice>
+                <xsd:element ref="ego:ConsumableAttribute" minOccurs="0"/>
+                <xsd:element ref="ego:Attribute" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element name="ResourcePlugins" type="ego:ResourcePlugins" minOccurs="0"/>
+                <xsd:element name="SchedulerPluginName" type="ego:SchedulerPluginName" minOccurs="0" maxOccurs="1"/>
+            </xsd:sequence>
+            <xsd:attribute name="ResourceGroupName" type="xsd:string" use="required"/>
+            <xsd:anyAttribute processContents="lax"/>
+        </xsd:complexType>
+    </xsd:element>
+ 
+    <xsd:element name="ResourceGroupConfiguration">
+        <xsd:annotation>
+            <xsd:documentation>
+                The top level element for the EGO configuration file for 
+                defining ResourceGroups. The DefaultResourceGroup for an EGO 
+                cluster can be defined within this element. The Version of the 
+                file format can also be defined here.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Version"/>
+                <xsd:element ref="ego:ResourceGroup" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ResourceGroupUsageInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                This type describes the free/allocated resources in a
+                resource group.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="FreeResources"      type="xsd:integer"/>
+            <xsd:element name="AllocatedResources" type="xsd:integer"/>
+          </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ResourceGroupInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                The element returns information about the ResourceGroups.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ResourceGroupUsageInfo"/>
+                <xsd:element ref="ego:Resource" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:ResourceGroup"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ClusterInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element provides summary information about the EGO cluster,
+                named by the ClusterName attribute. The Version of the EGO software
+                is provided, along with the current EGO primary host, and the list 
+                of hosts that can potentially be EGO masters.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Version"/>
+                <xsd:element ref="ego:MasterName"/>
+                <xsd:element ref="ego:CandidateMaster" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="ClusterName" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ClientInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                Information about a client registered within EGO.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ClientName"/>
+                <xsd:element ref="ego:ClientDescription" minOccurs="0"/>
+                <xsd:element ref="ego:ClientLocation" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Here are the definition of elements used for the EGO user database -->
+
+    <xsd:element name="Password">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element contains a user password in base64Binary
+                encoded format. The PasswordType attribute can be used
+                to indicate what form of password it is (e.g. cleartext, 
+                digested, etc).
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:base64Binary">
+                    <xsd:attribute name="PasswordType" type="xsd:string"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+ 
+    <xsd:element name="UserEntry">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element represents a single entry in the EGO user database. 
+                Along with a user name (User) and password, there is optional 
+                user contact information.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:User"/>
+                <xsd:element ref="ego:Password"/>
+                <xsd:element ref="ego:ContactName" minOccurs="0"/>
+                <xsd:element ref="ego:ContactPhone" minOccurs="0"/>
+                <xsd:element ref="ego:ContactEmail" minOccurs="0"/>
+                <xsd:element ref="ego:Description" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="UserList">
+        <xsd:annotation>
+            <xsd:documentation>
+                A wrapper element for making lists of UserEntry elements.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:UserEntry" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="UserDatabase">
+        <xsd:annotation>
+            <xsd:documentation>
+                The top level element of the EGO User Database file. An
+                optional Version can be used to indicate a particular version
+                of the database file format.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Version" minOccurs="0"/>
+                <xsd:element ref="ego:UserList"/>
+                <xsd:any namespace="##any" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+            </xsd:sequence>
+            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="Role">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element is used to provide information about a RoleName
+                and what it applies to (i.e. it's context) within Role 
+                management operations.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:attribute name="RoleName" type="xsd:string" use="required"/>
+            <xsd:attribute name="RoleContext" type="xsd:string"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Credential">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element contains a user credential in base64Binary
+                encoded format. This is returned by EGO runtime after a
+                successful logon.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:base64Binary">
+                 </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="CredentialTTL">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element contains a user credential TTL
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:duration">
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="SessionKey">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element contains a session key in base64Binary
+                encoded format. 
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:base64Binary">
+                 </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="CredentialExpireTime">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element contains a user credential TTL
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:dateTime">
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="CredentialToken">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element contains a user credential in base64Binary
+                encoded format. This is returned by EGO runtime after a
+                successful logon.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:SessionKey"/>
+                <xsd:element ref="ego:Credential"/>
+                <xsd:element ref="ego:CredentialExpireTime"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Url">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element contains a hostname and a port. A subset of
+                IP URLs.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:anyURI">
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Ipaddr" type="xsd:string"/>
+
+    <xsd:element name="Port" type="xsd:int"/>
+
+    <xsd:element name="Protocol">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="TCP"/>
+                <xsd:enumeration value="UDP"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="QueryLocationInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element represents  location entry of a service.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Ipaddr" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:Port"/>
+                <xsd:element ref="ego:Protocol"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="UpdateLocationOperation">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="ADD"/>
+                <xsd:enumeration value="DELETE"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="UpdateLocationInfo">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element represents  location entry of a service.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ActivityName"/>
+                <xsd:element ref="ego:UpdateLocationOperation"/>
+                <xsd:element ref="ego:Ipaddr" minOccurs="0" maxOccurs="unbounded"/>
+                <xsd:element ref="ego:Port"/>
+                <xsd:element ref="ego:Protocol"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="AllocationPreferenceListName">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="BLOCK"/>
+                <xsd:enumeration value="PREFERRED"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="AllocationPreferenceOperation">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="ADD"/>
+                <xsd:enumeration value="DELETE"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="AllocationPreference">
+        <xsd:annotation>
+            <xsd:documentation>
+                This element represents an allocation preference.
+		Currently only removing a resource from block list
+		is supported.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:AllocationPreferenceListName"/>
+                <xsd:element ref="ego:AllocationPreferenceOperation"/>
+                <xsd:element ref="ego:ResourceName" minOccurs="1" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="HostTypesNumber" type="xsd:int">
+    </xsd:element>
+
+    <xsd:element name="HostTypeName" type="xsd:string">
+    </xsd:element>
+
+    <xsd:element name="HostTypes">
+        <xsd:complexType>
+	    <xsd:sequence>
+	        <xsd:element ref="ego:HostTypesNumber"/>
+		<xsd:element ref="ego:HostTypeName" minOccurs="0" maxOccurs="unbounded"/>
+	    </xsd:sequence>
+	 </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="HostSummary">
+        <xsd:complexType>
+	    <xsd:sequence>
+	        <xsd:element name="hostNumber"    type="xsd:int"/>
+		<xsd:element name="statusNumber"  type="xsd:int"/>
+		<xsd:element name="statusName"    type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+		<xsd:element name="statusSummary" type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+		<xsd:element name="utNumber"      type="xsd:int"/>
+		<xsd:element name="utName"        type="xsd:string" minOccurs="0" maxOccurs="unbounded"/>
+		<xsd:element name="utSummary"     type="xsd:int" minOccurs="0" maxOccurs="unbounded"/>
+	    </xsd:sequence>
+	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="LogonUser">
+        <xsd:complexType>
+	    <xsd:sequence>
+	       <xsd:element name="userName" type="xsd:string"/>
+	    </xsd:sequence>
+	</xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="SignalNum" type="xsd:int">          
+    </xsd:element>
+
+    <xsd:element name="TimeIntervals" type="xsd:string">
+    </xsd:element>
+
+    <xsd:element name="ServiceEntry">
+        <xsd:complexType>
+            <xsd:attribute name="ServiceID" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ServiceList">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ServiceEntry" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="ServiceGroup">
+        <xsd:annotation>
+            <xsd:documentation>
+                Defines a service group in egosc. Each service group must have
+                a unique name.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:Description" minOccurs="0"/>
+                <xsd:element ref="ego:ServiceList" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute name="name" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    
+    <xsd:element name="ServiceGroupConfiguration">
+        <xsd:annotation>
+            <xsd:documentation>
+               The top level element of the EGO configuration file for
+               defining service groups.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="ego:ServiceGroup" minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>	
+
+    <xsd:element name="LogPath" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+               The log path for the service instance (available only with IBM Spectrum Conductor). Specify up to 1024 characters. 
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>	
+</xsd:schema>
+

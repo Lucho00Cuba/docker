@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PLC xmlns="http://www.ibm.com/perf/2006/01/loader"
+	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	 xsi:schemaLocation="http://www.ibm.com/perf/2006/01/loader plc_dataloader.xsd">
+	<DataLoaders>
+		<!-- 
+			 The data loader implementation:
+			 
+			 Name 		The name of data loader plug-in.
+			 Enable 		Whether this data loader plug-in is enabled.
+			 Interval 	The repeat interval of this dataloader instance, in seconds. 
+			 LoadXML 	The configuration file that the data loader uses. This file includes the Reader and Writer elements.
+		-->
+		<DataLoader Name="egodynamicresloader" Interval="300" Enable="true" LoadXML="dataloader/egodynamicres.xml" />
+		<DataLoader Name="egostaticresloader" Interval="3600" Enable="true" LoadXML="dataloader/egostaticres.xml" />
+		<DataLoader Name="egoconsumerresloader" Interval="300" Enable="true" LoadXML="dataloader/egoconsumerres.xml" />
+		<DataLoader Name="egoeventsloader" Interval="300" Enable="true" LoadXML="dataloader/egoevents.xml" />
+	</DataLoaders>
+</PLC>

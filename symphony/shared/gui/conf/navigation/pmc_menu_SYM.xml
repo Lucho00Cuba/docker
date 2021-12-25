@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Menu xmlns="http://www.platform.com/gui/pmc_menu" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.platform.com/gui/pmc_menu pmc_menu.xsd">
+
+	<MenuItems id="workloadTreeSource">
+		<MenuItem id="symphony" label="@{pmc.tree.node.symphony.label}"
+			icon="" status="" url="" layoutSourceId="" tabGroup=""
+			highlightTabId="" aclResource="Main_SOAM" aclPermission="1">
+			<MenuItems>
+				<MenuItem id="symphonyApp" label="@{pmc.tree.node.applications.label}"
+					icon="" status="" url="" layoutSourceId="applicationLayout"
+					tabGroup="" highlightTabId="applicationLayout" aclResource="Main_session"
+					aclPermission="1" helpGroupId="symApp">
+				</MenuItem>
+				<MenuItem id="profile" label="@{pmc.tree.node.appProfiles.label}"
+					icon="" status="" url="" layoutSourceId="symAppProfileLayout"
+					tabGroup="" highlightTabId="symAppProfileLayout" aclResource="Configuration"
+					aclPermission="1" helpGroupId="symAppProfile">
+				</MenuItem>
+				<MenuItem id="deprofile" label="@{pmc.tree.node.appProfiles.label}"
+					icon="" status="" url="" layoutSourceId="desymAppProfileLayout"
+					tabGroup="" highlightTabId="symAppProfileLayout" aclResource="Configuration"
+					aclPermission="1" helpGroupId="symAppProfile">
+				</MenuItem>
+			</MenuItems>
+		</MenuItem>
+	</MenuItems>
+
+	
+</Menu>

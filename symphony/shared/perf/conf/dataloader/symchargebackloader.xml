@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataLoader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="dataloader.xsd">
+ <!--
+ Defined which Reader implement will be used to get data. The Class
+ attribute refer the Class name or Reader implements. This Class can be
+ developed by customer.
+ -->
+ <Description><![CDATA[ Calculate the hourly charge back value from PERF DB for consumer/resource group and load them into ES for the charge back reports.]]></Description>
+ 
+ <Reader Class="com.platform.perf.dataloader.soam.esloader.ChargeBackReader">
+     <Properties>
+   <Property>
+    <Name>DataLoaderName</Name>
+    <Value>ChargeBackDataLoader</Value>
+   </Property>
+   <Property>
+    <Name>DataSource</Name>
+    <Value>ReportDB</Value>
+   </Property>
+   <!--
+    Defined the name of which resource groups will be calculated.
+    Leave it with blank or undefined means calculate for all resource groups.
+    This is Optional -->
+   <Property>
+    <Name>ExcludedResourceGroups</Name>
+    <Value>InternalResourceGroup,ManagementHosts,MapReduceInternalResourceGroup</Value>
+   </Property>
+  </Properties>
+ </Reader>
+ <!--
+ Defined which Writer will be used to load the output of Reader into
+ DataBase.
+ Type   attribute is optional, it defined the DataBase operation type.
+    By default, it is JDBC.
+ BatchSize  Defined how many records will be committed into DataBase one time.
+ -->
+ <Writer Class="com.platform.perf.dataloader.es.ESWriter" Type="JDBC" BatchSize="100" EnableRecover="Y">
+  <!--
+  Defined the name of which DataSource will be used. This is Optional
+  -->
+  <DataSource>ESDB</DataSource>
+ 
+  <!--
+  The SQL statement will be defined in this element. If  The Field sub
+  elements map the output of Reader to DataBase table. The Name attribute
+  is the key of Reader output. The Column attribute is the column name of
+  DataBase Table.
+  -->
+  <SQL Input="IBM-SYMPHONY-REPORT-CHARGE-BACK">
+   <Statement><![CDATA[
+     INSERT INTO IBM-SYMPHONY-REPORT-CHARGE-BACK(
+     CLUSTER_NAME              ,
+     CONSUMER_NAME             ,
+     RESOURCE_GROUP            ,
+     EVENT_TIME                ,
+     CHARGEBACK_VALUE
+   )VALUES(?,?,?,?,?)
+   ]]>
+   </Statement>
+   <Field Name="CLUSTER_NAME" Column="CLUSTER_NAME"/>
+   <Field Name="CONSUMER_NAME" Column="CONSUMER_NAME"/>
+   <Field Name="RESOURCE_GROUP" Column="RESOURCE_GROUP"/>
+   <Field Name="EVENT_TIME" Column="EVENT_TIME" Type="Timestamp"/>
+   <Field Name="CHARGEBACK_VALUE" Column="CHARGEBACK_VALUE" Type="Numeric"/>
+ 
+   <PK Name="CLUSTER_NAME"/>
+   <PK Name="CONSUMER_NAME"/>
+   <PK Name="RESOURCE_GROUP"/>
+   <PK Name="EVENT_TIME"/>
+  </SQL>
+  <Mappings>
+            <Tables>
+                <Table Name="IBM-SYMPHONY-REPORT-CHARGE-BACK" Mapping="IBM-SYMPHONY-REPORT-CHARGE-BACK-%{yyyy.mm.dd}"/>
+            </Tables>
+   <Columns>
+    <Column Key="IBM-SYMPHONY-REPORT-CHARGE-BACK">
+     <Field Name="CLUSTER_NAME" Mapping="CLUSTER_NAME"/>
+     <Field Name="CONSUMER_NAME" Mapping="CONSUMER_NAME"/>
+     <Field Name="RESOURCE_GROUP" Mapping="RESOURCE_GROUP"/>
+     <Field Name="EVENT_TIME" Mapping="EVENT_TIME"/>
+     <Field Name="CHARGEBACK_VALUE" Mapping="CHARGEBACK_VALUE"/>
+    </Column>
+   </Columns>
+  </Mappings>
+ </Writer>
+</DataLoader>

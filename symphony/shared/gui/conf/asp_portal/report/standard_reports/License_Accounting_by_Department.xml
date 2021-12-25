@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="report.xsd">
+	<Name>License Accounting by Department</Name>
+
+	<DisplayName>用户组</DisplayName>
+        <Summary>统计用户组许可证使用计费统计。</Summary>
+        <Description><![CDATA[
+        <h3>目的</h3>
+        <ul type="disc">
+                <li>该报表显示所有用户组许可证使用计费。</li>
+        </ul>        
+	<h3>数据描述</h3>
+        <ul type="disc">
+                <li>该报表显示在指定时间内所有用户组许可证使用计费。</li>
+        </ul>           
+]]></Description>
+        <Category>LSF</Category>	
+	<Folder>LicenseAccounting</Folder>
+	<Parameters>
+		<Parameter Name="TIME" Type="TIMEPICK" Label="时间">
+			<Attributes>
+				<Attribute Name="startTimeName" Value="StartTime"/>
+				<Attribute Name="endTimeName" Value="EndTime"/>
+				<Attribute Name="defaultMethod" Value="MONTH"/>
+				<Attribute Name="timeValue" Value="1"/>
+				<Attribute Name="timeUnit" Value="d"/>
+				<Attribute Name="timePrecision" Value="HOUR"/>
+			</Attributes>
+		</Parameter>
+		<Parameter Name="GROUP_NAME" Type="LISTBOX" DefaultValue="" Label="用户组" Lazy="false">
+			<Attributes>
+					<Attribute Name="label" Value="GroupName"/>
+					<Attribute Name="size" Value="5"/>
+			</Attributes>
+			<Query DBType="STANDARD">
+					<SQL><![CDATA[SELECT DISTINCT USER_GROUP_NAME,USER_DEPARTMENT_NAME, DEPARTMENT_MAP FROM USER_GROUP_DEPARTMENT WHERE USER_GROUP_NAME NOT IN ('normal_group', 'high_group') ORDER BY DEPARTMENT_MAP ASC]]></SQL>
+					<Field Type="Value" Column="USER_GROUP_NAME"/>
+					<Field Type="Label" Column="USER_DEPARTMENT_NAME"/>
+			</Query>
+		</Parameter>
+	</Parameters>
+	<Queries>
+		<!--Usage:
+		<Query DBType="MySQL"><SQL><![CDATA[select TIME_STAMP as Timestamp, HOSTLIST_ID as HOST,MAX_VALUE as Max, MIN_VALUE as Min, FREE_VALUE as Free from ALLOCATION_REQUEST_EVENT where ParamA=${ParamA} and ParamB=${ParamB} and Timestamp between ${T1} and ${t2}]]></SQL></Query>
+		-->
+
+		<Query Name="DS1" DBType="STANDARD" MaxRowNum="100">
+                        <SQL><![CDATA[
+                     	    SELECT UGD.USER_GROUP_NAME AS DEP_NAME, 
+			    	   UGD.DEPARTMENT_MAP AS DEPARTMENT_MAP,
+			           CAST(SUM(UMA.USED_HOURS / 60) AS NUMERIC(16, 2)) AS DEP_USED_HOURS,
+			           CAST(SUM(UMA.ACCOUNTING / 60) AS NUMERIC(16, 2)) AS DEP_ACCOUNT
+			      FROM (SELECT CORE.USER_NAME AS USER_NAME,
+			                   SUM(CORE_USED_MINUTES) AS USED_HOURS,
+			                   SUM(CORE_ACCOUNTING) AS ACCOUNTING
+			              FROM (SELECT LA.USER_NAME USER_NAME,
+                        			   LA.LIC_VENDOR_NAME,
+			                           LA.LIC_FEATURE_NAME,
+			                           LA.CORE_HOUR,
+                        			   SUM(LA.USED_MINUTES) AS CORE_USED_MINUTES,
+			                           SUM(LA.USED_MINUTES) * AVG(LR.LIC_RATE) AS CORE_ACCOUNTING
+			                      FROM LICENSE_ACCOUNTING LA, LICENSE_RATE LR
+			                     WHERE LA.LIC_FEATURE_NAME = LR.LIC_FEATURE_NAME
+			                       AND LA.LIC_VENDOR_NAME = LR.LIC_VENDOR_NAME
+			                       AND LA.TIME_STAMP >= ${START_TIMESTAMP}
+			                       AND LA.TIME_STAMP < ${END_TIMESTAMP}
+			                       AND LA.CORE_HOUR = LR.BUSINESS_HOUR_CODE
+			                     GROUP BY LA.USER_NAME,
+			                              LA.LIC_VENDOR_NAME,
+                        			      LA.LIC_FEATURE_NAME,
+			                              LA.CORE_HOUR) CORE
+			             GROUP BY CORE.USER_NAME) UMA,
+			           USER_GROUP_DEPARTMENT UGD
+			     WHERE UGD.USER_NAME = UMA.USER_NAME 
+				 AND UGD.USER_GROUP_NAME IN (%%%QUOTED_GROUP_NAME%%%) 
+			     GROUP BY UGD.USER_GROUP_NAME, UGD.DEPARTMENT_MAP
+				ORDER BY UGD.DEPARTMENT_MAP
+                        ]]></SQL>
+                </Query>
+
+		<Query Name="DS2" DBType="STANDARD" MaxRowNum="100">
+                        <SQL><![CDATA[
+                             SELECT UGD.USER_GROUP_NAME AS DEP_NAME,
+			            UGD.DEPARTMENT_MAP AS DEPARTMENT_MAP,
+						UMA.LIC_FEATURE AS LIC_FEATURE,
+			            CAST(SUM(UMA.USED_HOURS / 60) AS NUMERIC(16, 2)) AS DEP_FEATURE_USED_HOURS,
+			            CAST(SUM(UMA.ACCOUNTING / 60) AS NUMERIC(16, 2)) AS DEP_FEATURE_ACCOUNT
+			       FROM (SELECT CORE.USER_NAME AS USER_NAME,
+			                    CORE.CORE_LIC_FEATURE_NAME AS LIC_FEATURE,
+			                    SUM(CORE_USED_MINUTES) AS USED_HOURS,
+			                    SUM(CORE_ACCOUNTING) AS ACCOUNTING
+			               FROM (SELECT LA.USER_NAME USER_NAME,
+                        			    LA.LIC_VENDOR_NAME,
+			                            LA.LIC_FEATURE_NAME AS CORE_LIC_FEATURE_NAME,
+                        			    LA.CORE_HOUR,
+			                            SUM(LA.USED_MINUTES) AS CORE_USED_MINUTES,
+                        			    SUM(LA.USED_MINUTES) * AVG(LR.LIC_RATE) AS CORE_ACCOUNTING
+			                       FROM LICENSE_ACCOUNTING LA, LICENSE_RATE LR
+			                      WHERE LA.LIC_FEATURE_NAME = LR.LIC_FEATURE_NAME
+			                        AND LA.LIC_VENDOR_NAME = LR.LIC_VENDOR_NAME
+			                        AND LA.TIME_STAMP >= ${START_TIMESTAMP}
+                        			AND LA.TIME_STAMP < ${END_TIMESTAMP}
+			                        AND LA.CORE_HOUR = LR.BUSINESS_HOUR_CODE
+			                      GROUP BY LA.USER_NAME,
+                        			       LA.LIC_VENDOR_NAME,
+			                               LA.LIC_FEATURE_NAME,
+                        			       LA.CORE_HOUR) CORE
+			              GROUP BY CORE.USER_NAME, CORE.CORE_LIC_FEATURE_NAME) UMA,
+			            USER_GROUP_DEPARTMENT UGD
+			      WHERE UGD.USER_NAME = UMA.USER_NAME
+			        AND UGD.USER_GROUP_NAME IN (%%%QUOTED_GROUP_NAME%%%) 
+			      GROUP BY UGD.USER_GROUP_NAME, UMA.LIC_FEATURE, UGD.DEPARTMENT_MAP 
+				  ORDER BY UGD.DEPARTMENT_MAP
+			]]></SQL>
+                </Query>
+	</Queries>
+	<Layouts>
+
+		<Layout>
+			<Type>TABLE</Type>
+			<DataSetName>DS1</DataSetName>
+			<Title>用户组计费统计表</Title>
+			<Subtitles>
+					<Subtitle></Subtitle>
+					<Subtitle></Subtitle>
+			</Subtitles>
+			<!-- The label will display in chart Time-->
+			<TableColumns>
+				<TableColumn Name="DEP_NAME" Label="用户组">
+					<Rollup Method="" DefaultValue="总计" />
+				</TableColumn>
+				<TableColumn Name="DEP_USED_HOURS" Label="使用时间(小时)">
+					<Rollup Method="SUM" DefaultValue="0.00" />
+				</TableColumn>
+				<TableColumn Name="DEP_ACCOUNT" Label="总费用(元)"> 
+					<Rollup Method="SUM" DefaultValue="0.00" />
+				</TableColumn>
+			</TableColumns>
+		</Layout>
+		
+		<Layout>
+			<Type>TABLE</Type>
+			<DataSetName>DS2</DataSetName>
+			<Title>用户组计费中按许可证统计表</Title>
+			<Subtitles>
+					<Subtitle></Subtitle>
+					<Subtitle></Subtitle>
+			</Subtitles>
+			<!-- The label will display in chart Time-->
+			<TableColumns>
+				<TableColumn Name="DEP_NAME" Label="用户组">
+					<Rollup Method="" DefaultValue="总计" />
+				</TableColumn>
+				<TableColumn Name="LIC_FEATURE" Label="许可证"/>
+					
+				<TableColumn Name="DEP_FEATURE_USED_HOURS" Label="使用时间(小时)">
+					<Rollup Method="SUM" DefaultValue="0.00" />
+				</TableColumn>
+				<TableColumn Name="DEP_FEATURE_ACCOUNT" Label="费用(元)">
+					<Rollup Method="SUM" DefaultValue="0.00" />
+				</TableColumn>
+			</TableColumns>
+		</Layout>
+	</Layouts>
+	<Variables>
+		<Variable Name="StartTime" Target="StartTime" Source="REQUEST" />
+		<Variable Name="EndTime" Target="EndTime" Source="REQUEST" />
+		
+		<!-- Variable used to present report last month of database server. -->
+		<Variable Name="LAST_MONTH" Target="REAL_START_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM" />
+		</Variable>
+
+		<!-- Variable used to present report current month of database server. -->
+		<Variable Name="CURRENT_MONTH" Target="REAL_START_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM" />
+		</Variable>
+
+		<Variable Name="REAL_START_TIME" Target="REAL_START_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM-dd HH:mm" />
+		</Variable>
+		
+		<Variable Name="REAL_END_TIME" Target="REAL_END_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM-dd HH:mm" />
+		</Variable>
+		<!-- Variables used to build the SQL -->
+		<Variable Name="START_TIMESTAMP" Source="QUERY_BUILD_SOURCE" Target="START_TIME" Function="TO_TIMESTAMP" />
+		<Variable Name="END_TIMESTAMP" Source="QUERY_BUILD_SOURCE" Target="END_TIME" Function="TO_TIMESTAMP" />
+		<Variable Name="TRUNCATED_TIMESTAMP" Source="QUERY_BUILD_SOURCE" Target="TIMESTAMP_COLUMN" Function="TRUNC_TIME_TO_DAY" />
+
+		<Variable Name="DEPARTMENT" Target="DEPARTMENT" Source="REQUEST" />
+		<Variable Name="ORGANIZATION" Target="ORGANIZATION" Source="REQUEST" />
+		<Variable Name="USER" Target="USER" Source="REQUEST" />
+		<Variable Name="LEVEL" Target="LEVEL" Source="REQUEST" />
+
+		<Variable Name="GROUP_NAME" Target="GROUP_NAME" Source="REQUEST" />
+		<Variable Name="QUOTED_GROUP_NAME" Source="QUERY_BUILD_SOURCE" Target="GROUP_NAME" Function="TO_COMMA_DELIMITED_QUOTED_STRING" />
+	</Variables>
+	<Sources>
+		<Source Name="REQUEST" Plug-in="com.platform.perf.report.config.var.source.RequestVariableSource" />
+		<Source Name="REAL_TIME_RANGE" Plug-in="com.platform.perf.report.config.var.source.RealTimeRangeSource">
+			<Parameter Name="START_TIME">${StartTime}</Parameter>
+			<Parameter Name="END_TIME">${EndTime}</Parameter>
+		</Source>
+		<Source Name="QUERY_BUILD_SOURCE" Plug-in="com.platform.perf.report.config.var.source.QueryBuildSource">
+			<Parameter Name="START_TIME">${StartTime}</Parameter>
+			<Parameter Name="END_TIME">${EndTime}</Parameter>
+			<Parameter Name="TIMESTAMP_COLUMN">TIME_STAMP</Parameter>
+			<Parameter Name="GROUP_NAME">%%%GROUP_NAME%%%</Parameter>
+		</Source>
+	</Sources>
+</Report>

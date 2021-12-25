@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="report.xsd">
+	<Name>Resource Usage by Host Group</Name>
+	<DisplayName>机器组</DisplayName>
+	<Summary>统计指定机器组的资源使用情况。</Summary>
+	<Description><![CDATA[
+		<h3>目的</h3>
+		<ul type="disc">
+			<li>该报表使用户可以确定所选机器组的机器的资源使用趋势。</li>
+		</ul>
+		<h3>数据描述</h3>
+		<ul type="disc">
+			<li>根据指定的资源度量，显示所选机器组的机器在指定时间内的资源的使用情况。</li>
+			<li>用户可以从十一个内部指标或elim定义的外部指标中选择资源度量。</li>
+		</ul>
+		<h3>分析</h3>
+		<ul type="disc">
+			<li>得出所选机器组的机器的资源使用趋势并确定这些机器是否完全使用了它的资源。</li>
+		</ul>
+		<h3>最佳实践</h3>
+		<ul type="disc">
+			<li>若某机器的“CPU utilization”使用率低，则可以为这台机器所属的资源组增加CPU SLOTS数量来承担更大的负载。</li>
+		</ul>]]></Description>
+	<Category>EGO</Category>
+	<Folder>ResourceUsage</Folder>
+	<Parameters>
+		<Parameter Name="DATA_GRANULARITY" Type="DROPDOWNLIST" Label="统计时间粒度">
+			<Attributes>
+				<Attribute Name="label" Value="Usage" />
+				<Attribute Name="defaultValue" Value="HOUR" />
+				<Attribute Name="onChange" Value="TIME.setTimePrecision(this.value)" />
+			</Attributes>
+			<ListValue>
+				<Item Value="MINUTE" Label="按采样点" />
+				<Item Value="HOUR" Label="按小时" />
+				<Item Value="DAY" Label="按天" />
+			</ListValue>
+		</Parameter>
+		<Parameter Name="TIME" Type="TIMEPICK" Label="时间">
+			<Attributes>
+				<Attribute Name="startTimeName" Value="StartTime"/>
+				<Attribute Name="endTimeName" Value="EndTime"/>
+				<Attribute Name="defaultMethod" Value="MONTH"/>
+				<Attribute Name="timeValue" Value="1"/>
+				<Attribute Name="timeUnit" Value="d"/>
+				<Attribute Name="timePrecision" Value="HOUR"/>
+			</Attributes>
+		</Parameter>
+		<Parameter Name="HOST_GROUP" Type="LISTBOX" DefaultValue="" Label="机器组">
+			<Attributes>
+				<Attribute Name="label" Value="Host Group"/>
+				<Attribute Name="size" Value="5"/>
+				<Attribute Name="showAll" Value="true"/>
+			</Attributes>
+			<Query DBType="STANDARD">
+				<SQL><![CDATA[SELECT DISTINCT HOST_GROUP_NAME FROM HOST_GROUP WHERE HOST_GROUP_NAME NOT IN ('hpart1', 'nfsserver') ORDER BY HOST_GROUP_NAME]]></SQL>
+				<Field Type="Value" Column="HOST_GROUP_NAME"/>
+				<Field Type="Label" Column="HOST_GROUP_NAME"/>
+			</Query>
+		</Parameter>
+		<Parameter Name="ATTRIBUTE_NAME" Type="LISTBOX" Label="资源类型">
+			<Attributes>
+				<Attribute Name="label" Value="Metric"/>
+				<Attribute Name="defaultValues" Value="ut"/>
+				<Attribute Name="textCarrier" Value="ATTRIBUTE_LONG_NAME"/>
+				<Attribute Name="size" Value="5"/>
+				<Attribute Name="script"><![CDATA[
+function getLongNames() {
+		var selectedNames = document.getElementById('SELECTED_NAMES');
+		if(selectedNames == null) {
+			selectedNames = document.createElement("input");
+			selectedNames.id = 'SELECTED_NAMES';
+			selectedNames.name = 'SELECTED_NAMES';
+			selectedNames.type = 'hidden';
+			document.forms[0].appendChild(selectedNames);
+		}
+		var options = document.forms[0].ATTRIBUTE_NAME.options;
+		var s = '';
+		for(var i = 0; i < options.length; i++) {
+			if(!options[i].selected) {
+				continue;
+			}
+			if(s != '') {
+				s += ', ';
+			}
+			s += options[i].text;
+		}
+		selectedNames.value = s;
+}
+                                ]]>
+				</Attribute>
+				<Attribute Name="onChange" Value="getLongNames()"/>
+			</Attributes>
+			<VarValue Name="${METRICS_MAP}">
+				<Field Type="Value" Column="ATTRIBUTE_NAME"/>
+				<Field Type="Label" Column="ATTRIBUTE_LONG_NAME"/>
+			</VarValue>
+		</Parameter>
+	</Parameters>
+	<Queries>
+		<Query Name="DS1" DBType="STANDARD">
+			<SQL>
+				<![CDATA[
+SELECT TIME_STAMP, G.HOST_GROUP_NAME, M.ATTRIBUTE_NAME, AVG(M.ATTRIBUTE_VALUE_NUM) AS ATTRIBUTE_VALUE_NUM 
+FROM ${TABLE_NAME} M INNER JOIN
+   				(SELECT HOST_NAME, HOST_GROUP_NAME
+   				 FROM HOST_GROUP
+   				 WHERE TIME_STAMP = (SELECT MAX(TIME_STAMP)
+   									 FROM HOST_GROUP
+   									 WHERE TIME_STAMP >= ${START_TIMESTAMP}
+   										AND TIME_STAMP < ${END_TIMESTAMP})
+                  ${QUERY_CONDITION_HOST_GROUP_VALUE}
+   				) G ON M.RESOURCE_NAME = G.HOST_NAME
+WHERE  M.ATTRIBUTE_NAME IN (${QUOTED_ATTRIBUTE_NAME})
+  AND (M.TIME_STAMP >= ${START_TIMESTAMP}
+  AND M.TIME_STAMP < ${END_TIMESTAMP})
+GROUP BY M.TIME_STAMP, G.HOST_GROUP_NAME, M.ATTRIBUTE_NAME
+ORDER BY M.TIME_STAMP, G.HOST_GROUP_NAME
+      			]]>
+			</SQL>
+			<Parameter Name="ATTRIBUTE_NAME" Type="STRING"/>
+			<Parameter Name="StartTime" Type="TIMESTAMP"/>
+			<Parameter Name="EndTime" Type="TIMESTAMP"/>
+		</Query>
+		<Query Name="DS2" DBType="STANDARD">
+			<SQL><![CDATA[
+SELECT HOST_GROUP_NAME,
+       ATTRIBUTE_NAME,
+       MAX(ATTRIBUTE_VALUE_NUM) MAX_ATTRIBUTE_VALUE_NUM,
+       MIN(ATTRIBUTE_VALUE_NUM) MIN_ATTRIBUTE_VALUE_NUM,
+       AVG(ATTRIBUTE_VALUE_NUM) AVG_ATTRIBUTE_VALUE_NUM
+FROM
+(SELECT TIME_STAMP, G.HOST_GROUP_NAME, M.ATTRIBUTE_NAME, AVG(M.ATTRIBUTE_VALUE_NUM) ATTRIBUTE_VALUE_NUM
+FROM ${TABLE_NAME} M INNER JOIN
+   				(SELECT HOST_NAME, HOST_GROUP_NAME
+   				 FROM HOST_GROUP
+   				 WHERE TIME_STAMP = (SELECT MAX(TIME_STAMP)
+   									 FROM HOST_GROUP
+   									 WHERE TIME_STAMP >= ${START_TIMESTAMP}
+   										AND TIME_STAMP < ${END_TIMESTAMP})
+                  ${QUERY_CONDITION_HOST_GROUP_VALUE}
+   				) G ON M.RESOURCE_NAME = G.HOST_NAME
+WHERE  M.ATTRIBUTE_NAME IN (${QUOTED_ATTRIBUTE_NAME})
+  AND (M.TIME_STAMP >= ${START_TIMESTAMP}
+  AND M.TIME_STAMP < ${END_TIMESTAMP})
+GROUP BY M.TIME_STAMP, G.HOST_GROUP_NAME, M.ATTRIBUTE_NAME
+ORDER BY M.TIME_STAMP, G.HOST_GROUP_NAME)
+GROUP BY HOST_GROUP_NAME, ATTRIBUTE_NAME
+  			]]></SQL>
+		</Query>
+	</Queries>
+	<Layouts>
+		<!-- The Type refer the report type. e.g. LineChart, Table, ClusteredBarChart, StackedBarChart -->
+		<Layout SHOW_BAR_CHART="true">
+			<Type>LINE_CHART</Type>
+			<DataSetName>DS1</DataSetName>
+			<Title>机器组资源使用统计</Title>
+			<Subtitles>
+				<Subtitle>从 ${REAL_START_TIME} 到 ${REAL_END_TIME}</Subtitle>
+			</Subtitles>
+			<!-- The label will display in chart Time-->
+			<X-Axis Label="时间" Type="TIME" Start="${REAL_START_TIME}" End="${REAL_END_TIME}" Period="${X_AXIS_PERIOD}">
+				<!-- The column map the name from sql statement. Type refer maybe Timestamp and Catetory(String), The Period attribute only for Timestamp type.-->
+				<Column>TIME_STAMP</Column>
+			</X-Axis>
+			<Y-Axis Label="${Y_LABEL}" Format="${Y_FORMAT}"/>
+			<Series>
+				<FromRows ValueColumn="ATTRIBUTE_VALUE_NUM">
+					<Column>HOST_GROUP_NAME</Column>
+				</FromRows>
+				<!--
+				<FromColumns>
+					<Column>NUM</Column>
+				</FromColumns>
+				-->
+			</Series>
+		</Layout>
+		<Layout>
+			<Type>TABLE</Type>
+			<DataSetName>DS2</DataSetName>
+			<Title>机器组资源统计表</Title>
+			<Subtitles>
+				<Subtitle>从 ${REAL_START_TIME} 到 ${REAL_END_TIME}</Subtitle>
+			</Subtitles>
+			<!-- The label will display in chart Time-->
+			<TableColumns>
+				<TableColumn Name="HOST_GROUP_NAME" Label="机器组名称" />
+				<TableColumn Name="ATTRIBUTE_NAME" Label="资源类型" />
+				<TableColumn Name="MAX_ATTRIBUTE_VALUE_NUM" Label="最大" Type="NUMERIC" Format="#,###,###,##0.00" Style="text-align:right"/>
+				<TableColumn Name="MIN_ATTRIBUTE_VALUE_NUM" Label="最小" Type="NUMERIC" Format="#,###,###,##0.00" Style="text-align:right"/>
+				<TableColumn Name="AVG_ATTRIBUTE_VALUE_NUM" Label="平均" Type="NUMERIC" Format="#,###,###,##0.00" Style="text-align:right"/>
+			</TableColumns>
+		</Layout>
+	</Layouts>
+	<DataExports>
+		<DataExport Name="DS1">
+			<Column Name="TIME_STAMP" Label="时间" />
+			<Column Name="HOST_GROUP_NAME" Label="机器组名称" />
+			<Column Name="ATTRIBUTE_NAME" Label="资源类型" />
+			<Column Name="ATTRIBUTE_VALUE_NUM" Label="使用率" />
+		</DataExport>
+		<DataExport Name="DS2">
+			<Column Name="HOST_GROUP_NAME" Label="机器组名称" />
+			<Column Name="ATTRIBUTE_NAME" Label="资源类型" />
+			<Column Name="MAX_ATTRIBUTE_VALUE_NUM" Label="最大" />
+			<Column Name="MIN_ATTRIBUTE_VALUE_NUM" Label="最小" />
+			<Column Name="AVG_ATTRIBUTE_VALUE_NUM" Label="平均" />
+		</DataExport>
+	</DataExports>
+	<Variables>
+		<Variable Name="StartTime" Target="StartTime" Source="REQUEST" />
+		<Variable Name="EndTime" Target="EndTime" Source="REQUEST" />
+		<Variable Name="RESOURCE_NAME" Target="RESOURCE_NAME" Source="REQUEST" />
+		<Variable Name="ATTRIBUTE_NAME" Target="ATTRIBUTE_NAME" Source="REQUEST" />
+		<Variable Name="ATTRIBUTE_LONG_NAME" Target="ATTRIBUTE_LONG_NAME" Source="REQUEST" />
+		<Variable Name="HOST_GROUP" Target="HOST_GROUP" Source="REQUEST" />
+		<Variable Name="DATA_GRANULARITY"  Target="DATA_GRANULARITY" Source="REQUEST" />
+		<Variable Name="SELECTED_NAMES" Target="SELECTED_NAMES" Source="REQUEST" />
+
+		<Variable Name="METRICS_MAP"  Target="METRICS_MAP" Source="METRICS_MAP" />
+
+		<!-- Variable used to present report last month of database server. -->
+		<Variable Name="LAST_MONTH" Target="REAL_START_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM" />
+		</Variable>
+
+		<!-- Variable used to present report current month of database server. -->
+		<Variable Name="CURRENT_MONTH" Target="REAL_START_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM" />
+		</Variable>
+
+		<!-- Variable can be gotten from X_AXIS_PERIOD_SOURCE -->
+		<Variable Name="X_AXIS_PERIOD"  Target="X_AXIS_PERIOD" Source="X_AXIS_PERIOD_SOURCE" />
+
+		<Variable Name="Y_LABEL" Target="chart.${ATTRIBUTE_NAME}.yLabel" Source="PROPERTIES" Default="${ATTRIBUTE_NAME}" />
+		<Variable Name="Y_FORMAT" Target="chart.${ATTRIBUTE_NAME}.yFormat" Source="PROPERTIES" Default="#,###,###,##0.00" />
+
+		<Variable Name="REAL_START_TIME" Target="REAL_START_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM-dd HH:mm" />
+		</Variable>
+
+		<Variable Name="REAL_END_TIME" Target="REAL_END_TIME" Source="REAL_TIME_RANGE" >
+			<Format Plug-in="com.platform.perf.report.config.var.format.DateTimeFormat" Pattern="yyyy-MM-dd HH:mm" />
+		</Variable>
+		<!-- Variables used to build the SQL -->
+		<Variable Name="QUOTED_HOST_GROUP" Source="QUERY_BUILD_SOURCE" Target="HOST_GROUP" Function="TO_COMMA_DELIMITED_QUOTED_STRING" />
+		<Variable Name="QUOTED_ATTRIBUTE_NAME" Source="QUERY_BUILD_SOURCE" Target="ATTRIBUTE_NAME" Function="TO_COMMA_DELIMITED_QUOTED_STRING" />
+		<Variable Name="START_TIMESTAMP" Source="QUERY_BUILD_SOURCE" Target="START_TIME" Function="TO_TIMESTAMP" />
+		<Variable Name="END_TIMESTAMP" Source="QUERY_BUILD_SOURCE" Target="END_TIME" Function="TO_TIMESTAMP" />
+		<Variable Name="TRUNCATED_TIMESTAMP" Source="QUERY_BUILD_SOURCE" Target="TIMESTAMP_COLUMN" Function="TRUNC_TIME_TO_${DATA_GRANULARITY}" />
+		<Variable Name="TABLE_NAME" Source="QUERY_BUILD_SOURCE" Target="TABLE_NAME"/>
+
+		<Variable Name="SHOW_BAR_CHART" Target="SHOW_BAR_CHART" Source="SHOW_BAR_CHART" />
+
+		<Variable Name="QUERY_CONDITION_HOST_GROUP_VALUE" Target="QUERY_CONDITION_HOST_GROUP" Source="QUERY_CONDITION_SOURCE" Function="TO_COMMA_DELIMITED_QUOTED_STRING" />
+	</Variables>
+	<Sources>
+		<Source Name="METRICS_MAP" Plug-in="com.platform.perf.report.config.var.source.metrics.MetricsMapGetter" />
+
+		<Source Name="REQUEST" Plug-in="com.platform.perf.report.config.var.source.RequestVariableSource" />
+		<Source Name="REAL_TIME_RANGE" Plug-in="com.platform.perf.report.config.var.source.RealTimeRangeSource">
+			<Parameter Name="START_TIME">${StartTime}</Parameter>
+			<Parameter Name="END_TIME">${EndTime}</Parameter>
+		</Source>
+		<Source Name="PROPERTIES" Plug-in="com.platform.perf.report.config.var.source.PropertiesVariableSource" />
+		<Source Name="QUERY_BUILD_SOURCE" Plug-in="com.platform.perf.report.config.var.source.QueryBuildSource">
+			<Parameter Name="HOST_GROUP">${HOST_GROUP}</Parameter>
+			<Parameter Name="ATTRIBUTE_NAME">${ATTRIBUTE_NAME}</Parameter>
+			<Parameter Name="START_TIME">${StartTime}</Parameter>
+			<Parameter Name="END_TIME">${EndTime}</Parameter>
+			<Parameter Name="TIMESTAMP_COLUMN">M.TIME_STAMP</Parameter>
+			<Parameter Name="TABLE_NAME">${DATA_GRANULARITY}</Parameter>
+		</Source>
+
+		<Source Name="QUERY_CONDITION_SOURCE" Plug-in="com.platform.perf.report.config.var.source.QueryConditionSource">
+
+			<Parameter Name="QUERY_CONDITION_HOST_GROUP">
+				<Group Operator="AND" Where="false">
+					<Condition Operator="" Express="HOST_GROUP_NAME IN">${HOST_GROUP}</Condition>
+				</Group>
+			</Parameter>
+
+		</Source>
+
+		<Source Name="X_AXIS_PERIOD_SOURCE" Plug-in="com.platform.perf.report.config.var.source.DataIntervalSource">
+			<Parameter Name="DATA_LOADER">egodynamicresloader</Parameter> <!-- Use this data loader name to get data interval from plc configuration file -->
+			<Parameter Name="DEFAULT_INTERVAL">10m</Parameter> <!-- No interval found in plc configuration file, use this defualt value -->
+			<Parameter Name="BASE_LEVEL">MINUTE</Parameter> <!-- This parameter is optional, default is MINUTE -->
+			<Parameter Name="CURRENT_LEVEL">${DATA_GRANULARITY}</Parameter> <!-- This parameter is optional, default is MINUTE. The current level is not equivalent to the base level means data interval need change -->
+		</Source>
+		<Source Name="SHOW_BAR_CHART" Plug-in="com.platform.perf.report.config.var.source.BeanScriptSource">
+			<Parameter Name="language">java</Parameter>
+			<Parameter Name="script">
+<![CDATA[
+	import com.platform.perf.report.common.IVariableProvider;
+	import com.platform.perf.report.config.var.source.request.RequestVariableProvider;
+	import com.platform.perf.report.config.var.ReportVariableHelper;
+
+	IVariableProvider varProvider = (IVariableProvider)bsf.lookupBean("varProvider");
+	Object groupName = (( varProvider.getValue(ReportVariableHelper.VAR_REQUEST))).getParameterValues("ATTRIBUTE_NAME");
+
+    if (attributeName != null && groupName instanceof String[]) {
+        return ((String[])groupName).length > 1 ? false : true;
+    }
+]]>
+            </Parameter>
+		</Source>
+	</Sources>
+
+</Report>

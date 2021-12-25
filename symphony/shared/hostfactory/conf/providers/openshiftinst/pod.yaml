@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: Home-hf
+  annotations:
+    productChargedContainers: 
+    productID: 762afa9e64da4fec89452dd822e63370
+    productMetric: VIRTUAL_PROCESSOR_CORE
+    productName: IBM Spectrum Symphony Community Edition
+    productVersion: 7.3.0.0
+spec:
+  serviceAccountName: Home
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+                  - ppc64le
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 3
+          preference:
+            matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                  - amd64
+  containers:
+    - name: sym-compute
+      image: docker.io/ibmcom/spectrum-symphony-comp:7.3.2.0
+      imagePullPolicy: Always 
+      readinessProbe:
+        exec:
+          command:
+            - /bin/bash
+            - '-c'
+            - </dev/tcp/localhost/17869
+        initialDelaySeconds: 90
+        timeoutSeconds: 30
+        periodSeconds: 30
+        failureThreshold: 10
+      livenessProbe:
+        exec:
+          command:
+            - /bin/bash
+            - '-c'
+            - </dev/tcp/localhost/17869
+        initialDelaySeconds: 90
+        timeoutSeconds: 30
+        periodSeconds: 30
+        failureThreshold: 10
+      env:
+        - name: LICENSE
+          value: accept
+        - name: HOST_ROLE
+          value: COMPUTE
+        - name: SHARED_TOP_SUBDIR
+          value: 
+      resources:
+        requests:
+          memory: "1024Mi"
+          cpu: "1000m"
+        limits:
+          memory: "1024Mi"
+          cpu: "1000m"
+      securityContext:
+        capabilities:
+          drop:
+            - ALL
+            - KILL
+            - MKNOD
+            - SETGID
+            - SETUID
+        privileged: false
+        runAsNonRoot: false
+        allowPrivilegeEscalation: false
+      volumeMounts:
+      - mountPath: /shared
+        name: shared
+      - mountPath: /opt/ibm/spectrumcomputing/scripts/configmap
+        name: configmap
+        readOnly: true
+  volumes:
+  - name: shared
+    persistentVolumeClaim:
+      claimName: Home
+  - name: configmap
+    configMap:
+      name: Home 

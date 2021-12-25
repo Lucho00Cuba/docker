@@ -1,0 +1,104 @@
+#This conf file defined the menu item and action relationship
+#key: menu item id, it defined in pmc_menu.xml
+#value: action name
+
+
+#LSF
+lsfJob=getJobInfo
+lsf=getJobInfo
+
+#EGO
+egoService=getServiceList
+hostSoftware=getHostSoftware
+egoProfile=getServiceConfigureList
+egoServiceGroup=serviceGroup
+ego=getServiceList,getServiceConfigureList,serviceGroup
+MDSResourcePlan=toMDSResPlanList
+
+#Resource
+hostListIcon=getHostInfo
+allHostList=getAllHostInfo
+rackView=toRackview
+host=getHostInfo,getAllHostInfo,toRackview
+resourceHdfs=tohdfs
+
+storageHdfs=tohdfs
+resourceFS=tohdfs
+
+#resouce group
+rg=getResourceGroup
+mdsrg=getResourceGroup
+consumer=ConsumerTree
+resourcePlanSchedule=resourcePlanAction
+#Resource allocation
+resourceAllocation=getResourceAllocation
+resourceMDSAllocation=toMDSResPlanAllocation
+#MDS Resource allocation
+mdsResourceAllocation=toMDSResPlanAllocation
+resourcePlan_slot=getResourceGroup,resourcePlanAction,getResourceAllocation
+resourcePlan_mds=getResourceGroup,resourcePlanAction,getResourceAllocation
+#Service packages
+repositoryPackage=getRegionList
+symServicePackage=servicePackageInfoAction
+soamServicePackage=servicePackageInfoAction
+servicePackage=servicePackageInfoAction,getRegionList
+desymServicePackage=servicePackageInfoAction
+
+
+#Settings
+#Settings - System Entitlement
+entitlement=getClusterLic
+#Settings - Cluster
+summary=getClusterProp
+properties=toClusterProperty
+masterFailover=MasterCandidate
+cluster=getClusterLic,getClusterProp,toClusterProperty,MasterCandidate
+#Settings - Users
+account=getUserInfo
+role=toRBACControl
+user=getUserInfo,toRBACControl
+
+#Report&Logs
+standardReport=reportListingAction
+customReport=reportListingAction
+systemLog=logManageAction
+explorerReport=reportListingAction
+explorerDashboard=reportListingAction
+explorerChart=reportListingAction
+
+
+#Harvesting
+harvestingHost=getHarvestingHostInfo
+configure=getHarvestingConfiguration
+vmResources=getResourceView
+
+#Dashboard
+symDashboard=todashboard
+
+
+#YARN
+yarn=toyarn
+
+# host factory in old gui
+cloud=hostFactoryRequestsList,hostFactoryRequestsList,hostFactoryConfiguration
+cloudRequest=hostFactoryRequestsList
+cloudHost=hostFactoryHostsList
+cloudConfiguration=hostFactoryConfiguration
+carbonDemo=hostFactoryConfiguration
+
+#framework v5
+framework.sidebarTree.resources.tree.hosts.tree.rackView=toRackview
+framework.sidebarTree.resources.tree.harvesting.tree.conf=getHarvestingConfiguration
+framework.sidebarTree.resources.tree.harvesting.tree.vmResources=getResourceView
+framework.sidebarTree.sysServices.tree.egoService.tree.services=getServiceList
+framework.sidebarTree.sysServices.tree.hostInfo.tree.hostInfo=HostSoftware
+framework.sidebarTree.reports.tree.standard=STANDARD_REPORT
+framework.sidebarTree.reports.tree.custom=CUSTOM_REPORT
+
+framework.sidebarTree.reports.tree.explorer=EXPLORER_REPORT
+framework.sidebarTree.reports.tree.chart=EXPLORER_REPORT
+
+#host factory
+framework.sidebarTree.resources.tree.clouds.tree.requests=hostFactoryRequestsList
+framework.sidebarTree.resources.tree.clouds.tree.hosts=hostFactoryHostsList
+framework.sidebarTree.resources.tree.clouds.tree.configuration=hostFactoryConfiguration

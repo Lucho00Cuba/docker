@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AccessController xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="users_asp_acl.xsd">
+
+	<!-- 
+		角色权限定义，系统中一个角色可对应一个Role结点。
+		Name 角色名
+	-->
+	<Role Name="Admin">
+		<!--
+			全局权限定义
+			该角色对所有报表均拥有在本节点里定义的权限 
+		-->
+		<Global>
+			<Privilege>VIEW_INSTANCE</Privilege>		<!-- 查看报表实例 -->
+			<Privilege>BUILD_ONLINE_REPORT</Privilege>	<!-- 生成联机报表 -->
+			<Privilege>SCHEDULE_REPORT</Privilege>		<!-- 调度报表 -->
+		</Global>
+	</Role>
+	<Role Name="VipUser">
+		<Global>
+			<Privilege>VIEW_INSTANCE</Privilege> 
+			<Privilege>SCHEDULE_REPORT</Privilege>
+		</Global>
+	</Role>
+	
+	<Role Name="OrgLeader">
+		<Global>
+			<Privilege>VIEW_INSTANCE</Privilege> 
+			<Privilege>SCHEDULE_REPORT</Privilege>
+		</Global>
+	</Role>
+	
+	<Role Name="DepLeader">
+		<Global>
+			<Privilege>VIEW_INSTANCE</Privilege> 
+			<Privilege>SCHEDULE_REPORT</Privilege>
+		</Global>
+	</Role>
+	
+	<Role Name="CommonUser">
+		<Global>
+			<Privilege>VIEW_INSTANCE</Privilege>            
+		</Global>
+	</Role>
+
+	<!--
+	<Role Name="User">
+		<Reports>
+			<Report Name="Resource Usage by Host">
+				<Privilege>VIEW_INSTANCE</Privilege>	
+				<Privilege>BUILD_ONLINE_REPORT</Privilege>
+			</Report>
+		</Reports>
+	</Role>
+	-->
+</AccessController>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PLC xmlns="http://www.ibm.com/perf/2006/01/loader"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.ibm.com/perf/2006/01/loader plc.xsd">
+	 
+	<!-- The version of the loader controller. -->
+	<Version>4.0</Version>
+	
+	<!-- The port number of the loader controller that will listen to the CLI. -->
+	<Port>4046</Port>
+	
+	<!-- The maximum number of threads for running data loader plug-in instances. -->
+	<MaxLoadingThread>20</MaxLoadingThread>
+	
+	<!-- The directory containing the data loader configuration files. This directory is located in EGO_TOP/perf/conf. -->
+	<PLCDir>plc</PLCDir>
+	
+    <!--Recover define the behavior of recover DLP data -->
+	<Recover>		
+		<!-- Does enable auto load data from file to database. If you leave it blank, 
+		 the default value true will be used. -->
+		<EnableAutoLoad>true</EnableAutoLoad>
+
+		<!-- The interval duration of RecoverJob executing. The unit is second.  If you leave it blank, 
+		 the default value 60 will be used.-->
+		<RecoverInterval>60</RecoverInterval>
+		
+		<!-- The maximum number of threads for recovering data from file to database when "EnableAutoLoad" is set to "true". If you leave it blank, the default value 10 will be used. -->
+		<MaxThread>10</MaxThread>
+		
+		<!-- The maximum size of recover file. The unit is MB. If you leave it blank, 
+		 the default value 100 will be used. -->
+		<MaxFileSize>100</MaxFileSize>
+		
+		<!--The expression showes the period of the DLPPurgerJob executing. It showes the hour and minute or repeat period.
+			The format for this expression is like :
+			*:15, *:*[5], *:*[15], *[15], *[5] and 12:15.
+			If you leave it blank, the default value 00:30 will be used.
+			-->
+		<DLPPurgerInterval>00:30</DLPPurgerInterval>
+		
+		<!-- The duration of the backup data will keep. If you leave it blank, 
+		 the default value 14 will be used. -->		
+		<DLPPurgerDuration>14</DLPPurgerDuration>
+		
+		<!-- Does enable auto purger the DLP backup data. If you leave it blank, 
+		 the default value true will be used. -->
+		<EnableDLPPurger>true</EnableDLPPurger>
+		
+	</Recover>
+</PLC>

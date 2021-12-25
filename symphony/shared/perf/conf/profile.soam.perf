@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# add SOAM LD_LIBRARY_PATH
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${EGO_TOP}/${EGO_VERSION}/${BINARY_TYPE}/lib/jni
+
+# Get soam part lib
+SOAM_VERSION=`grep '^[ 	]*SOAM_VERSION' ${PERF_CONFDIR}/perf.conf | sed -e "s/^.*=//g" | sed -e "s/\"//g"`
+PERF_LIB=${PERF_LIB}:${PERF_TOP}/soam/${SOAM_VERSION}/${PERF_LIB_TYPE}/lib
+
+export LD_LIBRARY_PATH SOAM_VERSION PERF_LIB
+

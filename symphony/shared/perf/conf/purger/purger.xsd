@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:purger="http://www.ibm.com/perf/2006/06/purger" targetNamespace="http://www.ibm.com/perf/2006/06/purger" elementFormDefault="qualified">
+	<xs:element name="PurgerConf">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Description" type="xs:string" minOccurs="0"/>
+				<xs:element name="DataSource" type="xs:string"/>
+				<xs:element name="TableList">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Table" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="TableName" type="xs:string" use="required"/>
+									<xs:attribute name="TimestampColumn" type="xs:string" use="required"/>
+									<xs:attribute name="Archive" type="xs:boolean" use="optional"/>
+									<xs:attribute name="ClusterNameColumn" type="xs:string" use="optional"/>
+									<xs:attribute name="Duration" use="optional">
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:minInclusive value="0"/>
+												<xs:maxInclusive value="365"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+									<xs:attribute name="Plug-in" type="xs:string" use="optional"/>
+									<xs:attribute name="UseIndex" type="xs:string" use="optional"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="Duration" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:integer">
+									<xs:minInclusive value="0"/>
+									<xs:maxInclusive value="365"/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
