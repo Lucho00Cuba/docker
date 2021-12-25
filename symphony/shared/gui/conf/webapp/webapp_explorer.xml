@@ -1,8 +1,0 @@
-<server description="Explorer Server">
-	<webApplication id="explorer" location="perf/${env.PERF_VERSION}/explorer" name="explorer">
-		<classloader commonLibraryRef="Platform_GUI,log4jConfig"></classloader>
-	</webApplication>
-	<webApplication id="explorerapi" location="perf/${env.PERF_VERSION}/explorerapi" name="api">
-		<classloader commonLibraryRef="Platform_GUI,log4jConfig"></classloader>
-	</webApplication>
-</server>

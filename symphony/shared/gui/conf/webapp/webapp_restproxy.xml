@@ -1,5 +1,0 @@
-<server description="Rest Proxy Server">
-	<webApplication id="restProxy" location="ego/${env.EGO_VERSION}/restProxy" name="restProxy">
-		<classloader commonLibraryRef="Platform_GUI,log4jConfig"></classloader>
-	</webApplication>
-</server>

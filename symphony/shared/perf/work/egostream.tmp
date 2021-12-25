@@ -1,4 +1,0 @@
-Filename=/shared/kernel/work/data/ego.stream
-FirstRecord="EVENT_ALLOC_NEW" "4.0" 1640189207 "1" "EGOSC_SUPERVISIOR_ALLOC" "EGO_SERVICE_CONTROLLER" "/ClusterServices/EGOClusterServices" "InternalResourceGroup" "" 0 0 16 0 "" "" "" 0 0
-FilePosition=8538
-RetryCount=0

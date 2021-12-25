@@ -1,7 +1,0 @@
-#action permission mapping : action name - permission list
-
-#host factory
-hostFactoryRequestsList=HF_ALL_REQUESTOR_VIEW
-hostFactoryScheduleReqList=HF_ALL_REQUESTOR_VIEW
-hostFactoryHostsList=HF_ALL_REQUESTOR_VIEW
-hostFactoryConfiguration=HF_SERVICE_MANAGE|HF_ALL_PROVIDER_MANAGE

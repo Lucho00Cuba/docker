@@ -1,5 +1,0 @@
-<server>
-<webApplication id="soamgui" location="soam/${env.SOAM_VERSION}/soamgui" name="soamgui">
-                <classloader commonLibraryRef="Platform_GUI,log4jConfig" privateLibraryRef="Soam_Private_Lib"></classloader>
-    </webApplication>
-</server>

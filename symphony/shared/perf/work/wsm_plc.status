@@ -1,8 +1,0 @@
-Updated at Wed Dec 22 16:56:03 GMT 2021
-Committed memory: 2980.004MB, maximum memory: 2048MB
-The number of running loaders: 4
-Loader (egoeventsloader) wait time: 1.07 minutes
-Loader (egoconsumerresloader) wait time: 1.06 minutes
-Loader (egostaticresloader) wait time: 35.14 minutes
-Loader (egodynamicresloader) wait time: 1.05 minutes
-No running recovery loaders.

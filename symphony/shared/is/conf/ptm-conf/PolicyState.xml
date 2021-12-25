@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-<properties>
-<comment>PTM Policy States</comment>
-<entry key="P1">1</entry>
-<!--entry key="P2">1</entry-->
-</properties>
