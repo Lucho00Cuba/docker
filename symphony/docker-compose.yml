@@ -3,9 +3,9 @@
 #
 version: '3'
 services:
-  master:
+  master-1:
     image: ibmcom/spectrum-symphony:7.3.2.0
-    hostname: master
+    hostname: master-1
     privileged: true
     ports:
       - '8443:8443'
@@ -16,7 +16,28 @@ services:
     environment:
       LICENSE: accept
       CLUSTER_NAME: Home
-  worker:
+  master-2:
+    image: ibmcom/spectrum-symphony:7.3.2.0
+    hostname: master-2
+    privileged: true
+    expose:
+      - 8443
+      - 8543
+      - 8050
+    volumes:
+      - "./shared:/shared"
+    environment:
+      LICENSE: accept
+      CLUSTER_NAME: Home
+  worker-1:
+    image: ibmcom/spectrum-symphony:7.3.2.0
+    privileged: true
+    environment:
+      LICENSE: accept
+      HOST_ROLE: COMPUTE
+    volumes:
+      - "./shared:/shared"
+  worker-2:
     image: ibmcom/spectrum-symphony:7.3.2.0
     privileged: true
     environment:
