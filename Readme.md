@@ -17,3 +17,8 @@
 >>>- [nfs-server](https://github.com/Lucho00Cuba/Docker/tree/main/nfs)
 >>>- [registry](https://github.com/Lucho00Cuba/Docker/tree/main/registry)
 >>>- [jenkins](https://github.com/Lucho00Cuba/Docker/tree/main/jenkins)
+
+### Resources
+
+https://github.com/wardviaene/kubernetes-course
+https://github.com/BretFisher/kubernetes-mastery
