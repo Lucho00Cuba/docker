@@ -3,22 +3,23 @@
 #
 version: '3'
 services:
+  haproxy:
+    image: haproxy
+    hostname: haproxy
+    #command: haproxy -c -f /usr/local/etc/haproxy/haproxy.cfg # check
+    volumes:
+      - "./haproxy:/usr/local/etc/haproxy"
+    ports:
+      - '443:443'
+    links:
+      - master-1
+      - master-2
+    networks:
+      - grid
   master-1:
     image: ibmcom/spectrum-symphony:7.3.2.0
     hostname: master-1
-    privileged: true
-    ports:
-      - '8443:8443'
-      - '8543:8543'
-      - '8050:8050'
-    volumes:
-      - "./shared:/shared"
-    environment:
-      LICENSE: accept
-      CLUSTER_NAME: Home
-  master-2:
-    image: ibmcom/spectrum-symphony:7.3.2.0
-    hostname: master-2
+    container_name: master-1
     privileged: true
     expose:
       - 8443
@@ -29,19 +30,48 @@ services:
     environment:
       LICENSE: accept
       CLUSTER_NAME: Home
+    networks:
+      - grid
+  master-2:
+    image: ibmcom/spectrum-symphony:7.3.2.0
+    hostname: master-2
+    container_name: master-2
+    privileged: true
+    expose:
+      - 8443
+      - 8543
+      - 8050
+    volumes:
+      - "./shared:/shared"
+    environment:
+      LICENSE: accept
+      CLUSTER_NAME: Home
+    networks:
+      - grid
   worker-1:
     image: ibmcom/spectrum-symphony:7.3.2.0
+    hostname: worker-1
+    container_name: worker-1
     privileged: true
     environment:
       LICENSE: accept
       HOST_ROLE: COMPUTE
     volumes:
       - "./shared:/shared"
+    networks:
+      - grid
   worker-2:
     image: ibmcom/spectrum-symphony:7.3.2.0
+    hostname: worker-2
+    container_name: worker-2
     privileged: true
     environment:
       LICENSE: accept
       HOST_ROLE: COMPUTE
     volumes:
       - "./shared:/shared"
+    networks:
+      - grid
+
+networks:
+  grid:
